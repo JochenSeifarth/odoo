@@ -64,8 +64,98 @@
 </template>
 
 <!-- Multi record templates-->
-<!-- Picture Layout -->
+<!-- Picture Layout RYA -->
 <template id="dynamic_filter_template_event_event_picture" name="Picture Layout" priority="5">
+    <div t-foreach="records" t-as="data" class="s_events_event w-100" data-extra-classes="g-3" data-column-classes="col-12 col-sm-6 col-lg-4">
+        <t t-set="record" t-value="data['_record']._set_tz_context()"/>
+        <a class="s_events_event_cover position-relative d-flex align-items-center rounded overflow-hidden text-decoration-none ratio ratio-1x1"
+           t-att-href="data['call_to_action_url']">
+            <t t-call="website.record_cover">
+                <t t-set="_record" t-value="record"/>
+                <t t-set="_resize_height" t-value="512"/>
+                <t t-set="_resize_width" t-value="512"/>
+                <t t-set="use_filters" t-value="True"/>
+                <t t-set="additionnal_classes" t-value="'h-100 w-100 bg-600 position-absolute'"/>
+            </t>
+
+            <div class="text-center w-100 h-100 px-3 d-flex flex-column justify-content-center flex-grow-1">
+                <div t-if="is_sample" class="h5 o_ribbon_right bg-primary text-uppercase">Sample</div>
+                    <h4 class="text-white" t-field="record.name" />
+					<time t-att-datetime="record.date_begin"
+						  class="text-white text-center">
+						<t t-set="seen_times"
+						   t-value="[]" />
+						<t t-foreach="record.event_slot_ids.sorted('start_datetime')"
+						   t-as="slot">
+							<t t-set="time_key"
+							   t-value="slot.start_datetime.strftime('%H:%M') + '-' + slot.end_datetime.strftime('%H:%M')" />
+							<t t-if="not seen_times or time_key not in seen_times">
+								<t t-set="seen_times"
+								   t-value="(seen_times or []) + [time_key]" />
+								<div>
+									<span t-out="slot.start_datetime"
+										  t-options="{'widget': 'datetime', 'time_only': 'true',                              'format': 'short',
+                              'tz_name': record.date_tz}" />
+									- <span t-out="slot.end_datetime"
+										  t-options="{'widget': 'datetime',
+                              'time_only': 'true',
+                              'format': 'short',
+                              'tz_name': record.date_tz}" />
+								</div>
+							</t>
+						</t>
+						<t t-if="seen_times">(<span t-out="record.date_begin"
+								  t-options="{'widget': 'datetime', 'date_only': 'true', 'format': 'MMMM', 'tz_name': record.date_tz}" />
+                         <t t-if="record.date_begin.month != record.date_end.month">
+							- <span t-out="record.date_end"
+									  t-options="{'widget': 'datetime', 'date_only': 'true', 'format': 'MMMM', 'tz_name': record.date_tz}" />
+							</t>)</t>
+						<t t-elif="record.date_begin.year &lt; 2098">
+							<t t-set="begin_month"
+							   t-value="record.date_begin.month" />
+                            <t t-set="begin_year"
+							   t-value="record.date_begin.year" />
+
+                                   <t t-set="end_month"
+							   t-value="record.date_end.month" />
+                                   <t t-set="end_year"
+							   t-value="record.date_end.year" />
+
+							<!-- BEGIN: nur unterschiedliche Teile vom
+							Startdatum -->
+                                <span>
+
+								<span t-out="record.date_begin"
+									  t-options="{'widget':'datetime','date_only':True,'format':'d','tz_name':record.date_tz}" />
+
+								<t t-if="begin_month != end_month">
+									<span t-out="record.date_begin"
+										  t-options="{'widget':'datetime','date_only':True,'format':'MMMM','tz_name':record.date_tz}" />
+								</t>
+								<t t-if="begin_year != end_year">
+									<span t-out="record.date_begin"
+										  t-options="{'widget':'datetime','date_only':True,'format':'YYYY','tz_name':record.date_tz}" />
+								</t>
+							</span>
+							- <!-- END: immer komplett das Enddatum -->
+                                            <span t-out="record.date_end"
+								  t-options="{'widget':'datetime','date_only':True,'format':'d','tz_name':record.date_tz}" />
+                                            <span t-out="record.date_end"
+								  t-options="{'widget':'datetime','date_only':True,'format':'MMMM','tz_name':record.date_tz}" />
+                                            <span t-out="record.date_end"
+								  t-options="{'widget':'datetime','date_only':True,'format':'y','tz_name':record.date_tz}" />
+						</t>
+						<div class="d-flex justify-content-center"
+							 t-if="events_event_location_active"
+							 t-field="record.address_id"
+							 t-options="{'widget': 'contact', 'fields': ['city'], 'no_marker': 'true'}" />
+					</time>
+            </div>
+        </a>
+    </div>
+</template>
+<!-- Picture Layout -->
+<template id="dynamic_filter_template_event_event_picture_org" name="Picture Layout" priority="5">
     <div t-foreach="records" t-as="data" class="s_events_event w-100" data-extra-classes="g-3" data-column-classes="col-12 col-sm-6 col-lg-4">
         <t t-set="record" t-value="data['_record']._set_tz_context()"/>
         <a class="s_events_event_cover position-relative d-flex align-items-center rounded overflow-hidden text-decoration-none ratio ratio-1x1"
