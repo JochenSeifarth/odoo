@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Show ticket price on Event Description Page -->
+    <template id="event_description_full_rya" inherit_id="website_event.event_description_full" name="Show Ticket Prices in box on Event Description Page">
+
+        <!-- Inline ticket badges after lead paragraph -->
+        <xpath expr="//div[@id='o_wevent_event_main_cover_content']/p[@class='lead']" position="after">
+            <t t-if="event.event_ticket_ids">
+                <!-- i.e. hide this -->
+                <t t-if="not event.event_ticket_ids">
+                    <div class="d-flex flex-wrap gap-2 mt-2">
+                        <t t-foreach="event.event_ticket_ids" t-as="ticket">
+                            <span class="badge bg-secondary">
+                                <t t-out="ticket.name"/>
+: 
+                                <t t-out="int(ticket.price)"/>
+                                <t t-out="event.company_id.currency_id.symbol"/>
+                            </span>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </xpath>
+
+        <!-- Ticket Prices block before bordered block -->
+        <xpath expr="//div[contains(@class,'o_wevent_bordered_block')]" position="before">
+            <div t-attf-class="o_wevent_dates_block d-flex flex-wrap justify-content-between align-items-center gap-2">
+                <div class="pb-3 flex-wrap gap-3 w-lg-100">
+                    <small class="d-flex align-items-end justify-content-between gap-2 fw-bold text-nowrap">
+                        <span t-translate="yes">Price</span>                         
+                    </small>
+
+                    <div class="card bg-transparent py-3 px-2 px-md-3">
+                        <!-- Normale Preisanzeige -->
+                        <div class="d-flex flex-wrap gap-1">
+                            <t t-foreach="event.event_ticket_ids" t-as="ticket">
+                                <t t-if="ticket.price &gt;= 99999">
+                                    <a href="/contactus" class="btn btn-primary">
+                                        <t t-if="ticket.name">
+                                            <t t-out="ticket.name"/>:
+                                        </t>
+                                        On Request
+                                    </a>
+                                </t>
+                                <t t-else="">
+                                    <div>
+                                        <t t-if="ticket.name">
+                                            <t t-out="ticket.name"/>:
+                                        </t>
+                                        <t t-out="int(ticket.price)"/>
+                                        <t t-out="event.company_id.currency_id.symbol"/>
+                                    </div>
+                                </t>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Event - Description Dates -->
+    <template id="event_description_dates_rya" inherit_id="website_event.event_description_dates" name="Event Description Dates">
+        <xpath expr="//div[contains(@class,'card')]" position="replace">
+            <div class="card bg-transparent py-3 px-2 px-md-3">
+                <!-- Up to the next 5 closest dates -->
+                <t t-set="slots_to_preview" t-value="dict(list(slots.items())[:6])"/>
+                <t t-if="slots_to_preview">
+                    <div class="row">
+                        <div t-foreach="slots_to_preview" t-as="date" class="col d-flex flex-column align-items-start gap-1 pb-2">
+                            <time t-out="date" class="text-nowrap" t-options="{'widget': 'date', 'format': 'full'}"/>
+                            <div class="d-flex flex-wrap gap-2">
+                                <button t-foreach="slots_to_preview[date]" t-as="slot" t-attf-class="btn btn-sm text-nowrap pe-none
+                                        #{'bg-danger text-white' if slot.is_sold_out else 'btn-light'}">
+                                    <span t-if="slot.is_sold_out" class="lh-1">Sold Out</span>
+                                    <time t-else="" t-out="slot.start_datetime" t-att-datetime="slot.start_datetime" class="lh-1" t-options="{'widget': 'datetime', 'tz_name': event.date_tz, 'time_only': 'true', 'format': 'short'}"/>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <button t-if="event.event_registrations_open" type="button" data-bs-toggle="modal" data-bs-target="#modal_slot_registration" t-attf-class="btn btn-link text-decoration-none pb-0 {{cta_additional_classes}}">
+                        View More
+                    </button>
+                </t>
+                <t t-else="">
+                    <a href="/contactus" class="btn btn-primary">
+                        On Request
+                    </a>
+                </t>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="registration_template_rya" inherit_id="website_event.registration_template" name="Custom Registration Override">
+        <xpath expr="." position="replace">
+            <div class="rya_registration">
+                <t t-if="5 in event.tag_ids.ids">
+                <!-- Tag ID 5 (FÜNF) ist "Individuell") -->                
+                    <a type="button"
+                        t-attf-class="btn btn-primary {{cta_additional_classes}}"
+                        t-att-href="'/contactus'">
+                        Contact Us
+                    </a>
+                </t>
+                <t t-else="">
+                <!-- the original Odoo logic -->
+                    <a t-if="event_page and event.event_registrations_open" type="button"
+                        t-attf-class="btn btn-primary {{cta_additional_classes}}"
+                        t-att-href="'/event/%s/register' % (slug(event))">
+                        Register
+                    </a>
+                    <button t-elif="event.event_registrations_open" type="button"
+                        data-bs-toggle="modal" t-attf-class="btn btn-primary {{cta_additional_classes}}"
+                        t-attf-data-bs-target="#modal_{{'slot' if event.is_multi_slots else 'ticket'}}_registration">
+                        Register
+                    </button>
+                    <div t-if="registration_error_code == 'insufficient_seats'" class="alert alert-danger my-3" role="alert">
+                        Registration failed! These tickets are not available anymore.
+                    </div>
+                    <div t-if="registration_error_code == 'recaptcha_failed'" class="alert alert-danger my-3" role="alert">
+                        Registration failed! Suspicious activity detected by Google reCaptcha.
+                    </div>
+                    <t t-if="not event.event_registrations_open">
+                        <!-- Cancelled -->
+                        <div t-if="event.kanban_state == 'cancel'" class="alert alert-danger mb-3 small text-center" role="status">
+                            <b>Cancelled</b>
+                        </div>
+                        <!-- Delayed registration time -->
+                        <div t-elif="not event.event_registrations_started and not event.event_registrations_sold_out" class="alert alert-info mb-3 small" role="status">
+                            Registrations will open on
+                            <b t-out="event.start_sale_datetime" t-options="{'widget': 'datetime', 'tz_name': event.date_tz, 'format': 'MMMM dd, y'}"/>, at
+                            <b t-out="event.start_sale_datetime" t-options="{'widget': 'datetime', 'tz_name': event.date_tz, 'format': 'h:mm a'}"/>
+                            <small t-if="website_visitor_timezone != event.date_tz">(<t t-out="event.date_tz"/> time)</small>
+                        </div>
+                        <!-- Sold Out -->
+                        <div t-elif="event.event_registrations_sold_out" class="alert alert-danger mb-3 small" role="status">
+                            <b>Sold Out</b>
+                        </div>
+                        <!-- Registrations Closed -->
+                        <div t-else="" class="alert alert-warning mb-3 small" role="status">
+                            <em>Registrations <b>Closed</b></em>
+                        </div>
+                    </t>
+                </t>
+            </div>
+
+        </xpath>
+
+    </template>
+
+
+</odoo>
