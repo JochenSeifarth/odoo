@@ -140,6 +140,7 @@ class IrAttachment(models.Model):
 
         # prevent sha-1 collision
         if os.path.isfile(full_path) and not self._same_content(bin_data, full_path):
+            _logger.info("full_path %s", full_path)
             raise UserError(_("The attachment collides with an existing file."))
         return fname, full_path
 
