@@ -10,6 +10,15 @@ from odoo.addons.website_event.controllers.main import WebsiteEventController
 
 class WebsiteEventSaleController(WebsiteEventController):
 
+    def _prepare_event_register_values(self, event, **post):
+        values = super()._prepare_event_register_values(event, **post)
+
+        # Add our event JSON-LD data as 'product_markup_data' so it gets
+        # picked up by the template website_sale.website_sale_layout
+        values['product_markup_data'] = event.sudo()._to_markup_data(request.website)
+
+        return values
+    
     def _process_tickets_form(self, event, form_details):
         """ Add price information on ticket order """
         res = super()._process_tickets_form(event, form_details)
