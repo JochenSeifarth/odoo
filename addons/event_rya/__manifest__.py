@@ -11,6 +11,7 @@
     "data": [
         "views/event_list_rya.xml",
         "views/event_templates_page_registration_rya.xml",
+        "views/sale_report_views.xml",        
         "report/event_report_template_full_page_ticket_rya.xml",
     ],
     "installable": True,

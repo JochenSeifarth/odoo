@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+	<!-- TREE VIEW -->
+	<record id="sale_report_tree_inherit_utm"
+			model="ir.ui.view">
+		<field name="name">sale.report.tree.utm</field>
+		<field name="model">sale.report</field>
+		<field name="inherit_id"
+			   ref="sale.sale_report_view_tree" />
+		<field name="arch"
+			   type="xml">
+			<xpath expr="//list"
+				   position="inside">
+				<field name="source_id"
+					   optional="show" />
+				<field name="medium_id"
+					   optional="show" />
+			</xpath>
+		</field>
+	</record>
+
+</odoo>
