@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<odoo><data>
+
+    <record id="view_event_slot_rya_form" model="ir.ui.view">
+        <field name="name">event.slot.rya.form</field>
+        <field name="model">event.slot</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="event_id" invisible="1"/>
+                <group>
+                    <group>
+                        <field name="start_datetime" string="Date" widget="daterange" options="{'end_date_field': 'end_datetime'}" />
+                        <field name="end_datetime" invisible="1" />
+                    </group>
+                    <group>
+                        <field name="color" widget="color_picker"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_event_slot_rya_tree" model="ir.ui.view">
+        <field name="name">event.slot.rya.list</field>
+        <field name="model">event.slot</field>
+        <field name="arch" type="xml">
+            <list string="Slots" editable="bottom" multi_edit="1">
+                <field name="start_datetime" string="Date" widget="daterange" options="{'end_date_field': 'end_datetime'}" />
+                <field name="end_datetime" invisible="1" />
+                <field name="color" widget="color_picker"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_event_slot_rya_calendar" model="ir.ui.view">
+        <field name="name">event.slot.rya.calendar</field>
+        <field name="model">event.slot</field>
+        <field name="arch" type="xml">
+            <calendar string="Slots" date_start="start_datetime" date_stop="end_datetime">
+            </calendar>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_event_slot_rya_view">
+       <field name="name">EventSlotsRya</field>
+       <field name="path">eventslotsrya</field>
+       <field name="res_model">event.slot</field>
+       
+    <field name="view_mode">calendar,list,form</field>
+
+    <field name="view_ids" eval="[
+        (0, 0, {'view_mode': 'calendar', 'view_id': ref('view_event_slot_rya_calendar')}),
+        (0, 0, {'view_mode': 'list',     'view_id': ref('view_event_slot_rya_tree')}),
+        (0, 0, {'view_mode': 'form',     'view_id': ref('view_event_slot_rya_form')})
+    ]"/>
+           
+       <!-- IMPORTANT: no event filter -->
+       <field name="domain">[]</field>       
+       
+       <!-- field name="search_view_id" ref="view_event_slot_rya_search"/ -->
+       <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create an Event Slot
+          </p><p>
+            Schedule and organize your event slots: handle registrations, send automated confirmation emails, sell tickets, etc.
+          </p>
+        </field>
+    </record>
+
+    
+        <menuitem
+        id="menu_event_slots_rya"
+        name="Slots RYA"
+        sequence="20"
+        action="event_rya.action_event_slot_rya_view"
+        parent="event.event_main_menu"
+    />
+    
+</data></odoo>

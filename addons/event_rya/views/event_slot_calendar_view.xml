@@ -1,0 +1,36 @@
+<odoo>
+	<!-- Calendar View -->
+	<record id="view_event_slot_calendar"
+			model="ir.ui.view">
+		<field name="name">event.slot.calendar</field>
+		<field name="model">event.slot.calendar.entry</field>
+		<field name="arch"
+			   type="xml">
+			<calendar string="Event Slots"
+					  date_start="start"
+					  date_stop="stop">
+				<field name="event_id" />
+				<field name="slot_id" />
+			</calendar>
+		</field>
+	</record>
+
+	<!-- Calendar Action -->
+	<record id="action_event_slot_calendar"
+			model="ir.actions.act_window">
+		<field name="name">Event Slots Calendar</field>
+		<field name="res_model">event.slot.calendar.entry</field>
+		<field name="view_mode">calendar</field>
+		<field name="view_id"
+			   ref="view_event_slot_calendar" />
+		<field name="target">current</field>
+	</record>
+
+	<!-- Menuitem -->
+	<menuitem id="menu_event_slot_root" name="Event Slots"/>
+	<menuitem id="menu_event_slot_calendar"
+			  name="Event Slots Calendar 2"
+			  parent="menu_event_slot_root"
+			  action="action_event_slot_calendar"
+			  sequence="15" />
+</odoo>

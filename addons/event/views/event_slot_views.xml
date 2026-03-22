@@ -15,7 +15,10 @@
                             <i class="fa fa-arrow-right mx-2" title="to"/>
                             <field name="end_hour" class="oe_inline o_input_5ch" widget="float_time"/>
                         </div>
+
                         <field name="date_tz" string="Timezone"/>
+                        <field name="start_datetime" string="Start"/>
+                        <field name="end_datetime" string="End"/>
                     </group>
                     <group>
                         <field name="color" widget="color_picker"/>
@@ -62,8 +65,8 @@
             <calendar js_class="event_slot_calendar" date_start="start_datetime" date_stop="end_datetime"
                 string="Slots" scales="month" color="color" quick_create_view_id="%(event.view_event_slot_form)d"
                 multi_create_view="event.view_event_slot_multi_create_form">
-                <field name="start_datetime" invisible="1"/>
-                <field name="end_datetime" invisible="1"/>
+                <field name="start_datetime"/>
+                <field name="end_datetime"/>
                 <field name="date_tz" invisible="1"/>
             </calendar>
         </field>
