@@ -15,16 +15,13 @@ from odoo.tools import (
 class EventSlot(models.Model):
     _name = "event.slot"
     _description = "Event Slot"
-    _order = "event_id, date, start_hour, end_hour, id"
+    _order = "event_id, start_dateime, end_dateime, id"
 
     event_id = fields.Many2one("event.event", "Event", required=True, ondelete="cascade", index=True)
     color = fields.Integer("Color", default=0)
-    date = fields.Date("Date", required=True)
     date_tz = fields.Selection(related="event_id.date_tz")
-    start_hour = fields.Float("Starting Hour", required=True, help="Expressed in the event timezone.")
-    end_hour = fields.Float("Ending Hour", required=True, help="Expressed in the event timezone.")
-    start_datetime = fields.Datetime("Start Datetime", compute="_compute_datetimes", store=True)
-    end_datetime = fields.Datetime("End Datetime", compute="_compute_datetimes", store=True)
+    start_datetime = fields.Datetime("Start Datetime", required=True)
+    end_datetime = fields.Datetime("End Datetime", required=True)
 
     # Registrations
     is_sold_out = fields.Boolean(
@@ -44,15 +41,7 @@ class EventSlot(models.Model):
         string="Number of Attendees",
         store=False, readonly=True, compute="_compute_seats")
 
-    @api.constrains("start_hour", "end_hour")
-    def _check_hours(self):
-        for slot in self:
-            if not (0 <= slot.start_hour <= 23.99 and 0 <= slot.end_hour <= 23.99):
-                raise ValidationError(_("A slot hour must be between 0:00 and 23:59."))
-            if slot.end_hour <= slot.start_hour:
-                raise ValidationError(_("A slot end hour must be later than its start hour.\n%s", slot.display_name))
-
-    @api.constrains("date", "start_hour", "end_hour")
+    @api.constrains("start_datetime", "end_datetime")
     def _check_time_range(self):
         for slot in self:
             event_start = slot.event_id.date_begin
@@ -67,15 +56,6 @@ class EventSlot(models.Model):
                     slot_name=slot.display_name,
                 ))
 
-    @api.depends("date", "date_tz", "start_hour", "end_hour")
-    def _compute_datetimes(self):
-        for slot in self:
-            event_tz = pytz.timezone(slot.date_tz)
-            start = datetime.combine(slot.date, float_to_time(slot.start_hour))
-            end = datetime.combine(slot.date, float_to_time(slot.end_hour))
-            slot.start_datetime = event_tz.localize(start).astimezone(pytz.UTC).replace(tzinfo=None)
-            slot.end_datetime = event_tz.localize(end).astimezone(pytz.UTC).replace(tzinfo=None)
-
     @api.depends("seats_available")
     @api.depends_context('name_with_seats_availability')
     def _compute_display_name(self):
@@ -85,10 +65,7 @@ class EventSlot(models.Model):
         but only relative to the event and this will confuse the user.
         """
         for slot in self:
-            date = format_date(self.env, slot.date, date_format="medium")
-            start = format_time(self.env, float_to_time(slot.start_hour), time_format="short")
-            end = format_time(self.env, float_to_time(slot.end_hour), time_format="short")
-            name = f"{date}, {start} - {end}"
+            name = f"{start_datetime} - {end_datetime}"
             if (
                 self.env.context.get('name_with_seats_availability') and slot.event_id.seats_limited
                 and not slot.event_id.is_multi_slots
