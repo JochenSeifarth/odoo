@@ -14,7 +14,7 @@ export class EventSlotCalendarModel extends CalendarModel {
      */
     buildRawRecord(partialRecord, options = {}) {
         const rawRecord = super.buildRawRecord(partialRecord, options);
-        rawRecord["date"] = serializeDate(partialRecord.start);
+//        rawRecord["xxxdate"] = serializeDate(partialRecord.start);
         rawRecord["start_hour"] = partialRecord.start.hour + partialRecord.start.minute / 60;
         // There could be no 'end' when opening the mobile quick create dialog.
         if (partialRecord.end) {
@@ -32,7 +32,7 @@ export class EventSlotCalendarModel extends CalendarModel {
      */
     makeContextDefaults(rawRecord) {
         const context = super.makeContextDefaults(rawRecord);
-        context["default_date"] = rawRecord["date"];
+        context["default_date"] = rawRecord["start_datetime"];
         return context;
     }
 
