@@ -415,6 +415,8 @@ class IrHttp(models.AbstractModel):
         if not nearest_url_lang:
             url_lang_str = None
 
+        _logger.debug("User-Agent: %r", request.httprequest.user_agent.string)
+
         # See /2, no lang in url and default website
         if not url_lang_str and request.lang == default_lang:
             _logger.debug("%r (lang: %r) no lang in url and default website, continue", path, request_url_code)
