@@ -204,7 +204,9 @@ class WebsiteEventController(http.Controller):
         if event.menu_id and event.menu_id.child_id:
             target_url = event.menu_id.child_id[0].url
         else:
-            target_url = '/event/%s/register' % str(event.id)
+            values = self._prepare_event_register_values(event, **post)
+            return request.render("website_event.event_description_full", values)
+            ### target_url = '/event/%s/register' % str(event.id)
         if post.get('enable_editor') == '1':
             target_url += '?enable_editor=1'
         return request.redirect(target_url)
