@@ -11,6 +11,7 @@
                     <group>
                         <field name="start_datetime" string="Date" widget="daterange" options="{'end_date_field': 'end_datetime'}" />
                         <field name="end_datetime" invisible="1" />
+                        <field name="date_tz" string="Timezone"/>
                     </group>
                     <group>
                         <field name="color" widget="color_picker"/>
@@ -31,7 +32,7 @@
                     <field name="start_datetime" string="Date" widget="daterange" options="{'end_date_field': 'end_datetime'}" />
                     <field name="end_datetime" invisible="1" />
 
-                    <field name="date_tz" string="xxxTimezone"/>
+                    <field name="date_tz" string="Timezone"/>
                     <field name="color" widget="color_picker"/>
                 </group>
             </form>
@@ -45,6 +46,7 @@
             <list string="Slots" editable="bottom" multi_edit="1">
                 <field name="start_datetime" string="Date" widget="daterange" options="{'end_date_field': 'end_datetime'}" />
                 <field name="end_datetime" invisible="1" />
+                <field name="date_tz" string="XXXTimezone"/>                
                 <field name="event_date_begin" />
                 <field name="color" widget="color_picker"/>
             </list>
@@ -60,7 +62,7 @@
                 multi_create_view="event.view_event_slot_multi_create_form">
                 <field name="start_datetime" />
                 <field name="end_datetime" />
-                <field name="date_tz" invisible="1"/>
+                <field name="date_tz" string="Timezone"/>                
             </calendar>
         </field>
     </record>
