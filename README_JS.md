@@ -22,3 +22,16 @@ git rebase upstream/19.0
 
 # 5️⃣ Änderungen zu deinem Fork pushen
 git push origin 19.0
+
+### Google OAuth
+Google OAuth2
+https://www.odoo.com/documentation/19.0/applications/general/users/google.html#google-sign-in-authentication
+
+(Tes) Users
+https://console.cloud.google.com/auth/audience?project=rya-odoo
+
+enable in Odoo 
+https://www.real-yachting-alicante.com/odoo/settings?debug=1
+suche nach 'OAuth' bzw.
+https://www.real-yachting-alicante.com/odoo/settings/89/action-654?debug=1
+
