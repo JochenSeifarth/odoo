@@ -105,6 +105,9 @@
 
     <xpath expr="//head/*[1]" position="before">
         <t t-if="not title">
+            <t t-if="not additional_title and main_object and 'menu_ids' in main_object._fields and main_object.menu_ids and 'name' in main_object.menu_ids[0]._fields">
+                <t t-set="additional_title" t-value="main_object.sudo().menu_ids[0].name"/>
+            </t>
             <t t-if="not additional_title and main_object and 'name' in main_object">
                 <t t-set="additional_title" t-value="main_object.sudo().name"/>
             </t>

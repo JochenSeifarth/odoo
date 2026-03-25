@@ -45,7 +45,10 @@ class WebsiteSeoMetadata(models.AbstractModel):
         self.ensure_one()
         company = request.website.company_id.sudo()
         title = request.website.name
-        if 'name' in self:
+        page = self.page_ids[:1] if 'page_ids' in self._fields else None
+        if page and page.menu_ids:
+            title = '%s | %s' % (page.menu_ids[0].name, title)
+        elif 'name' in self:
             title = '%s | %s' % (self.name, title)
 
         img_field = 'social_default_image' if request.website.has_social_default_image else 'logo'
