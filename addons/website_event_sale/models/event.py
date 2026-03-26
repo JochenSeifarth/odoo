@@ -27,6 +27,7 @@ class EventEvent(models.Model):
 
         # Build offers
         offers = []
+        now = datetime.utcnow().replace(second=0, microsecond=0)
         for ticket in self.event_ticket_ids:
             ticket_alternate_names = {}
             for lang in ticket.env['res.lang'].search([]):
@@ -38,11 +39,23 @@ class EventEvent(models.Model):
             offers.append({
                 "@type": "Offer",
                 "name": ticket.name,
-                "alternateName": ticket_alternate_names if ticket_alternate_names else None,                
+                **({"alternateName": ticket_alternate_names} if ticket_alternate_names else {}),
                 "price": str(ticket.price),
                 "priceCurrency": ticket.currency_id.name if ticket.currency_id else "EUR",
                 "availability": "https://schema.org/SoldOut" if ticket.is_sold_out else "https://schema.org/InStock",
-                "url": self.event_register_url
+                "validFrom": _format_datetime_with_tz(ticket.start_sale_datetime, self.date_tz) if ticket.start_sale_datetime else _format_datetime_with_tz(now, self.date_tz),
+                "url": self.event_register_url,
+                "potentialAction": {
+                    "@type": "ReserveAction",
+                    "target": {
+                        "@type": "EntryPoint",
+                        "urlTemplate": self.event_register_url,
+                        "actionPlatform": [
+                            "http://schema.org/DesktopWebPlatform",
+                            "http://schema.org/MobileWebPlatform"
+                        ]
+                    }
+                }
             })
 
         # Build geo
@@ -66,10 +79,15 @@ class EventEvent(models.Model):
                     event_alternate_descriptions[lang.code] = lang_event.subtitle                    
             
         # Base template for an event
+        additional_types = []
+        if any(tag.id == 1 for tag in self.tag_ids):
+            additional_types.append("https://schema.org/TouristTrip")
+        
         base_event = {
             "@context": "https://schema.org",
             "@type": "Event",
-            "@id": self.event_share_url,            
+            "@id": self.event_share_url,
+            **({"additionalType": additional_types} if additional_types else {}),            
             "name": self.name,
             "alternateName": event_alternate_names if event_alternate_names else None,            
             "description": self.subtitle,
@@ -93,9 +111,10 @@ class EventEvent(models.Model):
                 **({"geo": geo} if geo else {})
             },
             "organizer": {
-                "@type": "Organization",
-                "name": "Real Yachting Alicante",
-                "url": "https://real-yachting-alicante.com"
+                "@id": self.company_id.website,
+            },
+            "performer": {
+                "@id": self.company_id.website,
             },
             "offers": offers
         }
