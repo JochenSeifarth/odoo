@@ -18,7 +18,10 @@ def _format_datetime_with_tz(dt, tz_name):
 class EventEvent(models.Model):
     _inherit = 'event.event'
 
-    def _to_markup_data(self, website):
+    def _to_markup_data(self, website, max_slots=30):
+        return json_scriptsafe.dumps(self._get_slots_as_events(website), indent=2)
+        
+    def _get_slots_as_events(self, website, max_slots=None):
 
         self.ensure_one()
         cutoff_date = datetime(2099, 1, 1, 0, 0, 0)
@@ -125,7 +128,10 @@ class EventEvent(models.Model):
         upcoming_slots = sorted(
             [slot for slot in self.event_slot_ids if slot.start_datetime and slot.start_datetime >= now],
             key=lambda s: s.start_datetime
-        )[:30]
+        )
+
+        if max_slots is not None:
+            upcoming_slots = upcoming_slots[:max_slots]
 
         if upcoming_slots:
             for slot in upcoming_slots:
@@ -153,4 +159,4 @@ class EventEvent(models.Model):
             if self.date_begin and self.date_begin <= cutoff_date:
                  events.append(base_event)
 
-        return json_scriptsafe.dumps(events, indent=2)
+        return events

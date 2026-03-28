@@ -12,6 +12,7 @@ from odoo.http import request
 from odoo.tools.misc import get_lang
 from odoo.tools import lazy
 from odoo.tools.translate import LazyTranslate
+from odoo.tools.json import scriptsafe as json_scriptsafe 
 from odoo.exceptions import UserError, ValidationError
 
 _lt = LazyTranslate(__name__)
@@ -76,7 +77,7 @@ class WebsiteEventController(http.Controller):
 
         website = request.website
 
-        step = 12  # Number of events per page
+        step = 18  # Number of events per page
 
         options = self._get_events_search_options(slug_tags, **searches)
         order = 'date_begin'
@@ -144,11 +145,19 @@ class WebsiteEventController(http.Controller):
 
         searches['search'] = fuzzy_search_term or search
 
+        product_markup_data = [
+            item
+            for event in events
+            for item in event.sudo()._get_slots_as_events(request.website, max_slots=6)
+        ]
+
         values = {
             'current_date': current_date,
             'current_country': current_country,
             'current_type': current_type,
             'event_ids': events,  # event_ids used in website_event_track so we keep name as it is
+            # Add our event JSON-LD data as 'product_markup_data' so it gets picked up by the template website_sale.website_sale_layout
+            'product_markup_data': json_scriptsafe.dumps(product_markup_data),
             'dates': dates,
             'categories': request.env['event.tag.category'].search([
                 ('is_published', '=', True), '|', ('website_id', '=', website.id), ('website_id', '=', False)
