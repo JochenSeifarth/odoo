@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<odoo>
+	<data>
+		<record id="view_event_event_form_inherit_legs" model="ir.ui.view">
+			<field name="name">event.event.form.legs.inherit</field>
+			<field name="model">event.event</field>
+			<field name="inherit_id" ref="event.view_event_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//notebook" position="inside">
+					<page string="Legs" name="event_legs">
+						<group class="oe_title">
+							<label for="total_distance_nm" string="Total Distance [nm]: " />
+							<div class="d-flex">
+								<field name="total_distance_nm" readonly="1" />
+							</div>
+						</group>
+						<field name="event_leg_ids">
+							<list string="Legs" editable="bottom" default_order="sequence">
+								<field name="sequence" widget="handle" />
+								<field name="address_id" />
+								<field name="partner_latitude" widget="latitude_dms" />
+								<field name="partner_longitude" widget="longitude_dms" />
+								<field name="distance_from_prev_nm" />
+							</list>
+						</field>
+					</page>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>

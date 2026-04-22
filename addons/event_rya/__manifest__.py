@@ -13,7 +13,14 @@
         "views/event_templates_page_registration_rya.xml",
         "views/sale_report_views.xml",        
         "report/event_report_template_full_page_ticket_rya.xml",
+        'security/ir.model.access.csv',
+        'views/event_event_views.xml',        
     ],
+    'assets': {
+        'web.assets_backend': [
+            'event_rya/static/src/js/coordinate_widgets.js',
+        ],
+    },    
     "installable": True,
     "auto_install": False,
     "application": False,
