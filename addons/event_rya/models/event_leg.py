@@ -1,9 +1,6 @@
 from __future__ import annotations
 
-import math
-from collections.abc import Collection
-
-from odoo import api, fields, models
+from odoo import fields, models
 
 
 class EventLeg(models.Model):
@@ -11,14 +8,15 @@ class EventLeg(models.Model):
     _description = "Event Leg"
     _order = "sequence, id"
 
-    sequence = fields.Integer("Sequence")
-    address_id = fields.Many2one("res.partner", "Leg", required=True)
     event_id = fields.Many2one(
         "event.event",
         string="Event",
         ondelete="cascade",
         required=True,
     )
+
+    sequence = fields.Integer("Sequence")
+    address_id = fields.Many2one("res.partner", "Leg", required=True)
 
     partner_latitude = fields.Float(
         string="Latitude",
@@ -40,5 +38,9 @@ class EventLeg(models.Model):
         digits=(16, 0),
     )
 
+    asw_json = fields.Json(
+        string="ASW JSON",
+    )
+
     def _compute_distance_from_previous(self) -> None:
-        self.mapped("event_id")._recompute_leg_distances()  # type: ignore
+        self.mapped("event_id")._recompute_legs()  # type: ignore

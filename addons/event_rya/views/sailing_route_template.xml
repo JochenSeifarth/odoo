@@ -1,0 +1,23 @@
+<odoo>
+    <template id="sailing_route_template" name="Sailing Route Page">
+
+        <t t-call="website.layout">
+
+            <div class="container mt-4">
+
+                <h2>
+                    <t t-esc="event.name" />
+                </h2>
+
+                <!-- Map Container -->
+                <div class="o_event_route_map" t-att-data-event-id="event.id"
+                    style="height: 600px; width: 100%; margin-top: 20px;">
+                </div>
+
+            </div>
+
+        </t>
+
+    </template>
+
+</odoo>

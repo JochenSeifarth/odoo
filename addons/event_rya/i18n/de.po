@@ -129,6 +129,7 @@ msgstr "Etappe"
 #. module: event_rya
 #: model:ir.model.fields,field_description:event_rya.field_event_event__event_leg_ids
 #: model_terms:ir.ui.view,arch_db:event_rya.view_event_event_form_inherit_legs
+#: model_terms:ir.ui.view,arch_db:event_rya.event_description_full_rya
 msgid "Legs"
 msgstr "Etappen"
 
@@ -139,5 +140,6 @@ msgstr "Länge"
 
 #. module: event_rya
 #: model:ir.model.fields,field_description:event_rya.field_event_event__total_distance_nm
+#: model_terms:ir.ui.view,arch_db:event_rya.event_description_full_rya
 msgid "Total Distance [nm]"
 msgstr "Gesamte Strecke [sm]"

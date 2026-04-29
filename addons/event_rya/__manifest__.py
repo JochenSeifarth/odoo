@@ -1,28 +1,38 @@
 {
     "name": "Event RYA",
-    "summary": "Show ticket price on event listing page",  
+    "summary": "Show ticket price on event listing page",
     "version": "1.0",
     "author": "Jochen Seifarth",
     "license": "Other proprietary",
     "category": "Website",
     "depends": [
-        "base","event","website","website_event","mail",
+        "base",
+        "event",
+        "website",
+        "website_event",
+        "mail",
     ],
     "data": [
         "views/event_list_rya.xml",
         "views/event_templates_page_registration_rya.xml",
-        "views/sale_report_views.xml",        
+        "views/sale_report_views.xml",
+        "views/sailing_route_template.xml",
         "report/event_report_template_full_page_ticket_rya.xml",
-        'security/ir.model.access.csv',
-        'views/event_event_views.xml',        
+        "security/ir.model.access.csv",
+        "views/event_event_views.xml",
     ],
-    'assets': {
-        'web.assets_backend': [
-            'event_rya/static/src/js/coordinate_widgets.js',
+    "assets": {
+        "web.assets_frontend": [
+            "event_rya/static/src/js/event_route_map.js",
+            "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
+            "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
         ],
-    },    
+        "web.assets_backend": [
+            "event_rya/static/src/js/coordinate_widgets.js",
+        ],
+    },
     "installable": True,
     "auto_install": False,
     "application": False,
-    'post_init_hook': 'load_translations',
+    "post_init_hook": "load_translations",
 }
