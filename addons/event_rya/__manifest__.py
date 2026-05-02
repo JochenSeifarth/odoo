@@ -7,6 +7,7 @@
     "category": "Website",
     "depends": [
         "base",
+        "base_geolocalize",
         "event",
         "website",
         "website_event",
@@ -20,6 +21,7 @@
         "report/event_report_template_full_page_ticket_rya.xml",
         "security/ir.model.access.csv",
         "views/event_event_views.xml",
+        "views/res_partner_geo.xml",
     ],
     "assets": {
         "web.assets_frontend": [
@@ -29,6 +31,8 @@
         ],
         "web.assets_backend": [
             "event_rya/static/src/js/coordinate_widgets.js",
+            "event_rya/static/src/js/partner_geo_map.js",
+            "event_rya/static/src/scss/partner_geo_map.scss",
         ],
     },
     "installable": True,
