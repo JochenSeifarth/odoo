@@ -22,12 +22,15 @@
         "security/ir.model.access.csv",
         "views/event_event_views.xml",
         "views/res_partner_geo.xml",
+        "views/webclient_templates.xml",
     ],
     "assets": {
         "web.assets_frontend": [
             "event_rya/static/src/js/event_route_map.js",
             "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
             "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
+            "event_rya/static/src/img/1/favicon.svg",
+            "event_rya/static/src/img/2/favicon.svg",
         ],
         "web.assets_backend": [
             "event_rya/static/src/js/coordinate_widgets.js",

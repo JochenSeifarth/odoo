@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="web_layout_rya" inherit_id="web.layout" name="add SVG favicon">
+        <xpath expr="//link[@type='image/x-icon']" position="before">
+            <t t-if="website and website.id">
+                <link type="image/svg+xml" rel="icon" t-att-href="'/event_rya/static/img/%s/favicon.svg' % website.id" />
+            </t>
+            <t t-else="">
+                <link type="image/svg+xml" rel="icon" href="/event_rya/static/img/1/favicon.svg" />
+            </t>
+        </xpath>
+    </template>
+</odoo>
