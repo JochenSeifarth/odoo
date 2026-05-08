@@ -26,8 +26,9 @@ class EventEvent(models.Model):
         self.ensure_one()
         cutoff_date = datetime(2099, 1, 1, 0, 0, 0)
         base_url = website.get_base_url()
-        cover_image_url = re.search(r'url\(\\"?(.*?)\\"?\)', self.cover_properties).group(1)
-
+        match = re.search(r'url\(\\"?(.*?)\\"?\)', self.cover_properties or "")
+        cover_image_url = match.group(1) if match else False
+        
         # Build offers
         offers = []
         now = datetime.utcnow().replace(second=0, microsecond=0)
