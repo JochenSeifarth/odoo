@@ -35,3 +35,18 @@ https://www.real-yachting-alicante.com/odoo/settings?debug=1
 suche nach 'OAuth' bzw.
 https://www.real-yachting-alicante.com/odoo/settings/89/action-654?debug=1
 
+
+
+###
+### Plausible.io CE edition was cloned from git
+###
+
+root@rya:/opt/plausible-ce# docker compose up -d
+[+] Running 3/3
+ ✔ Container plausible-ce-plausible_db-1         Healthy                                                                                                                   0.0s 
+ ✔ Container plausible-ce-plausible_events_db-1  Healthy                                                                                                                   0.0s 
+ ✔ Container plausible-ce-plausible-1            Started                                                                                                                   1.5s 
+root@rya:/opt/plausible-ce# docker compose exec plausible sh -c 'echo $GOOGLE_CLIENT_ID'
+922350052132-cel8mhhpq6c1fn3qf42meu275vr11dbc.apps.googleusercontent.com
+root@rya:/opt/plausible-ce# 
+
