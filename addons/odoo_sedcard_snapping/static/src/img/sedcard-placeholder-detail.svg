@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" role="img" aria-labelledby="title desc">
+  <title id="title">Sedcard detail placeholder</title>
+  <desc id="desc">Replace this placeholder with a detail shot.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f7efe5"/>
+      <stop offset="100%" stop-color="#d8b89d"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="600" fill="url(#bg)"/>
+  <circle cx="180" cy="150" r="90" fill="#edd8c3"/>
+  <circle cx="744" cy="464" r="130" fill="#e7cfb8"/>
+  <path d="M84 464C190 340 312 286 450 286s260 54 366 178" fill="none" stroke="#ffffff" stroke-opacity=".7" stroke-width="16"/>
+  <rect x="72" y="74" width="146" height="36" rx="18" fill="#ffffff" fill-opacity=".78"/>
+  <text x="98" y="99" fill="#8c6646" font-family="Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="2">DETAIL SHOT</text>
+  <text x="72" y="540" fill="#5f4f43" font-family="Arial, sans-serif" font-size="26" letter-spacing="1.5">Replace with a secondary image</text>
+</svg>

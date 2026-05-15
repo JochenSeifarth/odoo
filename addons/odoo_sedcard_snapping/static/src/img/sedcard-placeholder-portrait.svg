@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Sedcard portrait placeholder</title>
+  <desc id="desc">Replace this placeholder with a main portrait image.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f6ecdf"/>
+      <stop offset="100%" stop-color="#e1c8ad"/>
+    </linearGradient>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M60 0H0V60" fill="none" stroke="#ffffff" stroke-opacity=".35" stroke-width="2"/>
+    </pattern>
+  </defs>
+  <rect width="900" height="1200" fill="url(#bg)"/>
+  <rect width="900" height="1200" fill="url(#grid)"/>
+  <circle cx="450" cy="388" r="168" fill="#d9bda0"/>
+  <path d="M236 1046c26-207 151-320 314-320s288 113 314 320" fill="#c7a789"/>
+  <rect x="70" y="70" width="170" height="40" rx="20" fill="#ffffff" fill-opacity=".76"/>
+  <text x="100" y="97" fill="#8c6646" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="2">MAIN PORTRAIT</text>
+  <text x="72" y="1116" fill="#5f4f43" font-family="Arial, sans-serif" font-size="28" letter-spacing="1.5">Replace with a high-resolution image</text>
+</svg>
