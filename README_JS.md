@@ -50,3 +50,13 @@ root@rya:/opt/plausible-ce# docker compose exec plausible sh -c 'echo $GOOGLE_CL
 922350052132-cel8mhhpq6c1fn3qf42meu275vr11dbc.apps.googleusercontent.com
 root@rya:/opt/plausible-ce# 
 
+###
+### bei Problemen
+###
+docker compose down
+#### und dann erst
+docker compose up -d plausible_db plausible_events_db
+#### sobald die beide healthy sind, check mit
+docker ps
+### dann
+docker compose up -d plausible
