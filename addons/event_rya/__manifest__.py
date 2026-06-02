@@ -23,6 +23,7 @@
         "views/event_event_views.xml",
         "views/res_partner_geo.xml",
         "views/webclient_templates.xml",
+        "views/event_registration_views.xml",
     ],
     "assets": {
         "web.assets_frontend": [

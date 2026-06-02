@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="event_registration_view_kanban_rya" model="ir.ui.view">
+        <field name="name">event.registration.kanban.rya</field>
+        <field name="model">event.registration</field>
+        <field name="inherit_id" ref="event.event_registration_view_kanban" />
+        <field name="arch" type="xml">
+
+            <!-- ensure field is loaded -->
+            <xpath expr="//kanban" position="inside">
+                <field name="phone" />
+            </xpath>
+            <xpath expr="//kanban" position="inside">
+                <field name="event_begin_date" />
+            </xpath>
+
+
+            <!-- insert phonebefore event name block -->
+            <xpath expr="//div[contains(@class, 'o_kanban_event_registration_event_name')]"
+                position="before">
+                <div class="small">
+                    <i class="fa fa-phone" title="Phone" />
+                    <field name="phone" class="fw-bold text-truncate ms-1" />
+                </div>
+            </xpath>
+            <!-- replace event_slot_id with event_begin_date -->
+            <xpath expr="//t[@t-name='card']//div[@t-if='record.event_slot_id.raw_value']"
+                position="replace">
+                <div>
+                    <i class="fa fa-calendar" title="Event Start Date" />
+                    <field name="event_begin_date"
+                        class="fw-bold text-truncate ms-1" />
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_event_registration_tree_rya" model="ir.ui.view">
+        <field name="name">event.registration.list.rya</field>
+        <field name="model">event.registration</field>
+        <field name="inherit_id" ref="event.view_event_registration_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="default_order">
+                    event_begin_date asc,
+                    create_date asc
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='create_date']" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </xpath>
+            <xpath expr="//field[@name='email']" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </xpath>
+            <xpath expr="//field[@name='activity_ids']" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </xpath>
+            <xpath expr="//field[@name='event_slot_id']" position="before">
+                <field name="event_begin_date" optional="show" />
+            </xpath>
+            <xpath expr="//field[@name='event_slot_id']" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record
+        id="view_registration_search_rya" model="ir.ui.view">
+        <field name="name">event.registration.search.rya</field>
+        <field name="model">event.registration</field>
+        <field name="inherit_id" ref="event.view_registration_search" />
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='filter_is_ongoing']" position="before">
+                <filter string="Fishing"
+                    name="filter_is_fishing"
+                    domain="[('event_id.website_id', 'in', [2])]" />
+                <filter string="Yachting"
+                    name="filter_is_yachting"
+                    domain="[('event_id.website_id', 'in', [1])]" />
+                <separator />
+                <filter string="Ongoing/Upcoming"
+                    name="filter_is_ongoing_or_upcoming"
+                    domain="[('event_end_date', '>=', context_today())]" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="event.event_registration_action" model="ir.actions.act_window">
+        <field name="context">{'search_default_filter_is_ongoing_or_upcoming': True, 'search_default_filter_is_fishing': True,
+            'is_registration_desk_view': True}</field>
+    </record>
+
+    <record id="event.action_registration" model="ir.actions.act_window">
+        <field name="view_mode">list,kanban,pivot,graph,form</field>
+        <field name="context">{'search_default_filter_is_ongoing_or_upcoming': True }</field>
+    </record>
+
+</odoo>
