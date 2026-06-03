@@ -554,7 +554,7 @@
                                         <div t-if="(not ticket.is_expired and ticket.sale_available and max_input_value) or seats_available_slot_ticket">
                                             <div class="rounded input-group d-inline-flex border" style="width: 120px;">
                                                 <button
-                                                    class="btn d-md-inline-block border-0 pe-2" data-increment-type="minus" type="button"
+                                                    class="btn d-md-inline-block border-0 ps-1 pe-1" data-increment-type="minus" type="button"
                                                     t-att-disabled="True" t-attf-data-input-name="nb_register-#{ticket.id}">
                                                     <i class="oi oi-minus text-600"/>
                                                 </button>
@@ -563,7 +563,7 @@
                                                     inputmode="numeric" pattern="[0-9]*" size="2" type="text" value="0"
                                                     t-attf-max="#{max_input_value}" t-attf-name="nb_register-#{ticket.id}"/>
                                                 <button
-                                                    class="btn d-md-inline-block border-0 ps-2" data-increment-type="plus" type="button"
+                                                    class="btn d-md-inline-block border-0 ps-1 pe-1" data-increment-type="plus" type="button"
                                                     t-attf-data-input-name="nb_register-#{ticket.id}">
                                                     <i class="oi oi-plus text-600"/>
                                                 </button>
@@ -631,7 +631,7 @@
                                         <div class="rounded input-group d-inline-flex border" style="width: 120px;">
                                             <t t-set="register_id" t-value="tickets.id if tickets else 0"/>
                                             <button
-                                                class="btn d-md-inline-block border-0 pe-2" data-increment-type="minus" type="button"
+                                                class="btn d-md-inline-block border-0 ps-1 pe-1" data-increment-type="minus" type="button"
                                                 t-attf-data-input-name="nb_register-#{register_id}">
                                                 <i class="oi oi-minus text-600"/>
                                             </button>
@@ -640,7 +640,7 @@
                                                 inputmode="numeric" pattern="[0-9]*" size="2" type="text" value="1"
                                                 t-attf-max="#{max_input_value}" t-attf-name="nb_register-#{register_id}"/>
                                             <button
-                                                class="btn d-md-inline-block border-0 ps-2" data-increment-type="plus" type="button"
+                                                class="btn d-md-inline-block border-0 ps-1 pe-1" data-increment-type="plus" type="button"
                                                 t-att-disabled="seats_max == 1" t-attf-data-input-name="nb_register-#{register_id}">
                                                 <i class="oi oi-plus text-600"/>
                                             </button>
