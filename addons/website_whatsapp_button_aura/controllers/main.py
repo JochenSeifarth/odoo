@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
 from odoo import http
 from odoo.http import request
 
 
 class WhatsAppButtonController(http.Controller):
 
-    @http.route('/website/whatsapp/config', type='json', auth='public', website=True)
+    @http.route('/website/whatsapp/config', type='jsonrpc', auth='public', website=True)
     def get_whatsapp_config(self):
         """Return WhatsApp button configuration for the current website."""
         website = request.website
