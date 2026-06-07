@@ -346,8 +346,10 @@
 									<t t-foreach="event.event_slot_ids.sorted('start_datetime')"
 									   t-as="slot"
 									   t-last="last">
-										<t t-set="time_key"
-										   t-value="slot.start_datetime.strftime('%H:%M') + '-' + slot.end_datetime.strftime('%H:%M')" />
+                                        <t t-set="time_key"
+                                           t-value="('%02d:%02d-%02d:%02d' % (
+											        int(slot.start_hour), int((slot.start_hour - int(slot.start_hour)) * 60),
+                                                    int(slot.end_hour),   int((slot.end_hour   - int(slot.end_hour  )) * 60)))" />
 										<t t-if="not seen_times or time_key not in seen_times">
 											<t t-set="seen_times"
 											   t-value="(seen_times or []) + [time_key]" />
