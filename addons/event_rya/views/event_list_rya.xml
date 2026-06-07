@@ -9,15 +9,14 @@
                     <t t-foreach="event.event_ticket_ids" t-as="ticket">
                         <span class="badge bg-secondary">
                             <t t-if="ticket.name">
-                                <t t-out="ticket.name"/>:
-                            </t>
+                                <t t-out="ticket.name" />: </t>
                             <t t-if="ticket.price &gt;= 99999">
                                 On Request
                             </t>
                             <t t-else="">
                                 <!-- normale Preisanzeige -->
-                                <t t-out="int(ticket.price)"/>
-                                <t t-out="event.company_id.currency_id.symbol"/>
+                                <t t-out="int(ticket.price)" />
+                                <t t-out="event.company_id.currency_id.symbol" />
                             </t>
                         </span>
                     </t>
@@ -28,7 +27,10 @@
         <!-- Hide booking status for "Individuell" events -->
         <xpath expr="//footer[span]" position="replace">
             <t t-if="5 in event.tag_ids.ids">
-                <!-- Tag ID 5 (FÜNF) ist "Individuell") -->                
+                <!-- Tag ID 5 (FÜNF) ist "Individuell" auf real-yachting-alicante.com -->
+            </t>
+            <t t-elif="10 in event.tag_ids.ids">
+                <!-- Tag ID 10 (ZEHN) ist "Individuell" auf fishing-alicante.com -->
             </t>
             <t t-else="">
                 <!-- the original Odoo logic -->
@@ -40,7 +42,7 @@
                     )">
                     <span t-if="not event.event_registrations_open">
                         <t t-if="event.kanban_state == 'cancel'">
-                            Cancelled 
+                            Cancelled
                         </t>
                         <t t-elif="not event.event_registrations_started">
                             Registrations not yet open
