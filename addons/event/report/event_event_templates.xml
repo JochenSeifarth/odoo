@@ -400,6 +400,15 @@
         </t>
     </t>
     <span t-else="" t-out="event.address_id.name">1000 Brussels</span>
+	<t t-if="event.address_id.website">
+		<a t-att-href="event.address_id.website" target="_blank" class="text-decoration-underline">
+			show on Google Maps
+		</a>
+	</t>
+	<t t-elif="event.address_id.partner_longitude and event.address_id.partner_latitude">
+		<a t-att-href="'https://maps.google.com?q=%s,%s' % (event.address_id.partner_latitude, event.address_id.partner_longitude)"
+           target="_blank" class="text-decoration-underline">Show on Google Maps</a>
+	</t>
 </template>
 
 </odoo>
