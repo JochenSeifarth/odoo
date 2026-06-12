@@ -80,7 +80,8 @@
             <div class="card bg-transparent py-3 px-2 px-md-3">
                 <!-- Up to the next 5 closest dates -->
                 <t t-set="slots_to_preview" t-value="dict(list(slots.items())[:6])" />
-                <t t-if="slots_to_preview">
+                <t
+                    t-if="slots_to_preview and not (event.tag_ids.filtered(lambda t: t.name == 'Individuell') and not env.user.has_group('event.group_event_user'))">
                     <div class="row">
                         <div t-foreach="slots_to_preview" t-as="date" class="col d-flex flex-column align-items-start gap-1 pb-2">
                             <time t-out="date" class="text-nowrap" t-options="{'widget': 'date', 'format': 'full'}" />
@@ -113,16 +114,8 @@
     <template id="registration_template_rya" inherit_id="website_event.registration_template" name="Custom Registration Override">
         <xpath expr="." position="replace">
             <div class="rya_registration">
-                <t t-if="5 in event.tag_ids.ids">
-                    <!-- Tag ID 5 (FÜNF) ist "Individuell") -->
-                    <a type="button"
-                        t-attf-class="btn btn-primary {{cta_additional_classes}}"
-                        t-att-href="'/contactus'">
-                        Contact Us
-                    </a>
-                </t>
-                <t t-elif="10 in event.tag_ids.ids">
-                    <!-- Tag ID 10 (ZEHN) ist "Individuell") -->
+                <t
+                    t-if="event.tag_ids.filtered(lambda t: t.name == 'Individuell') and not env.user.has_group('event.group_event_user')">
                     <a type="button"
                         t-attf-class="btn btn-primary {{cta_additional_classes}}"
                         t-att-href="'/contactus'">
