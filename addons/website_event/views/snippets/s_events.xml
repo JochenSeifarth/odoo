@@ -151,7 +151,7 @@
                     <div class="row text-white justify-content-center w-100">
                         <t t-foreach="record.event_ticket_ids[:3]" t-as="ticket">
                             <div class="col-4 text-center">
-                                <h5 class="mt-2 mb-0">
+                                <h5 class="mt-2 mb-0 text-nowrap">
                                     <t t-out="int(ticket.price)" />
                                     <small t-out="ticket.currency_id.symbol" />
                                 </h5>
