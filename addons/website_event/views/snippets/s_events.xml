@@ -147,11 +147,22 @@
                                             <span t-out="record.date_end"
 								  t-options="{'widget':'datetime','date_only':True,'format':'y','tz_name':record.date_tz}" />
 						</t>
-						<div class="d-flex justify-content-center"
-							 t-if="events_event_location_active"
-							 t-field="record.address_id"
-							 t-options="{'widget': 'contact', 'fields': ['city'], 'no_marker': 'true'}" />
-					</time>
+                    </time>
+                    <div class="row text-white justify-content-center w-100">
+                        <t t-foreach="record.event_ticket_ids[:3]" t-as="ticket">
+                            <div class="col-4 text-center">
+                                <h5 class="mt-2 mb-0">
+                                    <t t-out="int(ticket.price)" />
+                                    <small t-out="ticket.currency_id.symbol" />
+                                </h5>
+                                <small t-if="ticket.name" t-out="ticket.name" class="d-block lh-1" />
+                            </div>
+                        </t>
+                    </div>
+                    <div class="text-white d-flex justify-content-center"
+                        t-if="events_event_location_active"
+                        t-field="record.address_id"
+                        t-options="{'widget': 'contact', 'fields': ['name'], 'no_marker': 'true'}" />
             </div>
         </a>
     </div>
