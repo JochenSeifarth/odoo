@@ -88,7 +88,7 @@
     </record>
 
     <record id="event.event_registration_action" model="ir.actions.act_window">
-        <field name="context">{'search_default_filter_is_ongoing_or_upcoming': True, 'search_default_filter_is_fishing': True,
+        <field name="context">{'search_default_filter_is_ongoing_or_upcoming': True,
             'is_registration_desk_view': True}</field>
     </record>
 
