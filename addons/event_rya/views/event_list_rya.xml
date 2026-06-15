@@ -26,7 +26,7 @@
         </xpath>
         <!-- Hide booking status for "Individuell" events -->
         <xpath expr="//footer[span]" position="replace">
-            <t t-if="event.tag_ids.filtered(lambda t: t.name == 'Individuell') and not env.user.has_group('event.group_event_user')">
+            <t t-if="event.tag_ids.filtered(lambda t: t.id in [5, 10]) and not env.user.has_group('event.group_event_user')">
             </t>
             <t t-else="">
                 <!-- the original Odoo logic -->

@@ -81,7 +81,7 @@
                 <!-- Up to the next 5 closest dates -->
                 <t t-set="slots_to_preview" t-value="dict(list(slots.items())[:6])" />
                 <t
-                    t-if="slots_to_preview and not (event.tag_ids.filtered(lambda t: t.name == 'Individuell') and not env.user.has_group('event.group_event_user'))">
+                    t-if="slots_to_preview and not (event.tag_ids.filtered(lambda t: t.id in [5, 10]) and not env.user.has_group('event.group_event_user'))">
                     <div class="row">
                         <div t-foreach="slots_to_preview" t-as="date" class="col d-flex flex-column align-items-start gap-1 pb-2">
                             <time t-out="date" class="text-nowrap" t-options="{'widget': 'date', 'format': 'full'}" />
@@ -115,7 +115,7 @@
         <xpath expr="." position="replace">
             <div class="rya_registration">
                 <t
-                    t-if="event.tag_ids.filtered(lambda t: t.name == 'Individuell') and not env.user.has_group('event.group_event_user')">
+                    t-if="event.tag_ids.filtered(lambda t: t.id in [5, 10]) and not env.user.has_group('event.group_event_user')">
                     <a type="button"
                         t-attf-class="btn btn-primary {{cta_additional_classes}}"
                         t-att-href="'/contactus'">
