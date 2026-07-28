@@ -6,5 +6,6 @@ from . import (
     qweb_logger,
     res_lang,
     res_partner,
+    sale_order,
     website_visitor_patch,
 )
