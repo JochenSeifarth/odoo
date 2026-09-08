@@ -87,28 +87,29 @@
                         class="text-white text-center">
                         <t t-set="seen_times"
                             t-value="[]" />
-                        <t t-foreach="record.event_slot_ids.sorted('start_datetime')"
-                            t-as="slot">
-                            <t t-set="time_key"
-                                t-value="('%02d:%02d-%02d:%02d' % (
+                        <t t-foreach="record.event_slot_ids.sorted('start_datetime')" t-as="slot">
+                            <t t-if="slot.start_datetime and slot.start_datetime >  datetime.datetime.now()">
+                                <t t-set="time_key"
+                                    t-value="('%02d:%02d-%02d:%02d' % (
                                         int(slot.start_hour), int((slot.start_hour - int(slot.start_hour)) * 60),
                                         int(slot.end_hour),   int((slot.end_hour   - int(slot.end_hour  )) * 60)))" />
-                            <t t-if="not seen_times or time_key not in seen_times">
-                                <t t-set="seen_times"
-                                    t-value="(seen_times or []) + [time_key]" />
-                                <div>
-                                    <span t-out="slot.start_datetime"
-                                        t-options="{'widget': 'datetime', 'time_only': 'true',                              'format': 'short',
+                                <t t-if="not seen_times or time_key not in seen_times">
+                                    <t t-set="seen_times"
+                                        t-value="(seen_times or []) + [time_key]" />
+                                    <div>
+                                        <span t-out="slot.start_datetime"
+                                            t-options="{'widget': 'datetime', 'time_only': 'true',                              'format': 'short',
                               'tz_name': record.date_tz}" />
-                                    - <span t-out="slot.end_datetime"
-                                        t-options="{'widget': 'datetime',
+                                        - <span t-out="slot.end_datetime"
+                                            t-options="{'widget': 'datetime',
                               'time_only': 'true',
                               'format': 'short',
                               'tz_name': record.date_tz}" />
-                                </div>
+                                    </div>
+                                </t>
                             </t>
                         </t>
-                        <t t-if="seen_times">
+                        <t t-if="seen_times or record.event_slot_ids">
                             <!-- don't show month for daytrips
                             (
                             <span t-out="record.date_begin" t-options="{'widget': 'datetime', 'date_only': 'true', 'format': 'MMMM', 'tz_name':
