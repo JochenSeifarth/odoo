@@ -25,7 +25,6 @@ plugins:
 
 extra_javascript:
   - javascript/numbering.js
-  - javascript/external-links.js
 
 markdown_extensions:
   - admonition

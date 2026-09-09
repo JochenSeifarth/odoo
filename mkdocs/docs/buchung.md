@@ -13,7 +13,9 @@ Unsere Rechnung geht an die Plattform als Kunde - **nicht** an Teilnehmer. Die T
 Email mit Buchungsdaten kommt.
 
 ### Vorgehen
-+ In Odoo als Benutzer anmelden, Menü [Verkauf](https://real-yachting-alicante.com/odoo/sales)
++ In Odoo als Benutzer anmelden, <a href="https://www.real-yachting-alicante.com/odoo/sales"
+   target="_blank"
+   rel="noopener noreferrer">Menü Verkauf</a>
 + Auf **\[+Neu]** klicken um einen Verkaufsauftrag zu erstellen:
 
 ![angebot1](images/angebot1.png)
@@ -55,7 +57,11 @@ Email mit Buchungsdaten kommt.
 ### Vorgehen
 Anonym die Website aufrufen. Mit diesen Links wird man automatisch anonym und die Quelle wird automatisch richtig erfasst.
 
-- [https://www.fishing-alicante.com/web/session/logout?redirect=/event&utm_source=**FishingBooker**](https://www.fishing-alicante.com/web/session/logout?redirect=/event&utm_source=FishingBooker)
+- <a href="https://www.fishing-alicante.com/web/session/logout?redirect=/event&utm_source=FishingBooker"
+   target="_blank"
+   rel="noopener noreferrer">
+   https://www.fishing-alicante.com/web/session/logout?redirect=/event&utm_source=<strong>FishingBooker</strong>
+</a>
 
 Sprache **des Kunden** auswählen ![Sprachauswahl](images/sprachauswahl.png)
 
@@ -64,7 +70,9 @@ Veranstaltung auswählen, **\[Buchen]** klicken, Datum auswählen, Ticket(s) aus
 Rechnungsadresse ausfüllen, **\[Bestätigen]** klicken
 !!! info "Wenn keine postalische Adresse vorliegt: Email und/oder Telefon-Nummer als Straße verwenden und als Stadt 03001 Alicante, Spanien"
 
-Damit ist die Auftragserfassung abgeschlossen, jetzt in Odoo als regulärer Benutzer anmelden, [Menü Verkauf](https://www.real-yachting-alicante.com/odoo/sales)
+Damit ist die Auftragserfassung abgeschlossen, jetzt in Odoo als regulärer Benutzer anmelden, <a href="https://www.real-yachting-alicante.com/odoo/sales"
+   target="_blank"
+   rel="noopener noreferrer">Menü Verkauf</a>
 
 Die eben erfasste Buching sollte der oberste Verkaufsauftrag sein, diesen aufrufen. (Optional: Durch Klick auf den  Kundennamen die Kundendetails aufrufen und die Sprache überprüfen, es sollte die oben ausgewählte sein)
 

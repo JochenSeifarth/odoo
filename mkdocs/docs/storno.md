@@ -4,9 +4,11 @@
 Email mit Storno kommt.
 
 ### Vorgehen
-+ In Odoo als Benutzer anmelden
++ In Odoo als Benutzer anmelden 
 
-+ Menü [Verkauf](https://real-yachting-alicante.com/odoo/sales)
++ <a href="https://www.real-yachting-alicante.com/odoo/sales"
+   target="_blank"
+   rel="noopener noreferrer">Menü Verkauf</a>
 
 Verkaufsauftrag auswählen - mit GYG??????? suchen / ggf. Feld Kundenreferenz einblenden um richtigen Auftrag zu identifizieren
 
@@ -16,8 +18,8 @@ Verkaufsauftrag auswählen - mit GYG??????? suchen / ggf. Feld Kundenreferenz ei
 Am Verkaufsauftrag **\[Stornieren]** klicken --> Veranstaltung(-szeitfenster) ist automatisch wieder freigegeben sodass anderen buchen können
 
 #### Kunden (Direktbucher) die über Stripe bezahlt haben
-Zahlung in Stripe zurückerstatten über
-[https://dashboard.stripe.com/acct_1Swi5PCMNXMFS6vK/payments](https://dashboard.stripe.com/acct_1Swi5PCMNXMFS6vK/payments)
+Zahlung in Stripe zurückerstatten über <a href="https://dashboard.stripe.com/acct_1Swi5PCMNXMFS6vK/payments" target="_blank" rel="noopener noreferrer">https://dashboard.stripe.com/acct_1Swi5PCMNXMFS6vK/payments</a>
+
 ![stripe-refund](images/stripe-refund.png)
 
 !!! danger "In Odoo einen Vermerk über die Rückerstattung machen."
