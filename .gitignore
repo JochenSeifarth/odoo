@@ -52,3 +52,6 @@ package.json
 /share/
 /src/
 /venv_odoo/
+
+#mkdocs generated stuff
+mkdocs/site/*

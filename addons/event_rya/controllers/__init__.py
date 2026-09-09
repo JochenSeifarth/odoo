@@ -1,3 +1,1 @@
-from . import main
-from . import event_route_controller
-from . import website
+from . import event_route_controller, hilfe_auth, main, website
