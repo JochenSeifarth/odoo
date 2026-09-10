@@ -39,6 +39,6 @@ markdown_extensions:
   - pymdownx.tasklist
 
 nav:
-  - Start: index.md
+  - Einführung: index.md
   - Buchung: buchung.md
   - Storno: storno.md
