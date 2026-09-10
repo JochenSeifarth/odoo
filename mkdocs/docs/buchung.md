@@ -1,38 +1,38 @@
 # Buchungen
 
-## Plattformen: Kunde zahlt komplett und nur an Plattform
+
+## Plattformen: Teilnehmer zahlt komplett und nur an Plattform
 #### Beispiele
 - GetYourGuide
 - Segelreisen Hering
 - Click&Boat
 - SamBoat
 
-Unsere Rechnung geht an die Plattform als Kunde - **nicht** an Teilnehmer. Die Teilnehmer bekommen von uns nur Tickets.
+Unsere Rechnung geht an die Plattform als Kunde - **nicht** an Teilnehmer.<br>
+Teilnehmer bekommen von uns nur Tickets.
 
 #### Auslöser
 Email mit Buchungsdaten kommt.
 
 ### Vorgehen
-+ In Odoo als Benutzer anmelden, <a href="https://www.real-yachting-alicante.com/odoo/sales"
-   target="_blank"
-   rel="noopener noreferrer">Menü Verkauf</a>
-+ Auf **\[+Neu]** klicken um einen Verkaufsauftrag zu erstellen:
++ In Odoo als Benutzer anmelden, <a href="https://www.real-yachting-alicante.com/odoo/sales" target="_blank">Menü Verkauf</a>
++ Auf **\[+Neu]** klicken um ein Angebot zu erstellen:
 
 ![angebot1](images/angebot1.png)
 
-1. **Kunde** ist immer GetYourGuide bzw. die Platform
-2. Veranstaltung, Zeitfenster und Anzahl Tickets auswählen
+1. **Kunde** ist immer die Platform, z.B. GetYourGuide. Diese sollte bereits in Odoo existieren.
+2. ***Produkt hinzufügen*** klicken, Veranstaltung auswahlen, Zeitfenster und Anzahl Tickets auswählen
 3. ggf. Preis überschreiben
 4. auf Tab "Weitere Informationen" erfassen:
     
 ![angebot2](images/angebot2.png)
 
-1. Kundenreferenz: GYG????????? - die Auftragsnummer der Platform
-2. Quelle: "GetYourGuide" bzw. die Platform auswählen
+1. Kundenreferenz: GYG????????? - die Auftragsnummer der Platform. Das ist wichtig damit später danan gesucht werden kann.
+2. Quelle: Die Platform auswählen, z.B. "GetYourGuide. Diese sollte bereits in Odoo existieren.
 
-Verkaufsauftrag **\[Bestätigen]** klicken
+Das Angebot braucht nicht per Email versendet zu werden, es wurde ja bereits schon gebucht. Deshalb 
+am Angebot **\[Bestätigen]** klicken, das Popup "Veranstlatunsgregistrierungen erscheint:
 
-im Popup
 ![angebot3](images/angebot3.png)
 
 - **Teilnehmer**-Namen, -E-Mail und -Telefon eintragen
@@ -40,11 +40,11 @@ im Popup
   
 !!! warning "Teilnehmer erhält automatisch Tickets (Achtung: Email ist in der Sprache des aktuell angemeldeten Benutzers! - solange der Kunde (die Platform) keine Sprache voreingestellt hat). Das Zeitfenster der Veranstaltung ist damit belegt und kann nicht mehr von anderen gebucht werden."
 
-Verkaufsauftrag **\[Rechnung erstellen]** klicken, "reguläre Rechnung" auswählen, ggf. Fälligkeitsdatum anpassen, **\[Bestätigen]** klicken
+Am Angebot **\[Rechnung erstellen]** klicken, "reguläre Rechnung" auswählen, ggf. Fälligkeitsdatum anpassen, **\[Bestätigen]** klicken
 
 Bei Zahlungseingang von der Platform die Rechnung mit **\[Zahlen]** als bezahlt markieren
 
-## Plattformen: Kunde zahlt nur Provision an Plattform und an uns den Rest
+## Plattformen: Teilnehmer zahlt nur Provision an Plattform und an uns den Rest
 #### Beispiele
 - FishingBooker
 
@@ -74,7 +74,7 @@ Damit ist die Auftragserfassung abgeschlossen, jetzt in Odoo als regulärer Benu
    target="_blank"
    rel="noopener noreferrer">Menü Verkauf</a>
 
-Die eben erfasste Buching sollte der oberste Verkaufsauftrag sein, diesen aufrufen. (Optional: Durch Klick auf den  Kundennamen die Kundendetails aufrufen und die Sprache überprüfen, es sollte die oben ausgewählte sein)
+Die eben erfasste Buching sollte das oberste Angebot sein, dieses aufrufen. (Optional: Durch Klick auf den  Kundennamen die Kundendetails aufrufen und die Sprache überprüfen, es sollte die oben ausgewählte sein)
 
 ![angebot11](images/angebot11.png)
 
@@ -83,9 +83,11 @@ Die eben erfasste Buching sollte der oberste Verkaufsauftrag sein, diesen aufruf
 
 **\[Senden]** klicken, ggf. Email Text im Popup modifizieren und **\[Senden]** klicken, dann wird das Angebot per Email verschickt.
 
+Der Kunde erhält folgende Email:
+
 ![angebot13](images/angebot13-email.png)
-In der Email hat der Kunde einen Button **\[Angebot akzeptieren & bezahlen]** womit er immer und ohne spezielle Anmeldung auf folgende Bezahlseite kommt:
+In der Email hat der Kunde einen Button **\[Angebot akzeptieren & bezahlen]** womit er jederzeit und ohne spezielle Anmeldung auf folgende Bezahlseite kommt:
 ![angebot13-payment](images/angebot13-payment.png)
 
 
-!!!warning "Erst bei Bezahlung wird der Platz für die Veranstaltung reserviert und das Ticket sowie Rechnungen verschickt, das passiert alles automatisch und in der oben ausgewählten Sprache des Kunden."
+!!!warning "Erst bei Bezahlung wird der Platz für die Veranstaltung reserviert und das Ticket sowie Rechnungen verschickt. Das passiert alles automatisch und in der oben ausgewählten Sprache des Kunden."
