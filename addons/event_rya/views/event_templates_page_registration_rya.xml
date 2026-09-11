@@ -6,18 +6,20 @@
 
 
         <!-- Route map -->
-        <xpath expr="//div[@id='o_wevent_event_main_col']" position="inside">
+        <xpath expr="//div[@id='o_wevent_event_main_col']/div[@itemprop='description']" position="before">
             <t t-if="event.event_leg_ids">
-                <!-- Map Container -->
-                <h5>
-                    <span t-translate="yes">Legs</span>
-                </h5>
-                <div>
-                    <span t-translate="yes">Total Distance [nm]</span> : <t t-out="event.total_distance_nm" />
-                </div>
+                <div class="mt-4">
+                    <!-- Map Container -->
+                    <h5>
+                        <span t-translate="yes">Legs</span>
+                    </h5>
+                    <div>
+                        <span t-translate="yes">Total Distance [nm]</span> : <t t-out="event.total_distance_nm" />
+                    </div>
 
-                <div class="o_event_route_map" t-att-data-event-id="event.id"
-                    style="height: 600px; width: 100%; margin-top: 20px;">
+                    <div class="o_event_route_map" t-att-data-event-id="event.id"
+                        style="height: 600px; width: 100%; margin-top: 20px;">
+                    </div>
                 </div>
             </t>
         </xpath>

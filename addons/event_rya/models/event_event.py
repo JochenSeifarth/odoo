@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-import math
-
 from odoo import api, fields, models
+
 from ..services.o2_router_service import O2RouterService
 
 
@@ -72,7 +71,7 @@ class EventEvent(models.Model):
                         (leg.partner_latitude, leg.partner_longitude),
                     )
                     leg.distance_from_prev_nm = round(
-                        ((leg.asw_json or {}).get("distance_nm") or 0.0) * 1.1, 2
+                        ((leg.asw_json or {}).get("distance_nm") or 0.0) * 1.25, 2,
                     )
                 previous_leg = leg
 
