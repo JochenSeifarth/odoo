@@ -9,6 +9,7 @@
         "base",
         "base_geolocalize",
         "event",
+        "event_sale",
         "website",
         "website_event",
         "mail",
@@ -23,6 +24,7 @@
         "views/event_event_views.xml",
         "views/res_partner_geo.xml",
         "views/webclient_templates.xml",
+        "views/report_invoice_rya.xml",
         "views/event_registration_views.xml",
     ],
     "assets": {

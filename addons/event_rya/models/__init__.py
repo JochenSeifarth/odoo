@@ -7,5 +7,6 @@ from . import (
     res_lang,
     res_partner,
     sale_order,
+    sale_order_line,
     website_visitor_patch,
 )
