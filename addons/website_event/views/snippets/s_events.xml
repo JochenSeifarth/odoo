@@ -88,7 +88,8 @@
                         <t t-set="seen_times"
                             t-value="[]" />
                         <t t-foreach="record.event_slot_ids.sorted('start_datetime')" t-as="slot">
-                            <t t-if="slot.start_datetime and slot.start_datetime >  datetime.datetime.now()">
+                            <t
+                                t-if="slot.start_datetime and slot.start_datetime > datetime.datetime.combine(datetime.date.today(), datetime.time.min)">
                                 <t t-set="time_key"
                                     t-value="('%02d:%02d-%02d:%02d' % (
                                         int(slot.start_hour), int((slot.start_hour - int(slot.start_hour)) * 60),
