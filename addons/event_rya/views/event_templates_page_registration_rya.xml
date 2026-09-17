@@ -88,9 +88,10 @@
                         <div t-foreach="slots_to_preview" t-as="date" class="col d-flex flex-column align-items-start gap-1 pb-2">
                             <time t-out="date" class="text-nowrap" t-options="{'widget': 'date', 'format': 'full'}" />
                             <div class="d-flex flex-wrap gap-2">
-                                <button t-foreach="slots_to_preview[date]" t-as="slot"
-                                    t-attf-class="btn btn-sm text-nowrap pe-none
-                                        #{'bg-danger text-white' if slot.is_sold_out else 'btn-light'}">
+                                <button t-foreach="slots_to_preview[date]" t-as="slot" type="button"
+                                    t-attf-class="btn btn-sm text-nowrap
+                                        #{'bg-danger text-white pe-none' if slot.is_sold_out else 'btn-primary o_rya_quick_slot_booking'}"
+                                    t-att-data-registration-url="False if slot.is_sold_out else '/event/%s/registration/slot/%s/tickets' % (slug(event), slot.id)">
                                     <span t-if="slot.is_sold_out" class="lh-1">Sold Out</span>
                                     <time t-else="" t-out="slot.start_datetime" t-att-datetime="slot.start_datetime" class="lh-1"
                                         t-options="{'widget': 'datetime', 'tz_name': event.date_tz, 'time_only': 'true', 'format': 'short'}" />

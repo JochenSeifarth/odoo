@@ -30,6 +30,7 @@
     "assets": {
         "web.assets_frontend": [
             "event_rya/static/src/js/event_route_map.js",
+            "event_rya/static/src/js/event_slot_quick_booking.js",
             "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
             "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
             "event_rya/static/src/img/1/favicon.svg",
