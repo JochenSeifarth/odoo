@@ -27,6 +27,7 @@
         "views/webclient_templates.xml",
         "views/report_invoice_rya.xml",
         "views/event_registration_views.xml",
+        "views/website_sale.templates.xml",
     ],
     "assets": {
         "web.assets_frontend": [
