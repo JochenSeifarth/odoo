@@ -15,11 +15,12 @@
         "mail",
     ],
     "data": [
+        "report/event.event_event_templates.xml",
+        "report/event.event_report_template_full_page_ticket.xml",
         "views/event_list_rya.xml",
         "views/event_templates_page_registration_rya.xml",
         "views/sale_report_views.xml",
         "views/sailing_route_template.xml",
-        "report/event_report_template_full_page_ticket_rya.xml",
         "security/ir.model.access.csv",
         "views/event_event_views.xml",
         "views/res_partner_geo.xml",

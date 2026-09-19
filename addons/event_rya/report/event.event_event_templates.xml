@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="event_report_template_formatted_event_address_rya"
+        inherit_id="event.event_report_template_formatted_event_address">
+        <xpath expr="*[last()]" position="after">
+            <t t-if="event.address_id.coordinates">
+                <span class="text-muted" t-out="event.address_id.coordinates">38°20'26"N 000°28'53"W</span>
+                <br />
+            </t>
+            <t t-if="event.address_id.google_map_url">
+                <a t-att-href="event.address_id.google_map_url" target="_blank" class="text-decoration-underline">📍 Google Maps</a>
+            </t>
+        </xpath>
+    </template>
+
+</odoo>
