@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="layout_rya" inherit_id="website.layout">
+        <!-- for title, use translated menu entry as website.page.name does not seem
+    to be translated -->
+        <xpath expr="//t[@t-if='not title']/*[1]" position="before">
+            <t
+                t-if="not additional_title and main_object and 'menu_ids' in main_object._fields and main_object.menu_ids and 'name' in main_object.menu_ids[0]._fields">
+                <t t-set="additional_title"
+                    t-value="main_object.sudo().menu_ids[0].name" />
+            </t>
+        </xpath>
+    </template>
+
+</odoo>
