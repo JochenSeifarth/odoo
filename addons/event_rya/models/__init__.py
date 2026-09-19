@@ -8,5 +8,6 @@ from . import (
     res_partner,
     sale_order,
     sale_order_line,
+    website_mixins_website_seo_metadata,
     website_visitor_patch,
 )
