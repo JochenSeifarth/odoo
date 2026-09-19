@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="website_sale_layout_add_organization_id"
+        inherit_id="website_sale.website_sale_layout">
+
+        <!-- replace sot ath we can add @id to the Organization schema.org json ld data -->
+        <xpath expr="//script[@type='application/ld+json'][@t-if='res_company and website']"
+            position="replace">
+
+            <script t-if="res_company and website" type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type":    "Organization",
+    "@id":      "<t t-out="res_company.website"/>",
+    "name":     "<t t-out="res_company.name"/>",
+    "logo":     "<t t-out="'%s/logo.png?company=%s' % (base_url, res_company.id)"/>",
+    "url":      "<t t-out="base_url"/>"
+}
+        </script>
+
+        </xpath>
+    </template>
+</odoo>
