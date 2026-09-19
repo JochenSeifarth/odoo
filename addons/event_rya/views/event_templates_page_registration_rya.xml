@@ -1,5 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+
+    <template id="event_details_rya" inherit_id="website_event.event_details">
+        <xpath expr="//div[@name='event']" position="attributes">
+            <attribute name="itemscope" remove="" />
+            <attribute name="itemtype" remove="" />
+        </xpath>
+    </template>
+
+    <template id="event_description_full_rya" inherit_id="website_event.event_description_full">
+        <xpath expr="//p[@t-field='event.subtitle']" position="attributes">
+            <attribute name="style" add="font-weight: unset;" separator=" " />
+        </xpath>
+    </template>
+
+    <template id="modal_ticket_registration_rya"
+        inherit_id="website_event.modal_ticket_registration"
+        name="RYA Registration Template">
+
+        <xpath expr="//div[@id='o_wevent_tickets_collapse']//button[@data-increment-type='minus']"
+            position="attributes">
+            <attribute name="class" remove="pe-2" add="ps-1 pe-1" separator=" " />
+        </xpath>
+
+        <xpath expr="//div[@id='o_wevent_tickets_collapse']//button[@data-increment-type='plus']"
+            position="attributes">
+            <attribute name="class" remove="ps-2" add="ps-1 pe-1" separator=" " />
+        </xpath>
+
+        <xpath expr="//div[contains(@class, 'o_wevent_registration_single')]//button[@data-increment-type='minus']"
+            position="attributes">
+            <attribute name="class" remove="pe-2" add="ps-1 pe-1" separator=" " />
+        </xpath>
+
+        <xpath expr="//div[contains(@class, 'o_wevent_registration_single')]//button[@data-increment-type='plus']"
+            position="attributes">
+            <attribute name="class" remove="ps-2" add="ps-1 pe-1" separator=" " />
+        </xpath>
+
+    </template>
+
     <!-- Show ticket price on Event Description Page -->
     <template id="event_description_full_rya" inherit_id="website_event.event_description_full"
         name="Show Ticket Prices in box and Event Legs on Event Description Page">
