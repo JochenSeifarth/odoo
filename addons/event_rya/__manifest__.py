@@ -29,6 +29,7 @@
         "views/event_registration_views.xml",
         "views/website_sale.templates.xml",
         "views/website.website_templates.xml",
+        "views/website_event.s_events.xml",
     ],
     "assets": {
         "web.assets_frontend": [
