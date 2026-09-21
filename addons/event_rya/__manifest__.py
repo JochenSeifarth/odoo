@@ -6,6 +6,7 @@
     "license": "Other proprietary",
     "category": "Website",
     "depends": [
+        "account",
         "base",
         "base_geolocalize",
         "event",
