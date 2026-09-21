@@ -1,7 +1,7 @@
+import logging
+
 from odoo import http
 from odoo.http import request
-import logging
-from ..services.o2_router_service import O2RouterService
 
 _logger = logging.getLogger(__name__)
 
@@ -15,7 +15,7 @@ class EventRouteController(http.Controller):
         csrf=False,
         methods=["GET"],
     )
-    def event_route(self, event_id):
+    def event_routejson(self, event_id):
 
         try:
             event = request.env["event.event"].sudo().browse(event_id)
@@ -41,13 +41,18 @@ class EventRouteController(http.Controller):
         csrf=False,
         methods=["GET"],
     )
-    def event_route_page(self, event_id, **kw):
-
+    def event_route(self, event_id, **kw):
         event = request.env["event.event"].sudo().browse(event_id)
+        return request.render("event_rya.sailing_route", {"event": event})
 
-        return request.render(
-            "event_rya.sailing_route_template",
-            {
-                "event": event,
-            },
-        )
+    @http.route(
+        "/event/<int:event_id>/routemap",
+        type="http",
+        auth="public",
+        website=True,
+        csrf=False,
+        methods=["GET"],
+    )
+    def event_routemap(self, event_id, **kw):
+        event = request.env["event.event"].sudo().browse(event_id)
+        return request.render("event_rya.sailing_route_map", {"event": event})

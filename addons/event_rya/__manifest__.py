@@ -21,7 +21,7 @@
         "views/event_list_rya.xml",
         "views/event_templates_page_registration_rya.xml",
         "views/sale_report_views.xml",
-        "views/sailing_route_template.xml",
+        "views/sailing_route.xml",
         "security/ir.model.access.csv",
         "views/event_event_views.xml",
         "views/res_partner_geo.xml",
