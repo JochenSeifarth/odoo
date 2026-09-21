@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_crm_partner_geo_form" model="ir.ui.view">
+        <field name="name">res.partner.geolocation.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base_geolocalize.view_crm_partner_geo_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='geo_location']//group[.//div[@name='geo_localize_button']]" position="after">
+                <group>
+                    <field name="partner_latitude" widget="partner_geo_map" nolabel="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

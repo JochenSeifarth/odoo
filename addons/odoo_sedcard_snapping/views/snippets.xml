@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<template id="snippets" inherit_id="website.snippets" name="A4 Sedcard Snippet">
+    <xpath expr="//snippets[@id='snippet_groups']/t[@snippet-group='custom']" position="after">
+        <t
+            snippet-group="print_layouts"
+            t-snippet="website.s_snippet_group"
+            string="Print Layouts"
+            t-thumbnail="/odoo_sedcard_snapping/static/src/img/s_sedcard_thumb.svg"
+        />
+    </xpath>
+    <xpath expr="//snippets[@id='snippet_structure']" position="inside">
+        <t
+            t-snippet="odoo_sedcard_snapping.s_sedcard"
+            string="A4 Sedcard"
+            group="print_layouts"
+            t-thumbnail="/odoo_sedcard_snapping/static/src/img/s_sedcard_thumb.svg"
+        >
+            <keywords>sedcard, comp card, model, portfolio, casting, a4, print, pdf, photo sheet</keywords>
+        </t>
+    </xpath>
+</template>
+
+</odoo>

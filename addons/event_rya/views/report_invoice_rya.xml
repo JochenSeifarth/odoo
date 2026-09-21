@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_invoice_document_rya" inherit_id="account.report_invoice_document">
+        <!-- add payment details -->
+        <xpath expr="//t[@t-foreach='payments_vals']/tr/td[1]/i" position="inside">
+            <div class="d-inline text-muted lh-sm fst-italic small">
+                <br /> <t t-out="payment_vals.get('journal_name', '')" /> / <t t-out="payment_vals.get('payment_method_name', '')" />
+            </div>
+        </xpath>
+
+        <!-- Replace Odoo QR-code logos with the RYA logo -->
+        <!-- Standard payment QR code -->
+        <xpath expr="//div[@id='qrcode']//img[@id='qrcode_odoo_logo']"
+            position="attributes">
+            <attribute name="src">/event_rya/static/src/img/RYA_logo_O.svg</attribute>
+        </xpath>
+
+        <!-- Online payment link QR code -->
+        <xpath expr="//div[@id='payment_link_qrcode']//img[@id='qrcode_odoo_logo']"
+            position="attributes">
+            <attribute name="src">/event_rya/static/src/img/RYA_logo_O.svg</attribute>
+        </xpath>
+
+    </template>
+</odoo>

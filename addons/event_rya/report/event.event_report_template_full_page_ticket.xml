@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="event_report_template_full_page_ticket_rya"
+              inherit_id="event.event_report_template_full_page_ticket"
+              name="Always show ticket instructions">
+        <!-- Überschreibe die Stelle, die die ticket_instructions zeigt -->
+        <xpath expr="//div[@t-field='event.ticket_instructions']" position="replace">
+                 <div t-field="event.ticket_instructions"
+                      class="o_event_full_page_extra_instructions ps-3 pt-3 pb-2 pe-2">
+                 </div>
+        </xpath>
+    </template>
+</odoo>

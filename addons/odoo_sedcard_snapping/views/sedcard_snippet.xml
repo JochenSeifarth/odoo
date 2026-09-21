@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<template id="s_sedcard" name="A4 Sedcard">
+    <section class="s_sedcard pt0 pb0">
+        <div class="o_sedcard_stage">
+            <p class="o_sedcard_screen_hint o_not_editable" contenteditable="false">
+                A4 preview, 210 x 297 mm. For an exact PDF, print this page at 100% scale with browser headers disabled.
+            </p>
+            <div class="o_sedcard_canvas">
+                <article class="o_sedcard_page">
+                    <div class="o_sedcard_inner">
+                        <header class="o_sedcard_header">
+                            <div class="o_sedcard_identity">
+                                <p class="o_sedcard_overline">Sedcard / Portfolio</p>
+                                <h1>Alex Harper</h1>
+                            </div>
+                            <div class="o_sedcard_header_meta">
+                                <p class="o_sedcard_badge">A4 print-ready layout</p>
+                                <p class="o_sedcard_role">Fashion and commercial model</p>
+                            </div>
+                        </header>
+
+                        <div class="o_sedcard_body">
+                            <figure class="o_sedcard_hero">
+                                <img
+                                    src="/odoo_sedcard_snapping/static/src/img/sedcard-placeholder-portrait.svg"
+                                    alt="Main portrait placeholder"
+                                />
+                            </figure>
+                            <div class="o_sedcard_gallery">
+                                <figure class="o_sedcard_gallery_item">
+                                    <img
+                                        src="/odoo_sedcard_snapping/static/src/img/sedcard-placeholder-detail.svg"
+                                        alt="Detail shot placeholder"
+                                    />
+                                </figure>
+                                <figure class="o_sedcard_gallery_item">
+                                    <img
+                                        src="/odoo_sedcard_snapping/static/src/img/sedcard-placeholder-detail.svg"
+                                        alt="Detail shot placeholder"
+                                    />
+                                </figure>
+                                <figure class="o_sedcard_gallery_item">
+                                    <img
+                                        src="/odoo_sedcard_snapping/static/src/img/sedcard-placeholder-detail.svg"
+                                        alt="Detail shot placeholder"
+                                    />
+                                </figure>
+                            </div>
+                        </div>
+
+                        <div class="o_sedcard_details">
+                            <div class="o_sedcard_measurements">
+                                <div class="o_sedcard_stat">
+                                    <p class="o_sedcard_stat_label">Height</p>
+                                    <p class="o_sedcard_stat_value">178 cm</p>
+                                </div>
+                                <div class="o_sedcard_stat">
+                                    <p class="o_sedcard_stat_label">Bust / Chest</p>
+                                    <p class="o_sedcard_stat_value">84 cm</p>
+                                </div>
+                                <div class="o_sedcard_stat">
+                                    <p class="o_sedcard_stat_label">Waist</p>
+                                    <p class="o_sedcard_stat_value">61 cm</p>
+                                </div>
+                                <div class="o_sedcard_stat">
+                                    <p class="o_sedcard_stat_label">Hips</p>
+                                    <p class="o_sedcard_stat_value">89 cm</p>
+                                </div>
+                                <div class="o_sedcard_stat">
+                                    <p class="o_sedcard_stat_label">Shoes</p>
+                                    <p class="o_sedcard_stat_value">39 EU</p>
+                                </div>
+                                <div class="o_sedcard_stat">
+                                    <p class="o_sedcard_stat_label">Hair / Eyes</p>
+                                    <p class="o_sedcard_stat_value">Brown / Hazel</p>
+                                </div>
+                            </div>
+
+                            <aside class="o_sedcard_bio">
+                                <p class="o_sedcard_bio_kicker">Profile</p>
+                                <p>
+                                    Confident runway presence, clean beauty close-ups, and polished commercial looks
+                                    for fashion, lifestyle, and travel campaigns.
+                                </p>
+                                <p>Berlin / Paris / Milan</p>
+                            </aside>
+                        </div>
+
+                        <footer class="o_sedcard_footer">
+                            <div class="o_sedcard_footer_left">
+                                <p class="o_sedcard_footer_label">Agency</p>
+                                <p class="o_sedcard_footer_value">Northlight Models</p>
+                            </div>
+                            <div class="o_sedcard_footer_right">
+                                <p>+49 30 555 01 23</p>
+                                <p>booking@example.com</p>
+                                <p>www.example.com</p>
+                            </div>
+                        </footer>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+</template>
+
+</odoo>

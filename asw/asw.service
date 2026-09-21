@@ -1,0 +1,28 @@
+[Unit]
+Description=Auto-Sea-Way Service
+After=network.target
+
+[Service]
+Type=simple
+User=rya
+Group=rya
+
+# Set this to the directory where your binary lives
+WorkingDirectory=/home/rya/git/odoo/asw
+
+# Full path to binary
+ExecStart=/home/rya/git/odoo/asw/asw-linux-amd64 serve \
+    --api-key asw \
+    --host 127.0.0.1 \
+    --port 3000 \
+    --graph export/europe.graph
+
+# Restart on failure
+Restart=on-failure
+RestartSec=5s
+
+# Optional: environment variables
+# Environment="VAR=value"
+
+[Install]
+WantedBy=multi-user.target

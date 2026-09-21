@@ -1,0 +1,143 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* event_rya
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0-20260216\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-06 16:06+0000\n"
+"PO-Revision-Date: 2026-03-06 16:06+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.registration_template_rya
+msgid ", at"
+msgstr ", a las"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.registration_template_rya
+msgid "<b>Cancelled</b>"
+msgstr "<b>Cancelado</b>"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.registration_template_rya
+msgid "<b>Sold Out</b>"
+msgstr "<b>Agotado</b>"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.registration_template_rya
+msgid "<em>Registrations <b>Closed</b></em>"
+msgstr "<em>Reservas <b>cerradas</b></em>"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.registration_template_rya
+msgid "Contact Us"
+msgstr "Contáctenos"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.event_description_dates_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.event_description_full_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.event_list_rya
+msgid "On Request"
+msgstr "Contáctenos"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.event_description_full_rya
+msgid "Price"
+msgstr "Precio"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.registration_template_rya
+msgid "Register"
+msgstr "Reservar"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.registration_template_rya
+msgid "Registration failed! Suspicious activity detected by Google reCaptcha."
+msgstr ""
+"¡Error de Reserva! Actividad sospechosa detectada por Google reCaptcha."
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.registration_template_rya
+msgid "Registration failed! These tickets are not available anymore."
+msgstr "¡Reserva fallida! Estas entradas ya no están disponibles."
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.event_list_rya
+msgid "Cancelled"
+msgstr "Cancelado"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.event_list_rya
+msgid "Registrations not yet open"
+msgstr "Las reservas aún no están abiertas"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.registration_template_rya
+msgid "Registrations will open on"
+msgstr "Las reservas se abrirán el"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.event_description_dates_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.event_list_rya
+msgid "Sold Out"
+msgstr "Agotado"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.event_list_rya
+msgid "Registrations Closed"
+msgstr "Reserva cerrada"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.event_description_dates_rya
+msgid "View More"
+msgstr "Ver más"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.registration_template_rya
+msgid "time)"
+msgstr "tiempo)"
+
+#. module: event_rya
+#: model:ir.model.fields,field_description:event_rya.field_event_leg__distance_from_prev_nm
+msgid "Distance from Previous (NM)"
+msgstr "Distancia [nm]"
+
+#. module: event_rya
+#: model:ir.model,name:event_rya.model_event_leg
+msgid "Event Leg"
+msgstr "Etapa"
+
+#. module: event_rya
+#: model:ir.model.fields,field_description:event_rya.field_event_leg__partner_latitude
+msgid "Latitude"
+msgstr "Latitud"
+
+#. module: event_rya
+#: model:ir.model.fields,field_description:event_rya.field_event_leg__address_id
+msgid "Leg"
+msgstr "Etapa"
+
+#. module: event_rya
+#: model:ir.model.fields,field_description:event_rya.field_event_event__event_leg_ids
+#: model_terms:ir.ui.view,arch_db:event_rya.view_event_event_form_inherit_legs
+#: model_terms:ir.ui.view,arch_db:event_rya.event_description_full_rya
+msgid "Legs"
+msgstr "Etapas"
+
+#. module: event_rya
+#: model:ir.model.fields,field_description:event_rya.field_event_leg__partner_longitude
+msgid "Longitude"
+msgstr "Longitud"
+
+#. module: event_rya
+#: model:ir.model.fields,field_description:event_rya.field_event_event__total_distance_nm
+#: model_terms:ir.ui.view,arch_db:event_rya.event_description_full_rya
+msgid "Total Distance [nm]"
+msgstr "Distancia total [nm]"

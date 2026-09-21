@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="sailing_route" name="Sailing Route Page">
+        <t t-call="website.layout">
+            <div class="container mt-4">
+                <h2>
+                    <t t-esc="event.name" />
+                </h2>
+                <!-- Map Container -->
+                <div class="o_event_route_map" t-att-data-event-id="event.id"
+                    style="height: 600px; width: 100%; margin-top: 20px;">
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- minimalistic route map -->
+    <template id="sailing_route_map" name="Sailing Route Map">
+        <t t-set="title" t-value="event.name" />
+        <t t-call="web.layout">
+            <t t-call-assets="web.assets_frontend" />
+
+            <!-- Map Container -->
+            <div class="o_event_route_map" t-att-data-event-id="event.id"
+                style="height: 600px; width: 100%;">
+            </div>
+        </t>
+    </template>
+
+</odoo>

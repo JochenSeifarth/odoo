@@ -1,0 +1,328 @@
+.s_sedcard {
+    --sedcard-paper-width-px: 794px;
+    --sedcard-paper-height-px: 1123px;
+    --sedcard-paper-width-mm: 210mm;
+    --sedcard-paper-height-mm: 297mm;
+    --sedcard-surface: #ece1d4;
+    --sedcard-panel: #fffdf9;
+    --sedcard-ink: #17120d;
+    --sedcard-muted: #6e6258;
+    --sedcard-line: rgba(23, 18, 13, 0.12);
+    --sedcard-accent: #b37b4f;
+    padding: 40px 0 !important;
+    background:
+        radial-gradient(circle at top left, rgba(179, 123, 79, 0.18), transparent 34%),
+        linear-gradient(180deg, #f7f1ea 0%, #ece1d4 100%);
+}
+
+.s_sedcard .o_sedcard_page,
+.s_sedcard .o_sedcard_page * {
+    box-sizing: border-box;
+}
+
+.s_sedcard .o_sedcard_stage {
+    width: min(100%, calc(var(--sedcard-paper-width-px) + 48px));
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.s_sedcard .o_sedcard_screen_hint {
+    margin: 0 0 16px;
+    padding: 10px 14px;
+    border: 1px solid rgba(23, 18, 13, 0.1);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.72);
+    color: var(--sedcard-muted);
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    line-height: 1.45;
+    text-transform: uppercase;
+}
+
+.s_sedcard .o_sedcard_canvas {
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+
+.s_sedcard .o_sedcard_page {
+    position: relative;
+    width: var(--sedcard-paper-width-px);
+    height: var(--sedcard-paper-height-px);
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 24px;
+    background:
+        linear-gradient(180deg, rgba(247, 241, 234, 0.55) 0%, rgba(255, 253, 249, 0) 22%),
+        var(--sedcard-panel);
+    color: var(--sedcard-ink);
+    box-shadow: 0 24px 80px rgba(43, 33, 24, 0.16);
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+}
+
+.s_sedcard .o_sedcard_page::before {
+    content: "";
+    position: absolute;
+    inset: 24px;
+    border: 1px dashed rgba(179, 123, 79, 0.28);
+    border-radius: 16px;
+    pointer-events: none;
+}
+
+.s_sedcard .o_sedcard_inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    height: var(--sedcard-paper-height-px);
+    padding: 44px;
+}
+
+.s_sedcard .o_sedcard_page h1,
+.s_sedcard .o_sedcard_page p,
+.s_sedcard .o_sedcard_page figure {
+    margin: 0;
+}
+
+.s_sedcard .o_sedcard_page a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.s_sedcard .o_sedcard_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--sedcard-line);
+}
+
+.s_sedcard .o_sedcard_identity {
+    max-width: 460px;
+}
+
+.s_sedcard .o_sedcard_overline,
+.s_sedcard .o_sedcard_stat_label,
+.s_sedcard .o_sedcard_bio_kicker,
+.s_sedcard .o_sedcard_footer_label {
+    color: var(--sedcard-muted);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.s_sedcard .o_sedcard_identity h1 {
+    margin-top: 8px;
+    font-size: 58px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 0.95;
+    text-transform: uppercase;
+}
+
+.s_sedcard .o_sedcard_header_meta {
+    display: grid;
+    gap: 12px;
+    max-width: 230px;
+    text-align: right;
+}
+
+.s_sedcard .o_sedcard_badge {
+    justify-self: end;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: #f6eee6;
+    color: var(--sedcard-accent);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.s_sedcard .o_sedcard_role {
+    color: var(--sedcard-muted);
+    font-size: 16px;
+    line-height: 1.45;
+}
+
+.s_sedcard .o_sedcard_body {
+    display: grid;
+    grid-template-columns: 450px 1fr;
+    gap: 24px;
+}
+
+.s_sedcard .o_sedcard_hero img,
+.s_sedcard .o_sedcard_gallery_item img {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    background: #eee2d4;
+}
+
+.s_sedcard .o_sedcard_hero img {
+    height: 560px;
+}
+
+.s_sedcard .o_sedcard_gallery {
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.s_sedcard .o_sedcard_gallery_item img {
+    height: 170px;
+}
+
+.s_sedcard .o_sedcard_details {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.9fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.s_sedcard .o_sedcard_measurements {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.s_sedcard .o_sedcard_stat {
+    min-height: 82px;
+    padding: 18px 20px;
+    border: 1px solid var(--sedcard-line);
+    border-radius: 18px;
+    background: #faf6f0;
+}
+
+.s_sedcard .o_sedcard_stat_label {
+    margin-bottom: 8px;
+}
+
+.s_sedcard .o_sedcard_stat_value {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+}
+
+.s_sedcard .o_sedcard_bio {
+    min-height: 180px;
+    padding: 22px 24px;
+    border: 1px solid var(--sedcard-line);
+    border-radius: 20px;
+    background: linear-gradient(180deg, #faf5ef 0%, #f3e9de 100%);
+}
+
+.s_sedcard .o_sedcard_bio p + p {
+    margin-top: 12px;
+}
+
+.s_sedcard .o_sedcard_bio_kicker + p {
+    margin-top: 12px;
+}
+
+.s_sedcard .o_sedcard_bio p:not(.o_sedcard_bio_kicker) {
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.s_sedcard .o_sedcard_footer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 24px;
+    margin-top: auto;
+    padding-top: 22px;
+    border-top: 1px solid var(--sedcard-line);
+}
+
+.s_sedcard .o_sedcard_footer_value {
+    margin-top: 10px;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 1.1;
+    text-transform: uppercase;
+}
+
+.s_sedcard .o_sedcard_footer_right {
+    display: grid;
+    gap: 6px;
+    color: var(--sedcard-muted);
+    font-size: 15px;
+    line-height: 1.4;
+    text-align: right;
+}
+
+@media (max-width: 840px) {
+    .s_sedcard {
+        padding: 24px 0 !important;
+    }
+
+    .s_sedcard .o_sedcard_stage {
+        padding: 0 12px;
+    }
+
+    .s_sedcard .o_sedcard_canvas {
+        padding-bottom: 12px;
+    }
+
+    .s_sedcard .o_sedcard_screen_hint {
+        width: max-content;
+        min-width: 100%;
+    }
+}
+
+@media print {
+    html.o_sedcard_print_layout,
+    html.o_sedcard_print_layout body,
+    html.o_sedcard_print_layout #wrapwrap {
+        background: #ffffff !important;
+    }
+
+    html.o_sedcard_print_layout header#top,
+    html.o_sedcard_print_layout footer#bottom {
+        display: none !important;
+    }
+
+    html.o_sedcard_print_layout main {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    html.o_sedcard_print_layout .s_sedcard {
+        padding: 0 !important;
+        background: transparent !important;
+    }
+
+    html.o_sedcard_print_layout .s_sedcard .o_sedcard_stage {
+        width: auto;
+        padding: 0;
+    }
+
+    html.o_sedcard_print_layout .s_sedcard .o_sedcard_canvas {
+        overflow: visible;
+        padding: 0;
+    }
+
+    html.o_sedcard_print_layout .s_sedcard .o_sedcard_screen_hint,
+    html.o_sedcard_print_layout .s_sedcard .o_sedcard_page::before {
+        display: none !important;
+    }
+
+    html.o_sedcard_print_layout .s_sedcard .o_sedcard_page {
+        width: var(--sedcard-paper-width-mm);
+        height: var(--sedcard-paper-height-mm);
+        margin: 0 auto;
+        border-radius: 0;
+        box-shadow: none;
+        break-after: page;
+        page-break-after: always;
+    }
+}

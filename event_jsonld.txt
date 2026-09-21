@@ -1,0 +1,18 @@
+# Import pprint for pretty printing
+from pprint import pprint
+
+event = env['event.event'].search([], limit=1)
+pprint({field: getattr(event, field) for field in event._fields})
+
+for address in event.address_id:
+	    pprint({field: getattr(address, field) for field in address._fields})
+
+for ticket in event.event_ticket_ids:
+    pprint({field: getattr(ticket, field) for field in ticket._fields})
+
+for slot in event.event_slot_ids:
+		    pprint({field: getattr(slot, field) for field in slot._fields})
+
+print("\nPerformers / Organizers:")
+for performer in event.organizer_id:
+    pprint({field: getattr(performer, field) for field in performer._fields})
