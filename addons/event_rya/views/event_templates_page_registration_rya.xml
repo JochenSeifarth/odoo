@@ -51,11 +51,14 @@
                         <span t-translate="yes">Legs</span>
                     </h5>
                     <div>
-                        <span t-translate="yes">Total Distance [nm]</span> : <t t-out="event.total_distance_nm" />
+                        <span t-translate="yes">Total Distance approx.</span> <t t-out="round(event.total_distance_nm)" />&#8239;<span
+                            t-translate="yes">nm</span>
                     </div>
-
-                    <div class="o_event_route_map" t-att-data-event-id="event.id"
-                        style="height: 600px; width: 100%; margin-top: 20px;">
+                    <div class="o_event_route_map_container"
+                        style="position: relative;">
+                        <div class="o_event_route_map" t-att-data-event-id="event.id"
+                            style="height: 600px; width: 100%; margin-top: 20px;">
+                        </div>
                     </div>
                 </div>
             </t>

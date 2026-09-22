@@ -141,3 +141,13 @@ msgstr "Longitud"
 #: model_terms:ir.ui.view,arch_db:event_rya.event_description_full_rya
 msgid "Total Distance [nm]"
 msgstr "Distancia total [nm]"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.event_description_full_rya
+msgid "Total Distance approx."
+msgstr "Distancia total aprox."
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.event_description_full_rya
+msgid "nm"
+msgstr "mn"

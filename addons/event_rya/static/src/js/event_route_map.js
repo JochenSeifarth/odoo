@@ -1,4 +1,5 @@
 import publicWidget from "@web/legacy/js/public/public_widget";
+import { _t } from "@web/core/l10n/translation";
 
 publicWidget.registry.EventRouteMap = publicWidget.Widget.extend({
     selector: ".o_event_route_map",
@@ -60,23 +61,23 @@ publicWidget.registry.EventRouteMap = publicWidget.Widget.extend({
 
         const natGeo = L.tileLayer(
             "https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}",
-            { attribution: "© Esri NatGeo", maxZoom: 18 }
+            { attribution: "© Esri NatGeo", maxZoom: 18 },
         );
 
         const esri = L.tileLayer(
             "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-            { attribution: "© Esri", maxZoom: 19 }
+            { attribution: "© Esri", maxZoom: 19 },
         );
 
-        const osm = L.tileLayer(
-            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            { attribution: "© OpenStreetMap", maxZoom: 19 }
-        );
+        const osm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: "© OpenStreetMap",
+            maxZoom: 19,
+        });
 
-        const openSeaMap = L.tileLayer(
-            "https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png",
-            { opacity: 0.85, attribution: "© OpenSeaMap" }
-        );
+        const openSeaMap = L.tileLayer("https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png", {
+            opacity: 0.85,
+            attribution: "© OpenSeaMap",
+        });
 
         /* -----------------------------
            SMART LAYER (FIXED + ACTIVE)
@@ -89,7 +90,7 @@ publicWidget.registry.EventRouteMap = publicWidget.Widget.extend({
 
                 this._switch = () => {
                     const z = map.getZoom();
-                    const target = (z >= 13) ? esri : natGeo;
+                    const target = z >= 13 ? esri : natGeo;
 
                     if (this._current !== target) {
                         if (this._current) map.removeLayer(this._current);
@@ -107,7 +108,7 @@ publicWidget.registry.EventRouteMap = publicWidget.Widget.extend({
             onRemove: (map) => {
                 map.off("zoomend", this._switch);
                 if (this._current) map.removeLayer(this._current);
-            }
+            },
         });
 
         const smart = new SmartLayer();
@@ -125,7 +126,11 @@ publicWidget.registry.EventRouteMap = publicWidget.Widget.extend({
 
         this._routeBounds = polyline.getBounds();
 
-        map.fitBounds(this._routeBounds, { padding: [20, 20] });
+        map.flyToBounds(this._routeBounds, {
+            padding: [20, 20],
+            duration: 1.0,
+            easeLinearity: 0.25,
+        });
 
         /* -----------------------------
            SAFE LABELS
@@ -154,18 +159,141 @@ publicWidget.registry.EventRouteMap = publicWidget.Widget.extend({
             const latlng = [leg.lat, leg.lng];
             const p = getSafePlacement(latlng, base);
 
-            L.marker(latlng)
-                .addTo(map)
-                .bindTooltip(
-                    `<b>${leg.name}</b><br>${leg.distance || 0} nm`,
-                    {
-                        direction: p.dir,
-                        offset: p.offset,
-                        opacity: 0.95,
-                        sticky: true,
-                    }
-                );
+            const number = i + 1;
+            const isFirst = i === 0;
+            const isLast = i === legs.length - 1;
+
+            // Start and finish are considered identical if they are
+            // within approximately 100 meters of each other.
+            const isRoundTrip =
+                legs.length > 1 &&
+                Math.abs(legs[0].lat - legs[legs.length - 1].lat) < 0.001 &&
+                Math.abs(legs[0].lng - legs[legs.length - 1].lng) < 0.001;
+
+            // For a round trip, render the start/finish only once.
+            if (isRoundTrip && isLast) {
+                return;
+            }
+
+            let icon;
+
+            if (isRoundTrip && isFirst) {
+                // Combined start/finish marker.
+                const lastNumber = legs.length;
+
+                icon = L.divIcon({
+                    className: "o_event_route_pin",
+                    html: `
+                <div style="
+                    width: 34px;
+                    height: 34px;
+                    border-radius: 50%;
+                    background: linear-gradient(
+                        to right,
+                        #198754 0%,
+                        #198754 50%,
+                        #dc3545 50%,
+                        #dc3545 100%
+                    );
+                    color: white;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 700;
+                    font-size: 11px;
+                    border: 2px solid white;
+                    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.45);
+                    position: relative;
+                ">
+                    <span style="
+                        position: absolute;
+                        left: 4px;
+                    ">${number}</span>
+
+                    <span style="
+                        position: absolute;
+                        right: 4px;
+                    ">${lastNumber}</span>
+                </div>
+            `,
+                    iconSize: [34, 34],
+                    iconAnchor: [17, 17],
+                });
+            } else {
+                let background = "#1f6feb";
+
+                if (isFirst) {
+                    background = "#198754";
+                } else if (isLast) {
+                    background = "#dc3545";
+                }
+
+                icon = L.divIcon({
+                    className: "o_event_route_pin",
+                    html: `
+                <div style="
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 50%;
+                    background: ${background};
+                    color: white;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 700;
+                    font-size: 13px;
+                    border: 2px solid white;
+                    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.45);
+                ">
+                    ${number}
+                </div>
+            `,
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 15],
+                });
+            }
+
+            const tooltipTitle = `<b>${leg.name}</b>`;
+
+            L.marker(latlng, { icon }).addTo(map).bindTooltip(`${tooltipTitle}`, {
+                direction: p.dir,
+                offset: p.offset,
+                opacity: 0.95,
+                sticky: true,
+            });
         });
+
+        /* -----------------------------
+           ROUTE OVERLAY
+        ----------------------------- */
+
+        const routeOverlay = L.DomUtil.create("div", "o_event_route_overlay", this.el);
+
+        routeOverlay.style.cssText = `
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            padding: 4px 10px;
+            background: rgba(255, 255, 255, 0.66);
+            border-radius: 4px;
+            pointer-events: none;
+            font-size: 16px;
+            white-space: normal;
+            max-width: calc(80%);
+            width: max-content;            
+        `;
+
+        routeOverlay.innerHTML = legs
+            .map((leg, i) => {
+                const distance = leg.distance
+                    ? ` ➝ ${Math.round(leg.distance)}\u202F${_t("nm")} ➝ `
+                    : "";
+
+                return `${distance}<strong>${leg.city || leg.name}</strong>`;
+            })
+            .join("");
 
         /* -----------------------------
            CONTROLS
@@ -188,7 +316,11 @@ publicWidget.registry.EventRouteMap = publicWidget.Widget.extend({
                     "width:34px;height:34px;background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;";
 
                 home.onclick = () => {
-                    map.fitBounds(this._routeBounds, { padding: [20, 20] });
+                    map.flyToBounds(this._routeBounds, {
+                        padding: [20, 20],
+                        duration: 1.0,
+                        easeLinearity: 0.25,
+                    });
                 };
 
                 return container;
@@ -202,17 +334,19 @@ publicWidget.registry.EventRouteMap = publicWidget.Widget.extend({
            LAYER CONTROL (FIXED)
         ----------------------------- */
 
-        L.control.layers(
-            {
-                "Smart": smart,
-                "Satellite": esri,
-                "OpenStreetMap": osm,
-            },
-            {
-                "OpenSeaMap": openSeaMap,
-            },
-            { position: "topright" }
-        ).addTo(map);
+        L.control
+            .layers(
+                {
+                    Smart: smart,
+                    Satellite: esri,
+                    OpenStreetMap: osm,
+                },
+                {
+                    OpenSeaMap: openSeaMap,
+                },
+                { position: "topright" },
+            )
+            .addTo(map);
 
         /* -----------------------------
            FULLSCREEN
@@ -239,7 +373,14 @@ publicWidget.registry.EventRouteMap = publicWidget.Widget.extend({
                         document.exitFullscreen?.();
                     }
 
-                    setTimeout(() => map.invalidateSize(), 200);
+                    setTimeout(() => {
+                        map.invalidateSize();
+                        map.flyToBounds(this._routeBounds, {
+                            padding: [20, 20],
+                            duration: 1.0,
+                            easeLinearity: 0.25,
+                        });
+                    }, 200);
                 };
 
                 return el;
@@ -251,7 +392,7 @@ publicWidget.registry.EventRouteMap = publicWidget.Widget.extend({
         /* -----------------------------
            ZOOM DISPLAY
         ----------------------------- */
-
+        /* hide zoom display
         const ZoomDisplay = L.Control.extend({
             options: { position: "topleft" },
 
@@ -270,6 +411,7 @@ publicWidget.registry.EventRouteMap = publicWidget.Widget.extend({
 
         map.addControl(new ZoomDisplay());
         map.on("zoomend", this._updateZoomDisplay);
+        */
 
         this._initInProgress = false;
     },

@@ -47,6 +47,7 @@ class EventEvent(models.Model):
                 {
                     "sequence": leg.sequence,
                     "name": leg.address_id.name,
+                    "city": leg.address_id.city,
                     "lat": leg.partner_latitude,
                     "lng": leg.partner_longitude,
                     "distance": leg.distance_from_prev_nm,

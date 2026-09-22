@@ -143,3 +143,13 @@ msgstr "Länge"
 #: model_terms:ir.ui.view,arch_db:event_rya.event_description_full_rya
 msgid "Total Distance [nm]"
 msgstr "Gesamte Strecke [sm]"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.event_description_full_rya
+msgid "Total Distance approx."
+msgstr "Gesamte Strecke ca."
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.event_description_full_rya
+msgid "nm"
+msgstr "sm"
