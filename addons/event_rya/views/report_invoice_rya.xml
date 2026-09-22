@@ -21,5 +21,17 @@
             <attribute name="src">/event_rya/static/src/img/RYA_logo_O.svg</attribute>
         </xpath>
 
+        <!-- add registration details -->
+        <xpath expr="//span[@t-field='line.name']" position="after">
+            <t t-if="line.event_participant_names">
+                <span class="text-muted">
+                    <t t-if="line.name">
+                        <br /><span t-translate="yes">Attendees</span>: <span t-esc="line.event_participant_names"
+                            style="white-space: pre-line;" />
+                    </t>
+                </span>
+            </t>
+        </xpath>
+
     </template>
 </odoo>

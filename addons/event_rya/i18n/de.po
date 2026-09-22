@@ -153,3 +153,10 @@ msgstr "Gesamte Strecke ca."
 #: model_terms:ir.ui.view,arch_db:event_rya.event_description_full_rya
 msgid "nm"
 msgstr "sm"
+
+#. module: event_rya
+#: model:ir.model.fields,field_description:event_rya.field_account_move_line__event_participant_names
+#: model_terms:ir.ui.view,arch_db:event_rya.report_invoice_document_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.view_move_form_event_participants
+msgid "Attendees"
+msgstr "Teilnehmer"

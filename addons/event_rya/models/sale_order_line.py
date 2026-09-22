@@ -20,10 +20,12 @@ class SaleOrderLine(models.Model):
             start = format_datetime(
                 self.env,
                 self.event_id.date_begin,
+                dt_format="short",
             )
             end = format_datetime(
                 self.env,
                 self.event_id.date_end,
+                dt_format="short",
             )
 
             description += f"\n{start} – {end}"

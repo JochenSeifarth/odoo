@@ -18,6 +18,7 @@
     "data": [
         "report/event.event_event_templates.xml",
         "report/event.event_report_template_full_page_ticket.xml",
+        "views/account_move_views.xml",
         "views/event_list_rya.xml",
         "views/event_templates_page_registration_rya.xml",
         "views/sale_report_views.xml",
