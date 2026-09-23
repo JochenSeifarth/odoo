@@ -4,6 +4,18 @@ from odoo import api, models
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
+    @api.depends("company_id", "order_line.event_id")
+    def _compute_prepayment_percent(self):
+        super()._compute_prepayment_percent()
+
+        for order in self:
+            if order.order_line.filtered("event_id"):
+                order.prepayment_percent = 0.20
+
+    def _has_prepayment(self):
+        self.ensure_one()
+        return 0.0 < self.prepayment_percent < 1.0
+
     def _has_event_ticket_lines(self):
         """
         Return True if this order contains event ticket products.

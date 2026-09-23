@@ -1,4 +1,5 @@
 from . import (
+    account_move,
     account_move_line,
     event_event,
     event_leg,
