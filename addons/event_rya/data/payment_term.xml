@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="payment_term_event_20_80_90" model="account.payment.term">
+        <!-- base language -->
+        <field name="name">
+            20% now, balance 90 days before event
+        </field>
+        <field name="note">
+            20% at booking, balance 90 days before the event
+        </field>
+
+        <field name="line_ids"
+            eval="[
+            Command.clear(),
+            Command.create({
+                'value': 'percent',
+                'value_amount': 20.0,
+                'nb_days': 0,
+            }),
+            Command.create({
+                'value': 'percent',
+                'value_amount': 80.0,
+                'nb_days': -90,
+                'delay_type': 'rya_days_after_event',
+            }),
+        ]" />
+    </record>
+</odoo>
