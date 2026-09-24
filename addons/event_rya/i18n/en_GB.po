@@ -156,3 +156,13 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:event_rya.view_move_form_event_participants
 msgid "Attendees"
 msgstr ""
+
+#. module: event_rya
+#: model:account.payment.term,name:account.payment.term_event_20_80_90
+msgid "20% now, balance 90 days before event"
+msgstr ""
+
+#. module: event_rya
+#: model:account.payment.term,note:account.payment.term_event_20_80_90
+msgid "20% at booking, balance 90 days before the event"
+msgstr ""

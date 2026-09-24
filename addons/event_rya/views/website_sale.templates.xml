@@ -1,6 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
+    <template id="website_sale_payment_rya" inherit_id="website_sale.total">
+        <xpath expr="//div[contains(@t-attf-class, 'o_cart_total')]/table" position="inside">
+            <t t-if="website_sale_order._has_event_ticket_lines()">
+                <tr t-foreach="website_sale_order._get_rya_payment_schedule()" t-as="payment_line">
+                    <td colspan="2" class="text-muted border-0 p-0 pe-3 pb-2">
+                        <span t-translate="yes">Due on</span>
+                        <span t-out="payment_line['date']" t-options='{"widget": "date"}' />
+                    </td>
+                    <td class="text-end border-0 p-0 ps-3 pb-2">
+                        <span t-out="payment_line['amount']"
+                            t-options="{ 'widget': 'monetary', 'display_currency': website_sale_order.currency_id, }" />
+                    </td>
+                </tr>
+                <tr class="border-top">
+                    <td colspan="2" class="border-0 ps-0 pt-2">Total</td>
+                    <td class="text-end border-0 px-0 pt-2">
+                        <span t-field="website_sale_order.amount_total"
+                            class="monetary_field text-end p-0"
+                            t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="border-0 ps-0 pt-2">
+                        <strong>Due now</strong>
+                    </td>
+                    <td class="text-end border-0 px-0 pt-2">
+                        <strong t-out="website_sale_order._get_rya_due_payment_amount()"
+                            class="monetary_field text-end p-0"
+                            t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}" />
+                    </td>
+                </tr>
+            </t>
+        </xpath>
+    </template>
+
     <template id="website_sale_layout_add_organization_id"
         inherit_id="website_sale.website_sale_layout">
 

@@ -16,6 +16,7 @@
         "mail",
     ],
     "data": [
+        "data/payment_term.xml",
         "report/event.event_event_templates.xml",
         "report/event.event_report_template_full_page_ticket.xml",
         "views/account_move_views.xml",

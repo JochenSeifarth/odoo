@@ -1,9 +1,12 @@
 from . import (
+    account_move,
     account_move_line,
+    account_payment_term_line,
     event_event,
     event_leg,
     event_registration,
     mail_compose_message,
+    payment_transaction,
     qweb_logger,
     res_lang,
     res_partner,

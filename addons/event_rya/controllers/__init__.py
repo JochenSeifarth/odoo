@@ -6,4 +6,5 @@ from . import (
     website,
     website_event_controller,
     website_event_sale_controller_rya,
+    website_sale_payment_portal,
 )
