@@ -1,28 +1,29 @@
 from odoo import fields, models
+from odoo.exceptions import ValidationError
 
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
-    def _has_event_ticket_lines(self):
-        """Return True if this order contains event ticket products."""
+    def _get_rya_event(self):
+        """Return the single event for this event order."""
         self.ensure_one()
 
-        products = self.order_line.filtered(
-            lambda line: line.product_id,
-        ).mapped("product_id")
+        if not self._has_event_ticket_lines():
+            return self.env["event.event"]
 
-        if not products:
-            return False
+        events = self.order_line.mapped("event_id")
+        if len(events) > 1:
+            raise ValidationError(
+                "An event order can contain only one event.",
+            )
 
-        return bool(
-            self.env["event.event.ticket"].search_count(
-                [
-                    ("product_id", "in", products.ids),
-                ],
-                limit=1,
-            ),
-        )
+        return events
+
+    def _has_event_ticket_lines(self):
+        """Return True if this order contains event ticket lines."""
+        self.ensure_one()
+        return bool(self.order_line.filtered("event_id"))
 
     def _get_rya_payment_schedule(self):
         """Return the payment-term schedule for an event order."""
@@ -31,7 +32,7 @@ class SaleOrder(models.Model):
         if not self._has_event_ticket_lines():
             return []
 
-        event = self.order_line.mapped("event_id")[:1]
+        event = self._get_rya_event()
         payment_term = self.payment_term_id
 
         if not event or not event.date_begin or not payment_term:
@@ -45,10 +46,20 @@ class SaleOrder(models.Model):
             date_ref,
             self.currency_id,
             self.company_id,
-            self.amount_tax,
+            self.currency_id._convert(
+                self.amount_tax,
+                self.company_id.currency_id,
+                self.company_id,
+                date_ref,
+            ),
             self.amount_tax,
             1,
-            self.amount_untaxed,
+            self.currency_id._convert(
+                self.amount_untaxed,
+                self.company_id.currency_id,
+                self.company_id,
+                date_ref,
+            ),
             self.amount_untaxed,
         )
 
@@ -64,14 +75,22 @@ class SaleOrder(models.Model):
             )
         ]
 
+    def _get_rya_payment_amount(self):
+        """amount actually due according to payment terms considering amount_paid"""
+        self.ensure_one()
+
+        return self.currency_id.round(
+            max(self._get_rya_due_payment_amount() - self.amount_paid, 0),
+        )
+
     def _get_rya_due_payment_amount(self):
-        """Return the payment-term amount currently due for an event order."""
+        """amount currently due according to payment terms"""
         self.ensure_one()
 
         if not self._has_event_ticket_lines():
             return self.amount_total
 
-        event = self.order_line.mapped("event_id")[:1]
+        event = self._get_rya_event()
         payment_term = self.payment_term_id
 
         if not event or not event.date_begin or not payment_term:
@@ -85,10 +104,20 @@ class SaleOrder(models.Model):
             date_ref,
             self.currency_id,
             self.company_id,
-            self.amount_tax,
+            self.currency_id._convert(
+                self.amount_tax,
+                self.company_id.currency_id,
+                self.company_id,
+                date_ref,
+            ),
             self.amount_tax,
             1,
-            self.amount_untaxed,
+            self.currency_id._convert(
+                self.amount_untaxed,
+                self.company_id.currency_id,
+                self.company_id,
+                date_ref,
+            ),
             self.amount_untaxed,
         )
 
@@ -103,6 +132,37 @@ class SaleOrder(models.Model):
             return self._get_rya_due_payment_amount()
 
         return super()._get_prepayment_required_amount()
+
+    def _rya_transaction_matches_due_amount(self, transaction):
+        """Return True if an event payment matches the amount due before it."""
+        self.ensure_one()
+
+        if not self._has_event_ticket_lines():
+            return False
+
+        due_amount = self._get_rya_due_payment_amount()
+        paid_before_transaction = self.amount_paid - transaction.amount
+        expected_amount = due_amount - paid_before_transaction
+
+        return (
+            self.currency_id.compare_amounts(
+                transaction.amount,
+                expected_amount,
+            )
+            == 0
+        )
+
+    def _has_to_be_paid(self):
+        if (
+            self._has_event_ticket_lines()
+            and self.state == "sale"
+            and not self.is_expired
+            and self.require_payment
+            and self.amount_total > 0
+        ):
+            return self._get_rya_payment_amount() > 0
+
+        return super()._has_to_be_paid()
 
     def _compute_fiscal_position_id(self):
         """

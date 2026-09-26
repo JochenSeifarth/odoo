@@ -2,12 +2,8 @@
 <odoo>
     <record id="payment_term_event_20_80_90" model="account.payment.term">
         <!-- base language -->
-        <field name="name">
-            20% now, balance 90 days before event
-        </field>
-        <field name="note">
-            20% at booking, balance 90 days before the event
-        </field>
+        <field name="name">20% now, balance 90 days before event</field>
+        <field name="note">20% at booking, balance 90 days before the event</field>
 
         <field name="line_ids"
             eval="[

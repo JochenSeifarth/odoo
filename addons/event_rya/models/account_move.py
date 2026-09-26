@@ -1,4 +1,5 @@
 from odoo import api, models
+from odoo.exceptions import ValidationError
 
 
 class AccountMove(models.Model):
@@ -14,13 +15,16 @@ class AccountMove(models.Model):
     )
     def _compute_needed_terms(self):
         for move in self:
-            event = move.invoice_line_ids.mapped(
-                "sale_line_ids.event_id",
-            )[:1]
+            events = move.invoice_line_ids.mapped("sale_line_ids.event_id").filtered(
+                lambda event: event.date_begin,
+            )
 
-            if event and event.date_begin:
+            if len(events) > 1:
+                raise ValidationError("An invoice cannot contain tickets for multiple events.")
+
+            if events:
                 move = move.with_context(
-                    rya_event_date=event.date_begin.date(),
+                    rya_event_date=events.date_begin.date(),
                 )
 
             super(AccountMove, move)._compute_needed_terms()

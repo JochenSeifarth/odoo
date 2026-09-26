@@ -6,10 +6,80 @@ from odoo.fields import Command
 from odoo.http import request, route
 from odoo.tools import SQL
 
-from odoo.addons.website_sale.controllers import payment
+from odoo.addons.sale.controllers import portal as sale_portal
+from odoo.addons.website_sale.controllers import payment as website_sale_payment
+from odoo.addons.website_sale.controllers import sale as website_sale_sale
 
 
-class PaymentPortal(payment.PaymentPortal):
+class CustomerPortal(website_sale_sale.CustomerPortal):
+
+    def _get_payment_values(
+        self,
+        order_sudo,
+        website_id=None,
+        **kwargs,
+    ):
+        if order_sudo._has_event_ticket_lines():
+            kwargs["payment_amount"] = order_sudo._get_rya_payment_amount()
+            if order_sudo.state == "sale":
+                kwargs["is_down_payment"] = False
+
+        return super()._get_payment_values(
+            order_sudo,
+            website_id=website_id,
+            **kwargs,
+        )
+
+
+class PaymentPortal(
+    website_sale_payment.PaymentPortal,
+    sale_portal.PaymentPortal,
+):
+
+    def _create_transaction(
+        self,
+        provider_id,
+        payment_method_id,
+        token_id,
+        amount,
+        currency_id,
+        partner_id,
+        flow,
+        tokenization_requested,
+        landing_route,
+        reference_prefix=None,
+        is_validation=False,
+        custom_create_values=None,
+        **kwargs,
+    ):
+        sale_order_id = kwargs.get("sale_order_id")
+
+        if sale_order_id and not is_validation:
+            order = request.env["sale.order"].sudo().browse(sale_order_id)
+
+            if order.exists() and order._has_event_ticket_lines():
+                amount = order._get_rya_payment_amount()
+
+                if amount <= 0:
+                    raise ValidationError(
+                        _("There is no payment currently due for this order."),
+                    )
+
+        return super()._create_transaction(
+            provider_id,
+            payment_method_id,
+            token_id,
+            amount,
+            currency_id,
+            partner_id,
+            flow,
+            tokenization_requested,
+            landing_route,
+            reference_prefix=reference_prefix,
+            is_validation=is_validation,
+            custom_create_values=custom_create_values,
+            **kwargs,
+        )
 
     @route(
         "/shop/payment/transaction/<int:order_id>",
@@ -18,10 +88,7 @@ class PaymentPortal(payment.PaymentPortal):
         website=True,
     )
     def shop_payment_transaction(self, order_id, access_token, **kwargs):
-        """Create a website payment transaction.
-
-        Event orders use the currently due payment-term amount.
-        """
+        """Create a website payment transaction."""
         try:
             order_sudo = self._document_check_access(
                 "sale.order",
@@ -62,7 +129,7 @@ class PaymentPortal(payment.PaymentPortal):
         })
 
         if order_sudo._has_event_ticket_lines():
-            kwargs["amount"] = order_sudo._get_rya_due_payment_amount()
+            kwargs["amount"] = order_sudo._get_rya_payment_amount()
         elif not kwargs.get("amount"):
             kwargs["amount"] = order_sudo.amount_total
 
