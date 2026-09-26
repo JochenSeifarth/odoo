@@ -24,16 +24,18 @@ class PaymentTransaction(models.Model):
         for tx in rya_transactions:
             tx = tx.with_company(tx.company_id)
 
-            confirmed_orders = tx.sale_order_ids.filtered(
-                lambda order: order.state == "sale",
+            event_orders = tx.sale_order_ids.filtered(
+                lambda order:
+                    order._has_event_ticket_lines()
+                    and order.state == "sale",
             )
 
-            if not confirmed_orders:
+            if not event_orders:
                 continue
 
-            confirmed_orders._force_lines_to_invoice_policy_order()
+            event_orders._force_lines_to_invoice_policy_order()
 
-            invoices = confirmed_orders.with_context(
+            invoices = event_orders.with_context(
                 raise_if_nothing_to_invoice=False,
             )._create_invoices(final=True)
 

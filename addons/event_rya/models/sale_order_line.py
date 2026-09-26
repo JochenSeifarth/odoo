@@ -6,6 +6,16 @@ from odoo.tools import format_datetime
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
+    def _get_rya_start_date(self):
+        """Return the start date of this line, the slot it books or its event.
+
+        A line booking a slot of a multi slot event starts at that slot, any
+        other line starts at its event. Returns False without a start.
+        """
+        self.ensure_one()
+
+        return self.event_slot_id.start_datetime or self.event_id.date_begin
+
     def _get_sale_order_line_multiline_description_sale(self):
         description = super()._get_sale_order_line_multiline_description_sale()
 

@@ -1,6 +1,17 @@
 <?xml version="1.0"?>
 <odoo>
 	<data>
+		<record id="view_event_event_form_inherit_payment_term" model="ir.ui.view">
+			<field name="name">event.event.form.payment.term.inherit</field>
+			<field name="model">event.event</field>
+			<field name="inherit_id" ref="event.view_event_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='event_type_id']/following-sibling::field[@name='tag_ids']" position="after">
+					<field name="rya_payment_term_id" />
+				</xpath>
+			</field>
+		</record>
+
 		<record id="view_event_event_form_inherit_legs" model="ir.ui.view">
 			<field name="name">event.event.form.legs.inherit</field>
 			<field name="model">event.event</field>

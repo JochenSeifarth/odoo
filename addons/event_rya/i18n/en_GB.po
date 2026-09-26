@@ -158,11 +158,21 @@ msgid "Attendees"
 msgstr ""
 
 #. module: event_rya
-#: model:account.payment.term,name:account.payment.term_event_20_80_90
+#: model:account.payment.term,name:event_rya.payment_term_event_20_80_90
 msgid "20% now, balance 90 days before event"
 msgstr ""
 
 #. module: event_rya
-#: model:account.payment.term,note:account.payment.term_event_20_80_90
+#: model_terms:account.payment.term,note:event_rya.payment_term_event_20_80_90
 msgid "20% at booking, balance 90 days before the event"
+msgstr ""
+
+#. module: event_rya
+#: model:account.payment.term,name:event_rya.payment_term_event_20_80_start
+msgid "20% now, balance before event"
+msgstr ""
+
+#. module: event_rya
+#: model_terms:account.payment.term,note:event_rya.payment_term_event_20_80_start
+msgid "20% at booking, balance before the event"
 msgstr ""

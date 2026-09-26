@@ -162,11 +162,46 @@ msgid "Attendees"
 msgstr "Teilnehmer"
 
 #. module: event_rya
-#: model:account.payment.term,name:account.payment.term_event_20_80_90
+#: model:account.payment.term,name:event_rya.payment_term_event_20_80_90
 msgid "20% now, balance 90 days before event"
 msgstr "20% sofort, Rest 90 Tage vor Veranstaltung"
 
 #. module: event_rya
-#: model:account.payment.term,note:account.payment.term_event_20_80_90
+#: model_terms:account.payment.term,note:event_rya.payment_term_event_20_80_90
 msgid "20% at booking, balance 90 days before the event"
-msgstr "20% bei Buchung, Rest 90 Tage vor Veranstaltungsbeginn"
+msgstr "20% bei Buchung, Rest 90 Tage vor der Veranstaltung"
+
+#. module: event_rya
+#: model:account.payment.term,name:event_rya.payment_term_event_20_80_start
+msgid "20% now, balance before event"
+msgstr "20% sofort, Rest vor Veranstaltung"
+
+#. module: event_rya
+#: model_terms:account.payment.term,note:event_rya.payment_term_event_20_80_start
+msgid "20% at booking, balance before the event"
+msgstr "20% bei Buchung, Rest vor der Veranstaltung"
+
+#. module: event_rya
+#: model:ir.model.fields.selection,name:event_rya.selection__account_payment_term_line__delay_type__rya_days_after_event
+msgid "Days after event start"
+msgstr "Tage nach Veranstaltungsbeginn"
+
+#. module: event_rya
+#: model:ir.model.fields.selection,name:event_rya.selection__event_registration__sale_status__partial
+msgid "Deposit paid"
+msgstr "Angezahlt"
+
+#. module: event_rya
+#: model:ir.model.fields,field_description:event_rya.field_event_event__rya_payment_term_id
+#: model:ir.model.fields,help:event_rya.field_event_event__rya_payment_term_id
+msgid ""
+"Payment terms proposed by default on the sale orders of this event. Without them "
+"the standard default of the customer applies."
+msgstr ""
+"Zahlungsbedingungen, die für die Verkaufsaufträge dieser Veranstaltung vorgeschlagen "
+"werden. Ohne sie gilt der Standardwert des Kunden."
+
+#. module: event_rya
+#: model:ir.model.fields,field_description:event_rya.field_event_event__rya_payment_term_id
+msgid "Payment Terms"
+msgstr "Zahlungsbedingungen"
