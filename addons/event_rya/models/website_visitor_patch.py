@@ -1,9 +1,8 @@
 # event_rya/models/website_visitor_patch.py
-from odoo import models, api
+from odoo import models
 import logging
 from pytz import timezone
 from datetime import datetime
-from odoo.http import request
 
 _logger = logging.getLogger(__name__)
 

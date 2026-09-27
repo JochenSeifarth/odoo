@@ -22,12 +22,12 @@
             <attribute name="class" remove="ps-2" add="ps-1 pe-1" separator=" " />
         </xpath>
 
-        <xpath expr="//div[contains(@class, 'o_wevent_registration_single')]//button[@data-increment-type='minus']"
+        <xpath expr="//div[hasclass('o_wevent_registration_single')]//button[@data-increment-type='minus']"
             position="attributes">
             <attribute name="class" remove="pe-2" add="ps-1 pe-1" separator=" " />
         </xpath>
 
-        <xpath expr="//div[contains(@class, 'o_wevent_registration_single')]//button[@data-increment-type='plus']"
+        <xpath expr="//div[hasclass('o_wevent_registration_single')]//button[@data-increment-type='plus']"
             position="attributes">
             <attribute name="class" remove="ps-2" add="ps-1 pe-1" separator=" " />
         </xpath>
@@ -66,7 +66,7 @@
 
 
         <!-- Inline ticket badges after lead paragraph -->
-        <xpath expr="//div[@id='o_wevent_event_main_cover_content']/p[@class='lead']" position="after">
+        <xpath expr="//div[@id='o_wevent_event_main_cover_content']/p[hasclass('lead')]" position="after">
             <t t-if="event.event_ticket_ids">
                 <!-- i.e. hide this -->
                 <t t-if="not event.event_ticket_ids">
@@ -84,7 +84,7 @@
         </xpath>
 
         <!-- Ticket Prices block before bordered block -->
-        <xpath expr="//div[contains(@class,'o_wevent_bordered_block')]" position="before">
+        <xpath expr="//div[hasclass('o_wevent_bordered_block')]" position="before">
             <div t-attf-class="o_wevent_dates_block d-flex flex-wrap justify-content-between align-items-center gap-2">
                 <div class="pb-3 flex-wrap gap-3 w-lg-100">
                     <small class="d-flex align-items-end justify-content-between gap-2 fw-bold text-nowrap">
@@ -118,7 +118,7 @@
 
     <!-- Event - Description Dates -->
     <template id="event_description_dates_rya" inherit_id="website_event.event_description_dates" name="Event Description Dates">
-        <xpath expr="//div[contains(@class,'card')]" position="replace">
+        <xpath expr="//div[hasclass('card')]" position="replace">
             <div class="card bg-transparent py-3 px-2 px-md-3">
                 <!-- Up to the next 5 closest dates -->
                 <t t-set="slots_to_preview" t-value="dict(list(slots.items())[:6])" />

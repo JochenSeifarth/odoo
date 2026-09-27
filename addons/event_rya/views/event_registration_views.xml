@@ -17,7 +17,7 @@
 
 
             <!-- insert phonebefore event name block -->
-            <xpath expr="//div[contains(@class, 'o_kanban_event_registration_event_name')]"
+            <xpath expr="//div[hasclass('o_kanban_event_registration_event_name')]"
                 position="before">
                 <div class="small">
                     <i class="fa fa-phone" title="Phone" />

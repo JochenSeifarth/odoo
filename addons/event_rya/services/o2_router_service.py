@@ -1,4 +1,5 @@
 import logging
+import math
 import os
 import requests
 from datetime import datetime
@@ -36,7 +37,7 @@ class O2RouterService:
             response = requests.get(
                 self.BASE_URL, params=params, headers=headers, timeout=10
             )
-        except requests.RequestException as e:
+        except requests.RequestException:
             _logger.exception("Upstream request failed")
             raise UserError("Routing service temporarily unavailable")
 

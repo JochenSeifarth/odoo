@@ -4,7 +4,7 @@ from odoo import api, models
 
 
 class MailComposeMessage(models.TransientModel):
-    _inherit = ['mail.compose.message']
+    _inherit = 'mail.compose.message'
 
     @api.depends('composition_mode', 'model', 'res_domain', 'res_ids', 'template_id')
     def _compute_attachment_ids(self):

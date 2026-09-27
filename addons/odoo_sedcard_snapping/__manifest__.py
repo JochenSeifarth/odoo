@@ -2,6 +2,7 @@
     "name": "Website A4 Sedcard Snippet",
     "summary": "A print-faithful A4 sedcard snippet for the website builder",
     "version": "1.0",
+     "author": "Jochen Seifarth",
     "category": "Website",
     "depends": ["website"],
     "data": [

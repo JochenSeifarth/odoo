@@ -88,20 +88,20 @@
 
         <!-- Single-slot date: day above month, without leading zero -->
         <xpath
-            expr="//div[@t-if='not event.is_multi_slots' and contains(@class, 'o_wevent_event_date_text')]/span[contains(@class, 'o_wevent_event_day')]"
+            expr="//div[@t-if='not event.is_multi_slots' and hasclass('o_wevent_event_date_text')]/span[hasclass('o_wevent_event_day')]"
             position="replace" />
 
         <xpath
-            expr="//div[@t-if='not event.is_multi_slots' and contains(@class, 'o_wevent_event_date_text')]/span[contains(@class, 'o_wevent_event_month')]"
+            expr="//div[@t-if='not event.is_multi_slots' and hasclass('o_wevent_event_date_text')]/span[hasclass('o_wevent_event_month')]"
             position="before">
             <span t-out="event.date_begin"
                 t-options="{'widget': 'datetime', 'tz_name': event.date_tz, 'format': 'd'}"
                 class="o_wevent_event_day oe_hide_on_date_edit" />
         </xpath>
 
-        <xpath expr="//div[@t-elif='not event.is_multi_slots']/span[contains(@class, 'o_wevent_event_day')]" position="replace" />
+        <xpath expr="//div[@t-elif='not event.is_multi_slots']/span[hasclass('o_wevent_event_day')]" position="replace" />
 
-        <xpath expr="//div[@t-elif='not event.is_multi_slots']/span[contains(@class, 'o_wevent_event_month')]" position="before">
+        <xpath expr="//div[@t-elif='not event.is_multi_slots']/span[hasclass('o_wevent_event_month')]" position="before">
             <span t-out="event.date_begin"
                 t-options="{'widget': 'datetime', 'tz_name': event.date_tz, 'format': 'd'}"
                 class="o_wevent_event_day oe_hide_on_date_edit" />
