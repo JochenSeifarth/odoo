@@ -75,11 +75,16 @@ class SaleOrder(models.Model):
     def _get_prepayment_required_amount(self):
         """Return the amount that has to be paid to confirm the order.
 
-        An event order is confirmed by paying what its payment term asks for
-        now, the rest of the term is paid later on. Every other order keeps the
-        standard amount, a share of the total given by the company.
+        A company that asks for no online payment confirms its quotations
+        without one, that holds for event orders as well. An event order is
+        otherwise confirmed by paying what its payment term asks for now, the
+        rest of the term is paid later on. Every other order keeps the standard
+        amount, a share of the total given by the company.
         """
         self.ensure_one()
+
+        if not self.require_payment:
+            return 0.0
 
         if self._has_event_ticket_lines():
             return self._get_rya_due_payment_amount()

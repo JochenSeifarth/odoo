@@ -151,6 +151,33 @@ class TestEventPaymentTerms(TransactionCase):
             ),
         )
 
+    def test_prepayment_amount_without_online_payment(self):
+        """A company that asks for no online payment confirms without a payment."""
+        self.sale_order.require_payment = False
+
+        self.assertEqual(self.sale_order._get_prepayment_required_amount(), 0.0)
+        self.assertTrue(self.sale_order._is_confirmation_amount_reached())
+
+    def test_prepayment_amount_without_online_payment_keeps_standard_behaviour(self):
+        """Turning off online payment does not change a standard order."""
+        self.sale_order.require_payment = False
+        product = self.env['product.product'].create({
+            'name': 'Test Service',
+            'type': 'service',
+            'list_price': 100.0,
+        })
+        order = self.env['sale.order'].create({
+            'partner_id': self.partner.id,
+            'order_line': [Command.create({
+                'product_id': product.id,
+                'price_unit': 100.0,
+            })],
+        })
+        order.require_payment = False
+
+        self.assertEqual(order._get_prepayment_required_amount(), 0.0)
+        self.assertTrue(order._is_confirmation_amount_reached())
+
     def test_paying_the_due_amount_confirms_the_order(self):
         """The payment of the first installment confirms the order and invoices it."""
         self.env['ir.config_parameter'].sudo().set_param('sale.automatic_invoice', 'True')
