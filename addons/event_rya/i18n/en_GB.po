@@ -42,13 +42,13 @@ msgstr ""
 
 #. module: event_rya
 #: model_terms:ir.ui.view,arch_db:event_rya.event_description_dates_rya
-#: model_terms:ir.ui.view,arch_db:event_rya.event_description_full_rya
 #: model_terms:ir.ui.view,arch_db:event_rya.event_list_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.event_ticket_price_block
 msgid "On Request"
 msgstr ""
 
 #. module: event_rya
-#: model_terms:ir.ui.view,arch_db:event_rya.event_description_full_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.event_ticket_price_block
 msgid "Price"
 msgstr ""
 
