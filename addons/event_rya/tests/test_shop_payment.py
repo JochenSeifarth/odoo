@@ -2,13 +2,17 @@
 
 import uuid
 from datetime import datetime, timedelta
+from unittest.mock import patch
 
 import odoo.tools
 from odoo import Command, fields
-from odoo.exceptions import UserError, ValidationError
+from odoo.exceptions import AccessError, MissingError, UserError, ValidationError
 from odoo.tests.common import TransactionCase
 
-from odoo.addons.event_rya.controllers.website_sale_payment_portal import PaymentPortal
+from odoo.addons.event_rya.controllers.website_sale_payment_portal import (
+    CustomerPortal,
+    PaymentPortal,
+)
 from odoo.addons.payment.tests.common import PaymentCommon
 from odoo.addons.website_sale.tests.common import MockRequest, WebsiteSaleCommon
 
@@ -177,6 +181,130 @@ class TestShopPayment(WebsiteSaleCommon, PaymentCommon, TransactionCase):
 
         self.assertEqual(len(transaction), 1)
         self.assertEqual(transaction.amount, 20.0)
+
+    def test_payment_values_of_a_confirmed_event_order(self):
+        """The portal form is filled with the amount the term asks for now.
+
+        The order pays 20 of its 100, which the core would read as a down
+        payment. The override says it is not one, it is an installment of the
+        term, so the form asks for the due share and not for the total.
+        """
+        self.event_cart.action_confirm()
+
+        with MockRequest(self.env, website=self.website):
+            values = CustomerPortal()._get_payment_values(
+                self.event_cart.sudo(),
+                website_id=self.website.id,
+                is_down_payment=True,
+            )
+
+        self.assertEqual(values['payment_amount'], 20.0)
+        self.assertEqual(values['amount'], 20.0)
+
+    def test_payment_values_of_a_draft_event_order(self):
+        """A quotation asks for the share of its term that is due as well."""
+        with MockRequest(self.env, website=self.website):
+            values = CustomerPortal()._get_payment_values(
+                self.event_cart.sudo(),
+                website_id=self.website.id,
+                is_down_payment=True,
+            )
+
+        self.assertEqual(values['payment_amount'], 20.0)
+        self.assertEqual(values['amount'], 20.0)
+
+    def test_payment_values_of_a_standard_order_are_untouched(self):
+        """An order without event lines keeps the amounts the core computed."""
+        with MockRequest(self.env, website=self.website):
+            values = CustomerPortal()._get_payment_values(
+                self.standard_cart.sudo(),
+                website_id=self.website.id,
+                is_down_payment=False,
+            )
+
+        self.assertEqual(values['payment_amount'], None)
+        self.assertEqual(values['amount'], self.standard_cart.amount_total)
+
+    def test_cancelled_event_order_is_refused(self):
+        """A cancelled order is not paid for, standard or not."""
+        self.event_cart.action_confirm()
+        self.event_cart.action_cancel()
+
+        with self.assertRaises(ValidationError) as catcher:
+            self._pay(self.event_cart)
+
+        self.assertIn("cancelled", str(catcher.exception))
+
+    def test_wrong_access_token_is_refused(self):
+        """An access error becomes a readable message, the core raises the same."""
+        with MockRequest(self.env, website=self.website, sale_order_id=self.event_cart.id):
+            with patch.object(
+                PaymentPortal,
+                '_document_check_access',
+                side_effect=AccessError("no"),
+            ):
+                with self.assertRaises(ValidationError) as catcher:
+                    PaymentPortal().shop_payment_transaction(
+                        self.event_cart.id,
+                        'not-the-access-token',
+                        provider_id=self.provider.id,
+                        payment_method_id=self.payment_method_id,
+                        token_id=False,
+                        amount=20.0,
+                        flow='redirect',
+                        tokenization_requested=False,
+                        landing_route='/shop/payment/confirm',
+                    )
+
+        self.assertIn("access token is invalid", str(catcher.exception))
+
+    def test_a_missing_order_is_not_swallowed(self):
+        """A missing order raises the core error, it is re-raised on purpose."""
+        with MockRequest(self.env, website=self.website, sale_order_id=self.event_cart.id):
+            with patch.object(
+                PaymentPortal,
+                '_document_check_access',
+                side_effect=MissingError("gone"),
+            ):
+                with self.assertRaises(MissingError):
+                    PaymentPortal().shop_payment_transaction(
+                        self.event_cart.id,
+                        self.event_cart.access_token,
+                        provider_id=self.provider.id,
+                        payment_method_id=self.payment_method_id,
+                        token_id=False,
+                        amount=20.0,
+                        flow='redirect',
+                        tokenization_requested=False,
+                        landing_route='/shop/payment/confirm',
+                    )
+
+    def test_validation_does_not_pay_and_does_not_refuse(self):
+        """A validation only checks the payment method, it charges nothing.
+
+        A confirmed event order whose first installment is paid has nothing due,
+        which refuses a payment. Token validation has to keep working on it.
+        """
+        self.event_cart.action_confirm()
+        self._create_done_transaction(self.event_cart, 20.0)
+
+        with MockRequest(self.env, website=self.website, sale_order_id=self.event_cart.id):
+            PaymentPortal()._create_transaction(
+                self.provider.id,
+                self.payment_method_id,
+                False,
+                self.event_cart.amount_total,
+                self.event_cart.currency_id.id,
+                self.event_cart.partner_id.id,
+                'redirect',
+                False,
+                '/shop/payment/confirm',
+                is_validation=True,
+                sale_order_id=self.event_cart.id,
+            )
+
+        self.assertEqual(len(self.event_cart.transaction_ids), 1)
+        self.assertEqual(self.event_cart.amount_paid, 20.0)
 
     @classmethod
     def _get_payment_controller(cls, route):

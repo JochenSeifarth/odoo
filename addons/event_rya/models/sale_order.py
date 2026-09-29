@@ -210,13 +210,14 @@ class SaleOrder(models.Model):
         return super()._has_to_be_paid()
 
     def _compute_fiscal_position_id(self):
-        """
-        Let Odoo determine the fiscal position normally.
+        """Let Odoo determine the fiscal position normally.
 
         Exception:
-        Event tickets are taxed where the event takes place,
-        therefore automatic fiscal positions based on the
-        customer's country must not be applied.
+        Event tickets are taxed where the event takes place, so no fiscal
+        position applies to an order holding them. Any position is cleared,
+        the one Odoo derives from the customer as well as a position a
+        salesperson picked by hand: where the event takes place decides the
+        taxes, not the country the order was written in.
         """
 
         super()._compute_fiscal_position_id()

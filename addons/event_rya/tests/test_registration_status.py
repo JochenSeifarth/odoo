@@ -140,3 +140,42 @@ class TestRegistrationStatus(AccountTestInvoicingCommon, TransactionCase):
         invoice = self._create_invoice()
         invoice.action_post()
         return invoice
+
+    def test_draft_invoice_does_not_count_as_paid(self):
+        """Only a posted invoice is paid for, a draft one is not an invoice yet."""
+        registration = self._confirm()
+        invoice = self._create_invoice()
+
+        self.assertEqual(invoice.state, 'draft')
+        self.assertEqual(registration.sale_status, 'to_pay')
+
+    def test_registration_of_a_draft_order_keeps_the_standard_status(self):
+        """A quotation is not paid for, whatever its invoices say."""
+        self.order.action_confirm()
+        self._pay_in_full(self._create_posted_invoice())
+        registrations = self.order.order_line.registration_ids
+
+        self.order.state = 'draft'
+        registrations._compute_registration_status()
+
+        self.assertEqual(registrations.mapped('sale_status'), ['to_pay'])
+
+    def test_free_order_is_free_and_not_to_pay(self):
+        """Nothing to pay for means free, the event logic leaves it alone."""
+        self.order.order_line.price_unit = 0.0
+        self.env.flush_all()
+        registration = self._confirm()
+
+        self.assertEqual(self.order.amount_total, 0.0)
+        self.assertEqual(registration.sale_status, 'free')
+
+    def test_every_registration_of_an_order_shares_its_status(self):
+        """The status comes from the order, so all of its registrations agree."""
+        self.order.order_line.product_uom_qty = 2
+        self.env.flush_all()
+        registrations = self._confirm()
+
+        self._pay_in_full(self._create_posted_invoice())
+
+        self.assertEqual(len(registrations), 2)
+        self.assertEqual(registrations.mapped('sale_status'), ['sold', 'sold'])

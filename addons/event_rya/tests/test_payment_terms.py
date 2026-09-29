@@ -377,6 +377,216 @@ class TestEventPaymentTerms(TransactionCase):
             [self.today],
         )
 
+    def test_schedule_of_an_order_without_event_lines(self):
+        """An order without event lines has no schedule."""
+        order = self.env['sale.order'].create({
+            'partner_id': self.partner.id,
+            'order_line': [Command.create({
+                'product_id': self.standard_product.id,
+                'price_unit': 100.0,
+            })],
+        })
+
+        self.assertEqual(order._get_rya_payment_schedule(), [])
+
+    def test_schedule_of_an_order_without_a_payment_term(self):
+        """An order without a payment term has no schedule."""
+        self.sale_order.payment_term_id = False
+
+        self.assertEqual(self.sale_order._get_rya_payment_schedule(), [])
+
+    def test_schedule_of_an_order_without_an_event_date(self):
+        """An event without a date dates nothing, so there is no schedule."""
+        order = self._create_sale_order(self.ticket)
+
+        with patch.object(type(self.event), 'date_begin', False):
+            self.assertEqual(order._get_rya_payment_schedule(), [])
+
+    def test_due_amount_without_a_schedule_is_the_total(self):
+        """Nothing to spread over time means everything is due at once."""
+        self.sale_order.payment_term_id = False
+
+        self.assertEqual(self.sale_order._get_rya_due_payment_amount(), 100.0)
+        self.assertEqual(self.sale_order._get_rya_payment_amount(), 100.0)
+
+    def test_schedule_is_sorted_by_date(self):
+        """The installments are shown in the order they are due, not of the term."""
+        self.sale_order.payment_term_id = self.env['account.payment.term'].create({
+            'name': 'Balance First, Deposit Last',
+            'line_ids': [
+                Command.create({
+                    'value': 'percent',
+                    'value_amount': 80.0,
+                    'nb_days': -90,
+                    'delay_type': 'rya_days_after_event',
+                }),
+                Command.create({
+                    'value': 'percent',
+                    'value_amount': 20.0,
+                    'nb_days': 0,
+                }),
+            ],
+        })
+
+        schedule = self.sale_order._get_rya_payment_schedule()
+
+        self.assertEqual([line['amount'] for line in schedule], [20.0, 80.0])
+        self.assertEqual(
+            [line['date'] for line in schedule],
+            sorted(line['date'] for line in schedule),
+        )
+
+    def test_due_flag_marks_the_installments_of_today(self):
+        """An installment due today counts as due, one due later does not."""
+        self.sale_order.payment_term_id = self.env.ref(
+            'event_rya.payment_term_event_20_80_start',
+        )
+
+        schedule = self.sale_order._get_rya_payment_schedule()
+
+        self.assertEqual([line['due'] for line in schedule], [True, False])
+        self.assertEqual(self.sale_order._get_rya_due_payment_amount(), 20.0)
+
+    def test_payment_amount_of_an_event_order_is_zero_once_paid(self):
+        """Paying more than is due leaves nothing to pay, it is not an error."""
+        self.sale_order.action_confirm()
+        self._create_payment_transaction(25.0)
+
+        self.assertEqual(self.sale_order._get_rya_payment_amount(), 0.0)
+        self.assertFalse(self.sale_order._has_to_be_paid())
+
+    def test_draft_event_order_is_still_to_be_paid(self):
+        """A quotation is not paid by its term, the standard check confirms it."""
+        self.assertEqual(self.sale_order.state, 'draft')
+        self.assertTrue(self.sale_order._has_to_be_paid())
+
+    def test_sent_event_order_is_still_to_be_paid(self):
+        self.sale_order.action_quotation_sent()
+
+        self.assertTrue(self.sale_order._has_to_be_paid())
+
+    def test_event_order_that_does_not_require_a_payment_is_not_to_be_paid(self):
+        """A company asking for no online payment confirms without one."""
+        self.sale_order.action_confirm()
+        self.sale_order.require_payment = False
+
+        self.assertFalse(self.sale_order._has_to_be_paid())
+
+    def test_free_event_order_is_not_to_be_paid(self):
+        """Nothing to pay for an order without an amount."""
+        order = self._create_sale_order(self.ticket)
+        order.order_line.price_unit = 0.0
+        order.action_confirm()
+
+        self.assertEqual(order.amount_total, 0.0)
+        self.assertFalse(order._has_to_be_paid())
+
+    def test_fiscal_position_of_an_event_order_is_cleared(self):
+        """Event tickets are taxed where the event takes place.
+
+        The core derives the position from the customer on every computation,
+        so the partner is given one to show that the event order drops even the
+        position Odoo itself picked.
+        """
+        fiscal_position = self.env['account.fiscal.position'].create({'name': 'Test'})
+        self.partner.property_account_position_id = fiscal_position
+        order = self._create_sale_order(self.ticket)
+
+        self.assertFalse(order.fiscal_position_id)
+
+    def test_standard_order_keeps_its_fiscal_position(self):
+        """An order without event lines keeps the position of its customer."""
+        fiscal_position = self.env['account.fiscal.position'].create({'name': 'Test'})
+        self.partner.property_account_position_id = fiscal_position
+        order = self.env['sale.order'].create({
+            'partner_id': self.partner.id,
+            'order_line': [Command.create({
+                'product_id': self.standard_product.id,
+                'price_unit': 100.0,
+            })],
+        })
+
+        self.assertEqual(order.fiscal_position_id, fiscal_position)
+
+    def test_start_and_term_of_an_order_with_a_foreign_company_term(self):
+        """A term of another company is dropped, the customer default applies."""
+        other_company = self.env['res.company'].create({'name': 'Other Company'})
+        self.partner.property_payment_term_id = self.env['account.payment.term'].create({
+            'name': 'Customer Payment Term',
+        }).id
+        self.event.payment_term_id = self.env['account.payment.term'].create({
+            'name': 'Payment Term Of Another Company',
+            'company_id': other_company.id,
+        })
+        order = self._create_sale_order(self.ticket)
+
+        _, payment_term = order._get_rya_event_start_and_term()
+
+        self.assertEqual(payment_term, self.env['account.payment.term'])
+
+    def test_start_and_term_uses_a_term_without_company(self):
+        """A term without a company is used by every company, as on an order."""
+        self.event.payment_term_id = self.env['account.payment.term'].create({
+            'name': 'Term Without Company',
+        })
+        order = self._create_sale_order(self.ticket)
+
+        _, payment_term = order._get_rya_event_start_and_term()
+
+        self.assertEqual(payment_term, self.event.payment_term_id)
+
+    def test_earliest_slot_wins_over_a_later_event(self):
+        """A line booking an earlier slot dates the terms of the order."""
+        self.event.payment_term_id = self.payment_term
+        slot = self._create_slot()
+        order = self._create_sale_order(self.ticket, self.later_ticket, slot=slot)
+
+        start_date, payment_term = order._get_rya_event_start_and_term()
+
+        self.assertEqual(start_date, slot.start_datetime)
+        self.assertEqual(payment_term, self.payment_term)
+
+    def test_invoice_date_of_a_slot_booking_order_is_the_slot(self):
+        """The booked slot dates the invoice, not the event it belongs to."""
+        slot = self._create_slot()
+        order = self._create_sale_order(self.ticket, slot=slot)
+        invoice = self._create_invoice(order.order_line)
+
+        self.assertEqual(invoice._get_rya_event_start_date(), slot.start_datetime)
+
+    def test_invoice_of_an_order_without_event_line_has_no_event_date(self):
+        """An invoice without an event order is not dated from an event."""
+        invoice = self._create_invoice(self.standard_order_line)
+
+        self.assertFalse(invoice._get_rya_event_start_date())
+
+    def test_invoice_date_ignores_an_event_without_a_date(self):
+        """An event without a date dates nothing."""
+        order = self._create_sale_order(self.ticket)
+        invoice = self._create_invoice(order.order_line)
+
+        with patch.object(type(self.event), 'date_begin', False):
+            self.assertFalse(invoice._get_rya_event_start_date())
+
+    def test_payment_term_line_of_the_standard_type_keeps_the_core_due_date(self):
+        """A line that is not relative to an event keeps the standard rule."""
+        line = self.payment_term.line_ids.filtered(
+            lambda line: line.delay_type != 'rya_days_after_event',
+        ).ensure_one()
+
+        self.assertEqual(
+            line._get_due_date(self.today),
+            self.today + timedelta(days=line.nb_days),
+        )
+
+    def test_payment_term_line_warns_without_an_event_date(self):
+        """A line that needs an event date says so instead of failing quietly."""
+        with self.assertLogs('odoo.addons.event_rya.models.account_payment_term_line',
+                             level='WARNING') as catcher:
+            self._event_line._get_due_date(self.today)
+
+        self.assertIn('no event date is known', catcher.output[0])
+
     @property
     def standard_order_line(self):
         order = self.env['sale.order'].create({

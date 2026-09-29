@@ -56,7 +56,7 @@ class TestEventInvoicing(TransactionCase):
         cls.standard_order = cls._create_standard_order()
 
     @classmethod
-    def _create_event_order(cls):
+    def _create_event_order(cls, confirm=True):
         order = cls.env['sale.order'].create({
             'partner_id': cls.partner.id,
             'payment_term_id': cls.payment_term.id,
@@ -67,7 +67,8 @@ class TestEventInvoicing(TransactionCase):
                 'price_unit': 100.0,
             })],
         })
-        order.action_confirm()
+        if confirm:
+            order.action_confirm()
         return order
 
     @classmethod
@@ -83,7 +84,8 @@ class TestEventInvoicing(TransactionCase):
         order.action_confirm()
         return order
 
-    def _create_transaction(self, order, amount):
+    def _create_transaction(self, order, amount, *other_orders):
+        """Register a done payment, on `order` alone or on all the given orders."""
         return self.env['payment.transaction'].create({
             'provider_id': self.env['payment.provider'].search([], limit=1).id,
             'payment_method_id': self.env['payment.method'].search([], limit=1).id,
@@ -92,7 +94,7 @@ class TestEventInvoicing(TransactionCase):
             'currency_id': order.currency_id.id,
             'reference': f'TEST-{order.id}-{amount}',
             'state': 'done',
-            'sale_order_ids': [Command.set(order.ids)],
+            'sale_order_ids': [Command.set((order + sum(other_orders, self.env['sale.order'])).ids)],
         })
 
     def test_event_order_is_invoiced_once_for_its_total(self):
@@ -125,3 +127,85 @@ class TestEventInvoicing(TransactionCase):
         invoices = self.standard_order.invoice_ids
         self.assertEqual(len(invoices), 1)
         self.assertLess(invoices.amount_total, self.standard_order.amount_total)
+
+    def test_invoice_carries_the_due_date_of_every_installment(self):
+        """The one invoice shows when each installment of the term is due."""
+        self._create_transaction(self.event_order, 20.0)._invoice_sale_orders()
+
+        invoice = self.event_order.invoice_ids
+
+        self.assertEqual(
+            sorted(term['date_maturity'] for term in invoice.needed_terms),
+            sorted([
+                self.today,
+                self.event_date - timedelta(days=90),
+            ]),
+        )
+
+    def test_invoice_of_an_event_order_is_reachable_in_the_portal(self):
+        """The customer has to be able to open the invoice that pays the event."""
+        self._create_transaction(self.event_order, 20.0)._invoice_sale_orders()
+
+        self.assertTrue(self.event_order.invoice_ids.access_token)
+
+    def test_draft_event_order_is_not_invoiced(self):
+        """A quotation has nothing to invoice yet."""
+        draft_order = self._create_event_order(confirm=False)
+        transaction = self._create_transaction(draft_order, 20.0)
+
+        transaction._invoice_sale_orders()
+
+        self.assertFalse(draft_order.invoice_ids)
+
+    def test_a_mixed_transaction_invoices_both_orders(self):
+        """A transaction may pay an event order and a standard one at once.
+
+        The event order is invoiced for its total, the standard one keeps the
+        down payment invoice. Neither of them may be left uninvoiced because
+        the other is there.
+        """
+        transaction = self._create_transaction(
+            self.event_order,
+            20.0,
+            self.standard_order,
+        )
+
+        transaction._invoice_sale_orders()
+
+        self.assertEqual(len(self.event_order.invoice_ids), 1)
+        self.assertEqual(
+            self.event_order.invoice_ids.amount_total,
+            self.event_order.amount_total,
+        )
+        self.assertEqual(len(self.standard_order.invoice_ids), 1)
+        self.assertLess(
+            self.standard_order.invoice_ids.amount_total,
+            self.standard_order.amount_total,
+        )
+        self.assertEqual(
+            transaction.invoice_ids,
+            self.event_order.invoice_ids | self.standard_order.invoice_ids,
+        )
+
+    def test_a_mixed_transaction_keeps_both_invoices_on_the_transaction(self):
+        """The transaction points at both invoices, neither replaces the other."""
+        transaction = self._create_transaction(
+            self.event_order,
+            20.0,
+            self.standard_order,
+        )
+
+        transaction._invoice_sale_orders()
+
+        self.assertEqual(len(transaction.invoice_ids), 2)
+
+    def test_a_standard_transaction_is_untouched(self):
+        """A transaction without event orders keeps the standard behaviour."""
+        transaction = self._create_transaction(self.standard_order, 20.0)
+
+        transaction._invoice_sale_orders()
+
+        self.assertEqual(
+            transaction.invoice_ids,
+            self.standard_order.invoice_ids,
+        )
