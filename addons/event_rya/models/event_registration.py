@@ -26,18 +26,20 @@ class EventRegistration(models.Model):
         "sale_order_id.invoice_ids.amount_residual",
     )
     def _compute_registration_status(self):
+        """Show what is paid for a registration of an event order.
+
+        The standard implementation marks a registration of a confirmed order as
+        sold, whatever has been paid for that order. An event order is invoiced
+        for its whole total while it is paid in the installments of its payment
+        term, so a registration only counts as sold once its invoices are paid
+        for. Until then it shows what is missing, a deposit paid as partial.
+        """
         super()._compute_registration_status()
 
-        for registration in self:
-            order = registration.sale_order_id
-
-            if (
-                not order
-                or not registration.event_ticket_id
-                or registration.sale_status == "free"
-                or registration.state == "cancel"
-                or order.state != "sale"
-            ):
+        for order, registrations in (
+            self.filtered("sale_order_id").grouped("sale_order_id").items()
+        ):
+            if order.state != "sale":
                 continue
 
             invoices = order.invoice_ids.filtered(
@@ -47,24 +49,25 @@ class EventRegistration(models.Model):
             )
 
             if not invoices:
-                registration.sale_status = "to_pay"
-                continue
-
-            total = sum(invoices.mapped("amount_total"))
-            residual = sum(invoices.mapped("amount_residual"))
-            paid = total - residual
-
-            if float_is_zero(
-                total,
-                precision_rounding=order.currency_id.rounding,
-            ):
-                registration.sale_status = "free"
-            elif float_is_zero(
-                residual,
-                precision_rounding=order.currency_id.rounding,
-            ):
-                registration.sale_status = "sold"
-            elif paid > 0:
-                registration.sale_status = "partial"
+                sale_status = "to_pay"
             else:
-                registration.sale_status = "to_pay"
+                total = sum(invoices.mapped("amount_total"))
+                residual = sum(invoices.mapped("amount_residual"))
+                rounding = order.currency_id.rounding
+
+                if float_is_zero(total, precision_rounding=rounding):
+                    sale_status = "free"
+                elif float_is_zero(residual, precision_rounding=rounding):
+                    sale_status = "sold"
+                elif residual < total:
+                    sale_status = "partial"
+                else:
+                    sale_status = "to_pay"
+
+            for registration in registrations:
+                if (
+                    registration.event_ticket_id
+                    and registration.sale_status != "free"
+                    and registration.state != "cancel"
+                ):
+                    registration.sale_status = sale_status
