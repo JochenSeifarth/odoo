@@ -7,7 +7,7 @@
 			<field name="inherit_id" ref="event.view_event_form" />
 			<field name="arch" type="xml">
 				<xpath expr="//field[@name='event_type_id']/following-sibling::field[@name='tag_ids']" position="after">
-					<field name="rya_payment_term_id" />
+					<field name="payment_term_id" domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]" />
 				</xpath>
 			</field>
 		</record>

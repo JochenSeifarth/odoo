@@ -5,8 +5,9 @@
         <xpath expr="//tr[@name='o_order_total']" position="after">
             <t t-if="website_sale_order._has_event_ticket_lines()">
                 <tr t-foreach="website_sale_order._get_rya_payment_schedule()" t-as="payment_line">
-                    <td colspan="2" class="text-muted border-0 p-0 pe-3 pb-2"> Due on <span t-out="payment_line['date']"
-                            t-options='{"widget": "date"}' />
+                    <td colspan="2" class="text-muted border-0 p-0 pe-3 pb-2">
+                        <span t-translate="yes">Due on</span>
+                        <span t-out="payment_line['date']" t-options='{"widget": "date"}' />
                     </td>
                     <td class="text-end border-0 p-0 ps-3 pb-2">
                         <span t-out="payment_line['amount']"
@@ -15,7 +16,7 @@
                 </tr>
                 <tr>
                     <td colspan="2" class="border-0 p-0 pe-3 pb-2">
-                        <strong>Due now</strong>
+                        <strong t-translate="yes">Due now</strong>
                     </td>
                     <td class="text-end border-0 p-0 ps-3 pb-2">
                         <strong t-out="website_sale_order._get_rya_due_payment_amount()"

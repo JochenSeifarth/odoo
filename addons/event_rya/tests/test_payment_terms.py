@@ -162,14 +162,24 @@ class TestEventPaymentTerms(TransactionCase):
         self.assertEqual(self.sale_order.invoice_ids.move_type, 'out_invoice')
         self.assertEqual(self.sale_order.invoice_ids.invoice_payment_term_id, self.payment_term)
 
-    def test_payment_term_selection_offers_the_payment_terms(self):
-        selection = self.event._fields['rya_payment_term_id']._description_selection(self.env)
+    def test_payment_term_of_another_company_is_not_proposed(self):
+        """A payment term of another company is left to the customer default."""
+        self.event.payment_term_id = self.env['account.payment.term'].create({
+            'name': 'Payment Term Of Another Company',
+            'company_id': self.env['res.company'].create({'name': 'Other Company'}).id,
+        })
+        customer_term = self.env['account.payment.term'].create({
+            'name': 'Customer Payment Term',
+        })
+        self.partner.property_payment_term_id = customer_term.id
+        order = self._create_sale_order(self.ticket, with_payment_term=False)
+        self.env.flush_all()
 
-        self.assertIn((str(self.payment_term.id), self.payment_term.display_name), selection)
+        self.assertEqual(order.payment_term_id, customer_term)
 
     def test_payment_term_of_event_is_proposed(self):
         """The term of the event is proposed when the customer has none."""
-        self.event.rya_payment_term_id = str(self.payment_term.id)
+        self.event.payment_term_id = self.payment_term
         order = self._create_sale_order(self.ticket, with_payment_term=False)
         self.env.flush_all()
 
@@ -179,7 +189,7 @@ class TestEventPaymentTerms(TransactionCase):
         self.partner.property_payment_term_id = self.env['account.payment.term'].create({
             'name': 'Customer Payment Term',
         }).id
-        self.event.rya_payment_term_id = str(self.payment_term.id)
+        self.event.payment_term_id = self.payment_term
         order = self._create_sale_order(self.ticket, with_payment_term=False)
         self.env.flush_all()
 
@@ -197,7 +207,7 @@ class TestEventPaymentTerms(TransactionCase):
 
     def test_payment_term_of_event_is_proposed_on_a_later_event_line(self):
         """The shop adds the event line to an existing cart."""
-        self.event.rya_payment_term_id = str(self.payment_term.id)
+        self.event.payment_term_id = self.payment_term
         order = self.env['sale.order'].create({'partner_id': self.partner.id})
         self.env['sale.order.line'].create({
             'order_id': order.id,
@@ -212,7 +222,7 @@ class TestEventPaymentTerms(TransactionCase):
 
     def test_payment_term_of_event_is_proposed_on_a_later_event_slot_line(self):
         """The shop adds a slot of a multi slot event to an existing cart."""
-        self.event.rya_payment_term_id = str(self.payment_term.id)
+        self.event.payment_term_id = self.payment_term
         slot = self._create_slot()
         order = self.env['sale.order'].create({'partner_id': self.partner.id})
         self.env['sale.order.line'].create({

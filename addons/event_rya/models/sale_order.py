@@ -50,23 +50,19 @@ class SaleOrder(models.Model):
         """Return the payment term proposed by the event of this order.
 
         Returns an empty recordset when the order has no event line, or when the
-        event of the order proposes no payment term that fits the company, so
-        that the default of the customer applies.
+        event of the order proposes a payment term of another company, so that
+        the default of the customer applies. A payment term without a company
+        is used by every company, as it is on a sales order.
         """
         self.ensure_one()
-        empty = self.env["account.payment.term"]
 
-        payment_term_id = self._get_rya_event_line().event_id.rya_payment_term_id
-        if not payment_term_id:
-            return empty
-
-        payment_term = self.env["account.payment.term"].browse(int(payment_term_id)).exists()
+        payment_term = self._get_rya_event_line().event_id.payment_term_id
         if payment_term.company_id and payment_term.company_id != self.company_id:
-            return empty
+            return self.env["account.payment.term"]
 
         return payment_term
 
-    @api.depends("order_line.event_id.rya_payment_term_id")
+    @api.depends("order_line.event_id.payment_term_id")
     def _compute_payment_term_id(self):
         """Propose the payment term of the event, the default of the customer comes second."""
         super()._compute_payment_term_id()

@@ -5,23 +5,33 @@ class PaymentTransaction(models.Model):
     _inherit = "payment.transaction"
 
     def _invoice_sale_orders(self):
-        rya_transactions = self.filtered(
+        """Invoice the sales orders of the transactions, event orders their own way.
+
+        An event order is paid in the installments of its payment term, so what
+        the customer pays is only a part of its total. The standard
+        implementation turns such a part into a down payment invoice and leaves
+        the rest of the order to a second invoice, which would spread the
+        tickets of one event over two documents. An event order therefore gets
+        one invoice for its whole total, carrying the payment term with the due
+        date of every installment. A later installment does not invoice it
+        again, its lines are billed already.
+        """
+        event_transactions = self.filtered(
             lambda tx: tx.sale_order_ids.filtered(
                 lambda order: order._has_event_ticket_lines(),
             ),
         )
 
-        normal_transactions = self - rya_transactions
+        standard_transactions = self - event_transactions
 
         # Keep standard Odoo behavior for all non-event orders.
-        if normal_transactions:
+        if standard_transactions:
             super(
                 PaymentTransaction,
-                normal_transactions,
+                standard_transactions,
             )._invoice_sale_orders()
 
-        # Event orders: create the full invoice, not a downpayment invoice.
-        for tx in rya_transactions:
+        for tx in event_transactions:
             tx = tx.with_company(tx.company_id)
 
             event_orders = tx.sale_order_ids.filtered(
