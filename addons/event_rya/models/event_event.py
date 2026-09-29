@@ -36,22 +36,14 @@ class EventEvent(models.Model):
         digits=(16, 0),
     )
 
-    rya_payment_term_id = fields.Selection(
-        selection="_selection_rya_payment_term_id",
+    payment_term_id = fields.Many2one(
+        "account.payment.term",
         string="Payment Terms",
+        ondelete="set null",
+        check_company=True,  # Unrequired company
         help="Payment terms proposed by default on the sale orders of this event. "
              "Without them the standard default of the customer applies.",
     )
-
-    @api.model
-    def _selection_rya_payment_term_id(self) -> list[tuple[str, str]]:
-        """Return the payment terms as (id, label) pairs.
-
-        All payment terms are offered, so that a term of another company stays
-        selectable and readable, see `sale.order._get_rya_event_payment_term`.
-        """
-        terms = self.env["account.payment.term"].search([], order="name")
-        return [(str(term.id), term.display_name) for term in terms]
 
     def get_route(self):
         self.ensure_one()

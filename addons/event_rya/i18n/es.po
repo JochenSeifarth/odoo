@@ -190,8 +190,8 @@ msgid "Deposit paid"
 msgstr "Anticipo pagado"
 
 #. module: event_rya
-#: model:ir.model.fields,field_description:event_rya.field_event_event__rya_payment_term_id
-#: model:ir.model.fields,help:event_rya.field_event_event__rya_payment_term_id
+#: model:ir.model.fields,field_description:event_rya.field_event_event__payment_term_id
+#: model:ir.model.fields,help:event_rya.field_event_event__payment_term_id
 msgid ""
 "Payment terms proposed by default on the sale orders of this event. Without them "
 "the standard default of the customer applies."
@@ -200,6 +200,16 @@ msgstr ""
 "evento. Si no se indican, se aplica el valor estándar del cliente."
 
 #. module: event_rya
-#: model:ir.model.fields,field_description:event_rya.field_event_event__rya_payment_term_id
+#: model:ir.model.fields,field_description:event_rya.field_event_event__payment_term_id
 msgid "Payment Terms"
 msgstr "Condiciones de pago"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.website_sale_payment_rya
+msgid "Due on"
+msgstr "Vence el"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.website_sale_payment_rya
+msgid "Due now"
+msgstr "A pagar ahora"
