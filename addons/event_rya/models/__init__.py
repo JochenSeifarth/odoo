@@ -7,6 +7,7 @@ from . import (
     event_registration,
     mail_compose_message,
     payment_transaction,
+    qweb_deprecation_filter,
     qweb_logger,
     res_lang,
     res_partner,

@@ -48,11 +48,11 @@
                 <div class="mt-4">
                     <!-- Map Container -->
                     <h5>
-                        <span t-translate="yes">Legs</span>
+                        <span t-translation="on">Legs</span>
                     </h5>
                     <div>
-                        <span t-translate="yes">Total Distance approx.</span> <t t-out="round(event.total_distance_nm)" />&#8239;<span
-                            t-translate="yes">nm</span>
+                        <span t-translation="on">Total Distance approx.</span> <t t-out="round(event.total_distance_nm)" />&#8239;<span
+                            t-translation="on">nm</span>
                     </div>
                     <div class="o_event_route_map_container"
                         style="position: relative;">
@@ -88,7 +88,7 @@
             <div t-attf-class="o_wevent_dates_block d-flex flex-wrap justify-content-between align-items-center gap-2">
                 <div class="pb-3 flex-wrap gap-3 w-lg-100">
                     <small class="d-flex align-items-end justify-content-between gap-2 fw-bold text-nowrap">
-                        <span t-translate="yes">Price</span>
+                        <span t-translation="on">Price</span>
                     </small>
 
                     <div class="card bg-transparent py-3 px-2 px-md-3">

@@ -4,14 +4,31 @@ import base64
 
 from odoo.tests import Form, users
 
-from odoo.addons.mail.tests.common import MailCommon
+from odoo.addons.mail.tests.common import MailCase, mail_new_test_user
 
 
-class TestMailComposeMessageEventRYA(MailCommon):
+class TestMailComposeMessageEventRYA(MailCase):
+    """ Inherits MailCase rather than MailCommon on purpose.
+
+    MailCommon.setUpClass() forces the test company to a hardcoded country
+    (base.be in stock Odoo), which re-validates the company partner's VAT and
+    Peppol endpoint against that country and fails for a company holding
+    real data. This test only needs the employee user, so it is created here
+    instead.
+    """
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.user_employee = mail_new_test_user(
+            cls.env,
+            company_id=cls.env.company.id,
+            country_id=cls.env.company.country_id.id,
+            groups='base.group_user,base.group_partner_manager',
+            login='employee',
+            name='Ernest Employee',
+            notification_type='inbox',
+        )
         cls.env['ir.config_parameter'].set_param('mail.restrict.template.rendering', True)
         cls.test_record = cls.env['res.partner'].with_context(cls._test_context).create({
             'name': 'Test',
