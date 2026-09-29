@@ -1,6 +1,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from datetime import datetime, timedelta
+from unittest.mock import patch
 
 from odoo import Command, fields
 from odoo.tests import TransactionCase
@@ -247,6 +248,47 @@ class TestEventPaymentTerms(TransactionCase):
 
         self.assertEqual(order.payment_term_id, self.payment_term)
 
+    def test_start_and_term_come_from_the_earliest_event_line(self):
+        """Both values have to come from the line that starts first."""
+        self.event.payment_term_id = self.payment_term
+        order = self._create_sale_order(self.ticket, self.later_ticket)
+
+        start_date, payment_term = order._get_rya_event_start_and_term()
+
+        self.assertEqual(start_date, self.event.date_begin)
+        self.assertEqual(payment_term, self.payment_term)
+
+    def test_start_and_term_come_from_the_booked_slot(self):
+        """A line books a slot, the slot starts the event line."""
+        self.event.payment_term_id = self.payment_term
+        slot = self._create_slot()
+        order = self._create_sale_order(self.ticket, slot=slot)
+
+        start_date, payment_term = order._get_rya_event_start_and_term()
+
+        self.assertEqual(start_date, slot.start_datetime)
+        self.assertEqual(payment_term, self.payment_term)
+
+    def test_start_date_ignores_an_event_line_without_a_date(self):
+        """An event line whose event has no date dates nothing."""
+        order = self._create_sale_order(self.ticket)
+
+        with patch.object(type(self.event), 'date_begin', False):
+            self.assertEqual(
+                order._get_rya_event_start_and_term(),
+                (False, self.env['account.payment.term']),
+            )
+
+    def test_start_and_term_of_an_order_without_event_line(self):
+        """An order without an event line has neither a start nor a term."""
+        order = self.env['sale.order'].create({'partner_id': self.partner.id})
+        self.env.flush_all()
+
+        self.assertEqual(
+            order._get_rya_event_start_and_term(),
+            (False, self.env['account.payment.term']),
+        )
+
     def test_payment_term_of_event_is_proposed_on_a_later_event_slot_line(self):
         """The shop adds a slot of a multi slot event to an existing cart."""
         self.event.payment_term_id = self.payment_term
@@ -333,15 +375,51 @@ class TestEventPaymentTerms(TransactionCase):
             }) for line in order_lines],
         })
 
-    def _create_payment_transaction(self, amount):
+    def test_paying_the_due_amount_matches_it(self):
+        """The shop shows the payment as the one the term asked for."""
+        self.sale_order.action_confirm()
+        transaction = self._create_payment_transaction(20.0)
+
+        self.assertTrue(
+            self.sale_order._rya_transaction_matches_due_amount(transaction),
+        )
+
+    def test_paying_another_amount_does_not_match_it(self):
+        self.sale_order.action_confirm()
+        transaction = self._create_payment_transaction(5.0)
+
+        self.assertFalse(
+            self.sale_order._rya_transaction_matches_due_amount(transaction),
+        )
+
+    def test_paying_the_due_amount_of_a_standard_order_does_not_match_it(self):
+        """Only an event order has a due amount to match."""
+        product = self.env['product.product'].create({
+            'name': 'Test Service',
+            'type': 'service',
+            'list_price': 100.0,
+        })
+        order = self.env['sale.order'].create({
+            'partner_id': self.partner.id,
+            'order_line': [Command.create({
+                'product_id': product.id,
+                'price_unit': 100.0,
+            })],
+        })
+        transaction = self._create_payment_transaction(20.0, order=order)
+
+        self.assertFalse(order._rya_transaction_matches_due_amount(transaction))
+
+    def _create_payment_transaction(self, amount, order=None):
         """Register a confirmed payment on the order, as the shop does."""
+        order = order or self.sale_order
         return self.env['payment.transaction'].create({
             'provider_id': self.env['payment.provider'].search([], limit=1).id,
             'payment_method_id': self.env['payment.method'].search([], limit=1).id,
-            'partner_id': self.partner.id,
+            'partner_id': order.partner_id.id,
             'amount': amount,
-            'currency_id': self.sale_order.currency_id.id,
+            'currency_id': order.currency_id.id,
             'reference': 'TEST-TRANSACTION',
             'state': 'done',
-            'sale_order_ids': [Command.set(self.sale_order.ids)],
+            'sale_order_ids': [Command.set(order.ids)],
         })

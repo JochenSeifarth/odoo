@@ -8,35 +8,32 @@ _logger = logging.getLogger(__name__)
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
-    def _get_rya_event_line(self):
-        """Return the event line of this order that starts first, if any.
+    def _get_rya_event_start_and_term(self):
+        """Return what dates and what terms the payment of this order follows.
 
-        This line dates the payment terms of the order and holds its event,
-        see `sale.order.line._get_rya_start_date`. Returns an empty recordset
-        for an order without an event line.
+        An event line starts at the slot it books, at its event otherwise. The
+        line that starts first dates the payment terms of the order, and the
+        event of that same line holds the payment term they are computed with.
+
+        :return: The start date, False without an event line, and the payment
+            term of that event, empty when the order has no event line or when
+            the event proposes a payment term of another company, so that the
+            default of the customer applies. A payment term without a company is
+            used by every company, as it is on a sales order.
+        :rtype: tuple[datetime | bool, account.payment.term]
         """
         self.ensure_one()
 
-        lines = self.order_line.filtered("event_id")
-        start_dates = {
-            line: line._get_rya_start_date()
-            for line in lines
-            if line._get_rya_start_date()
-        }
+        start_date = False
+        event = self.env["event.event"]
 
-        return min(start_dates, key=start_dates.get, default=self.env["sale.order.line"])
+        for line in self.order_line.filtered("event_id"):
+            line_start = line.event_slot_id.start_datetime or line.event_id.date_begin
+            if line_start and (not start_date or line_start < start_date):
+                start_date = line_start
+                event = line.event_id
 
-    def _get_rya_event_start_date(self):
-        """Return the start date of the event line that dates the payment terms.
-
-        Returns False for an order without an event line.
-        """
-        self.ensure_one()
-
-        start_date = self._get_rya_event_line()._get_rya_start_date() or False
-
-        events = self.order_line.mapped("event_id")
-        if len(events) > 1:
+        if len(self.order_line.event_id) > 1:
             _logger.warning(
                 "Sale order %s: an event order should contain only one event. "
                 "Using the earliest starting event at %s",
@@ -44,23 +41,11 @@ class SaleOrder(models.Model):
                 start_date,
             )
 
-        return start_date
-
-    def _get_rya_event_payment_term(self):
-        """Return the payment term proposed by the event of this order.
-
-        Returns an empty recordset when the order has no event line, or when the
-        event of the order proposes a payment term of another company, so that
-        the default of the customer applies. A payment term without a company
-        is used by every company, as it is on a sales order.
-        """
-        self.ensure_one()
-
-        payment_term = self._get_rya_event_line().event_id.payment_term_id
+        payment_term = event.payment_term_id
         if payment_term.company_id and payment_term.company_id != self.company_id:
-            return self.env["account.payment.term"]
+            payment_term = self.env["account.payment.term"]
 
-        return payment_term
+        return start_date, payment_term
 
     @api.depends("order_line.event_id.payment_term_id")
     def _compute_payment_term_id(self):
@@ -68,7 +53,7 @@ class SaleOrder(models.Model):
         super()._compute_payment_term_id()
 
         for order in self:
-            payment_term = order._get_rya_event_payment_term()
+            _, payment_term = order._get_rya_event_start_and_term()
             if payment_term:
                 order.payment_term_id = payment_term
 
@@ -94,7 +79,7 @@ class SaleOrder(models.Model):
     def _has_event_ticket_lines(self):
         """Return True if this order contains event ticket lines."""
         self.ensure_one()
-        return bool(self.order_line.filtered("event_id"))
+        return bool(self.order_line.event_id)
 
     def _get_rya_payment_schedule(self):
         """Return the payment term schedule of an event order.
@@ -108,7 +93,7 @@ class SaleOrder(models.Model):
         if not self._has_event_ticket_lines():
             return []
 
-        start_date = self._get_rya_event_start_date()
+        start_date, _payment_term = self._get_rya_event_start_and_term()
         payment_term = self.payment_term_id
 
         if not start_date or not payment_term:
@@ -187,20 +172,21 @@ class SaleOrder(models.Model):
         return self.currency_id.round(outstanding)
 
     def _rya_transaction_matches_due_amount(self, transaction):
-        """Return True if an event payment matches the amount due before it."""
+        """Return True if an event payment matches the amount due before it.
+
+        The amount paid up to and including the transaction has to be the amount
+        that was due, which is what the order of the payments shows. Paying it
+        is what the transaction matching the due amount means.
+        """
         self.ensure_one()
 
         if not self._has_event_ticket_lines():
             return False
 
-        due_amount = self._get_rya_due_payment_amount()
-        paid_before_transaction = self.amount_paid - transaction.amount
-        expected_amount = due_amount - paid_before_transaction
-
         return (
             self.currency_id.compare_amounts(
-                transaction.amount,
-                expected_amount,
+                self._get_rya_due_payment_amount(),
+                self.amount_paid,
             )
             == 0
         )

@@ -25,15 +25,22 @@ class AccountMove(models.Model):
         """Return the start date of the events this invoice covers.
 
         The date comes from the sale orders of the invoice, see
-        `sale.order._get_rya_event_start_date`, and an invoice may cover orders
-        of several events, in which case the earliest start dates the payment
-        terms. Returns False for an invoice without an event order.
+        `sale.order._get_rya_event_start_and_term`, and an invoice may cover
+        orders of several events, in which case the earliest start dates the
+        payment terms. Returns False for an invoice without an event order.
         """
         self.ensure_one()
 
-        start_dates = [
-            order._get_rya_event_start_date()
+        starts = (
+            order._get_rya_event_start_and_term()
             for order in self.invoice_line_ids.mapped("sale_line_ids.order_id")
-        ]
+        )
 
-        return min((start_date for start_date in start_dates if start_date), default=False)
+        return min(
+            (
+                start_date
+                for start_date, _payment_term in starts
+                if start_date
+            ),
+            default=False,
+        )
