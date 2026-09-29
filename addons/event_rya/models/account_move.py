@@ -15,10 +15,22 @@ class AccountMove(models.Model):
         "invoice_line_ids.sale_line_ids.order_id.order_line.event_slot_id.start_datetime",
     )
     def _compute_needed_terms(self):
+        """Hand the start date of an event to the payment term of its invoice.
+
+        The standard computation reads no context, the date is put into the
+        context of every move that covers an order of an event, see
+        `account.payment.term.line._get_due_date`. A move without a payment term
+        keeps the context it has, looking its event up would be of no use to it.
+        """
         for move in self:
-            start_date = move._get_rya_event_start_date()
-            if start_date:
+            if move.invoice_payment_term_id and (
+                start_date := move._get_rya_event_start_date()
+            ):
                 move = move.with_context(rya_event_date=start_date)
+
+            # The standard implementation reads the context of the move it is
+            # called on, so it has to be called on the move that carries the
+            # date, which is why it is bound again instead of a plain `super()`.
             super(AccountMove, move)._compute_needed_terms()
 
     def _get_rya_event_start_date(self):

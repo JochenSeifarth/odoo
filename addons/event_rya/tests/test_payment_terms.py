@@ -33,6 +33,11 @@ class TestEventPaymentTerms(TransactionCase):
         cls.ticket = cls.event.event_ticket_ids
         cls.later_ticket = cls.later_event.event_ticket_ids
         cls.payment_term = cls.env.ref('event_rya.payment_term_event_20_80_90')
+        cls.standard_product = cls.env['product.product'].create({
+            'name': 'Test Service',
+            'type': 'service',
+            'list_price': 100.0,
+        })
         cls.partner = cls.env['res.partner'].create({'name': 'Test Customer'})
         cls.sale_order = cls._create_sale_order(cls.ticket)
 
@@ -349,6 +354,39 @@ class TestEventPaymentTerms(TransactionCase):
         invoice = self._create_invoice(*self.sale_order.order_line, self.later_order_line)
 
         self.assertEqual(invoice._get_rya_event_start_date(), self.event.date_begin)
+
+    def test_terms_of_a_set_of_invoices_are_dated_from_their_event(self):
+        """A batch of moves hands the date to the event invoice only."""
+        event_invoice = self._create_invoice(self.sale_order.order_line)
+        standard_invoice = self._create_invoice(self.standard_order_line)
+        without_term = self._create_invoice(self.standard_order_line)
+        without_term.invoice_payment_term_id = False
+
+        (event_invoice + standard_invoice + without_term)._compute_needed_terms()
+
+        self.assertEqual(
+            sorted(term['date_maturity'] for term in event_invoice.needed_terms),
+            [self.today, self.event_date - timedelta(days=90)],
+        )
+        self.assertEqual(
+            sorted(term['date_maturity'] for term in standard_invoice.needed_terms),
+            [self.today],
+        )
+        self.assertEqual(
+            sorted(term['date_maturity'] for term in without_term.needed_terms),
+            [self.today],
+        )
+
+    @property
+    def standard_order_line(self):
+        order = self.env['sale.order'].create({
+            'partner_id': self.partner.id,
+            'order_line': [Command.create({
+                'product_id': self.standard_product.id,
+                'price_unit': 100.0,
+            })],
+        })
+        return order.order_line
 
     @property
     def _event_line(self):
