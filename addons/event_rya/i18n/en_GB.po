@@ -42,13 +42,13 @@ msgstr ""
 
 #. module: event_rya
 #: model_terms:ir.ui.view,arch_db:event_rya.event_description_dates_rya
-#: model_terms:ir.ui.view,arch_db:event_rya.event_description_full_rya
 #: model_terms:ir.ui.view,arch_db:event_rya.event_list_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.event_ticket_price_block
 msgid "On Request"
 msgstr ""
 
 #. module: event_rya
-#: model_terms:ir.ui.view,arch_db:event_rya.event_description_full_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.event_ticket_price_block
 msgid "Price"
 msgstr ""
 
@@ -155,4 +155,24 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:event_rya.report_invoice_document_rya
 #: model_terms:ir.ui.view,arch_db:event_rya.view_move_form_event_participants
 msgid "Attendees"
+msgstr ""
+
+#. module: event_rya
+#: model:account.payment.term,name:event_rya.payment_term_event_20_80_90
+msgid "20% now, balance 90 days before event"
+msgstr ""
+
+#. module: event_rya
+#: model_terms:account.payment.term,note:event_rya.payment_term_event_20_80_90
+msgid "20% at booking, balance 90 days before the event"
+msgstr ""
+
+#. module: event_rya
+#: model:account.payment.term,name:event_rya.payment_term_event_20_80_start
+msgid "20% now, balance before event"
+msgstr ""
+
+#. module: event_rya
+#: model_terms:account.payment.term,note:event_rya.payment_term_event_20_80_start
+msgid "20% at booking, balance before the event"
 msgstr ""

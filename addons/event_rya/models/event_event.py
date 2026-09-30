@@ -36,6 +36,15 @@ class EventEvent(models.Model):
         digits=(16, 0),
     )
 
+    payment_term_id = fields.Many2one(
+        "account.payment.term",
+        string="Payment Terms",
+        ondelete="set null",
+        check_company=True,  # Unrequired company
+        help="Payment terms proposed by default on the sale orders of this event. "
+             "Without them the standard default of the customer applies.",
+    )
+
     def get_route(self):
         self.ensure_one()
 

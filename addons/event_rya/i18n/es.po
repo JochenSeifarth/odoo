@@ -42,13 +42,13 @@ msgstr "Contáctenos"
 
 #. module: event_rya
 #: model_terms:ir.ui.view,arch_db:event_rya.event_description_dates_rya
-#: model_terms:ir.ui.view,arch_db:event_rya.event_description_full_rya
 #: model_terms:ir.ui.view,arch_db:event_rya.event_list_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.event_ticket_price_block
 msgid "On Request"
 msgstr "Contáctenos"
 
 #. module: event_rya
-#: model_terms:ir.ui.view,arch_db:event_rya.event_description_full_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.event_ticket_price_block
 msgid "Price"
 msgstr "Precio"
 
@@ -158,3 +158,58 @@ msgstr "mn"
 #: model_terms:ir.ui.view,arch_db:event_rya.view_move_form_event_participants
 msgid "Attendees"
 msgstr "Participantes"
+
+#. module: event_rya
+#: model:account.payment.term,name:event_rya.payment_term_event_20_80_90
+msgid "20% now, balance 90 days before event"
+msgstr "20% ahora, resto 90 días antes del evento"
+
+#. module: event_rya
+#: model_terms:account.payment.term,note:event_rya.payment_term_event_20_80_90
+msgid "20% at booking, balance 90 days before the event"
+msgstr "20% al reservar, resto 90 días antes del evento"
+
+#. module: event_rya
+#: model:account.payment.term,name:event_rya.payment_term_event_20_80_start
+msgid "20% now, balance before event"
+msgstr "20% ahora, resto antes del evento"
+
+#. module: event_rya
+#: model_terms:account.payment.term,note:event_rya.payment_term_event_20_80_start
+msgid "20% at booking, balance before the event"
+msgstr "20% al reservar, resto antes del evento"
+
+#. module: event_rya
+#: model:ir.model.fields.selection,name:event_rya.selection__account_payment_term_line__delay_type__rya_days_after_event
+msgid "Days after event start"
+msgstr "Días después el inicio del evento"
+
+#. module: event_rya
+#: model:ir.model.fields.selection,name:event_rya.selection__event_registration__sale_status__partial
+msgid "Deposit paid"
+msgstr "Anticipo pagado"
+
+#. module: event_rya
+#: model:ir.model.fields,field_description:event_rya.field_event_event__payment_term_id
+#: model:ir.model.fields,help:event_rya.field_event_event__payment_term_id
+msgid ""
+"Payment terms proposed by default on the sale orders of this event. Without them "
+"the standard default of the customer applies."
+msgstr ""
+"Condiciones de pago propuestas por defecto en los pedidos de venta de este "
+"evento. Si no se indican, se aplica el valor estándar del cliente."
+
+#. module: event_rya
+#: model:ir.model.fields,field_description:event_rya.field_event_event__payment_term_id
+msgid "Payment Terms"
+msgstr "Condiciones de pago"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.website_sale_payment_rya
+msgid "Due on"
+msgstr "Vence el"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.website_sale_payment_rya
+msgid "Due now"
+msgstr "A pagar ahora"

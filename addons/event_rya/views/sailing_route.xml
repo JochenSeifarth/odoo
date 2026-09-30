@@ -4,7 +4,7 @@
         <t t-call="website.layout">
             <div class="container mt-4">
                 <h2>
-                    <t t-esc="event.name" />
+                    <t t-out="event.name" />
                 </h2>
                 <!-- Map Container -->
                 <div class="o_event_route_map" t-att-data-event-id="event.id"

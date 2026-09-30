@@ -34,6 +34,46 @@
 
     </template>
 
+    <!-- The event description is rendered from two different places: the
+         sidebar for desktop and a separate block in the main column for
+         mobile. The ticket prices therefore have to be rendered in both, each
+         one hidden in the layout of the other, so that they show up next to
+         the event data on both screen sizes. -->
+    <template id="event_ticket_price_block" name="Event Ticket Prices">
+        <div t-if="event.event_ticket_ids"
+            t-attf-class="o_rya_ticket_price_block d-flex flex-wrap justify-content-between align-items-center gap-2 {{visibility_classes or ''}}">
+            <div class="w-100 mt-1 mb-1 flex-wrap gap-3">
+                <small class="d-flex align-items-end justify-content-between gap-2 fw-bold text-nowrap">
+                    <span t-translation="on">Price</span>
+                </small>
+
+                <div class="card bg-transparent py-3 px-2 px-md-3">
+                    <!-- Normale Preisanzeige -->
+                    <div class="d-flex flex-wrap gap-1">
+                        <t t-foreach="event.event_ticket_ids" t-as="ticket">
+                            <t t-if="ticket.price &gt;= 99999">
+                                <a href="/contactus" class="btn btn-primary">
+                                    <t t-if="ticket.name">
+                                        <t t-out="ticket.name" />: </t> On Request </a>
+                            </t>
+                            <t t-else="">
+                                <div>
+                                    <t t-if="ticket.name">
+                                        <t t-out="ticket.name" />: </t>
+                                    <t t-out="int(ticket.price)" />
+                                    <t t-out="event.company_id.currency_id.symbol" />
+                                </div>
+                            </t>
+                        </t>
+                    </div>
+                </div>
+                <small class="d-block text-center text-muted" t-if="event.payment_term_id.note">
+                    <t t-out="event.payment_term_id.note" />
+                </small>
+            </div>
+        </div>
+    </template>
+
     <!-- Show ticket price on Event Description Page -->
     <template id="event_description_full_rya" inherit_id="website_event.event_description_full"
         name="Show Ticket Prices in box and Event Legs on Event Description Page">
@@ -48,11 +88,11 @@
                 <div class="mt-4">
                     <!-- Map Container -->
                     <h5>
-                        <span t-translate="yes">Legs</span>
+                        <span t-translation="on">Legs</span>
                     </h5>
                     <div>
-                        <span t-translate="yes">Total Distance approx.</span> <t t-out="round(event.total_distance_nm)" />&#8239;<span
-                            t-translate="yes">nm</span>
+                        <span t-translation="on">Total Distance approx.</span> <t t-out="round(event.total_distance_nm)" />&#8239;<span
+                            t-translation="on">nm</span>
                     </div>
                     <div class="o_event_route_map_container"
                         style="position: relative;">
@@ -64,55 +104,20 @@
             </t>
         </xpath>
 
-
-        <!-- Inline ticket badges after lead paragraph -->
-        <xpath expr="//div[@id='o_wevent_event_main_cover_content']/p[hasclass('lead')]" position="after">
-            <t t-if="event.event_ticket_ids">
-                <!-- i.e. hide this -->
-                <t t-if="not event.event_ticket_ids">
-                    <div class="d-flex flex-wrap gap-2 mt-2">
-                        <t t-foreach="event.event_ticket_ids" t-as="ticket">
-                            <span class="badge bg-secondary">
-                                <t t-out="ticket.name" /> : <t t-out="int(ticket.price)" />
-                                <t
-                                    t-out="event.company_id.currency_id.symbol" />
-                            </span>
-                        </t>
-                    </div>
-                </t>
-            </t>
+        <!-- Ticket Prices block, desktop: above the Date & Time block of the sidebar -->
+        <xpath expr="//aside[@id='o_wevent_event_main_sidebar']/div[hasclass('o_wevent_bordered_block')][1]"
+            position="before">
+            <t t-set="visibility_classes">d-none d-lg-block</t>
+            <t t-call="event_rya.event_ticket_price_block" />
         </xpath>
 
-        <!-- Ticket Prices block before bordered block -->
-        <xpath expr="//div[hasclass('o_wevent_bordered_block')]" position="before">
-            <div t-attf-class="o_wevent_dates_block d-flex flex-wrap justify-content-between align-items-center gap-2">
-                <div class="pb-3 flex-wrap gap-3 w-lg-100">
-                    <small class="d-flex align-items-end justify-content-between gap-2 fw-bold text-nowrap">
-                        <span t-translate="yes">Price</span>
-                    </small>
-
-                    <div class="card bg-transparent py-3 px-2 px-md-3">
-                        <!-- Normale Preisanzeige -->
-                        <div class="d-flex flex-wrap gap-1">
-                            <t t-foreach="event.event_ticket_ids" t-as="ticket">
-                                <t t-if="ticket.price &gt;= 99999">
-                                    <a href="/contactus" class="btn btn-primary">
-                                        <t t-if="ticket.name">
-                                            <t t-out="ticket.name" />: </t> On Request </a>
-                                </t>
-                                <t t-else="">
-                                    <div>
-                                        <t t-if="ticket.name">
-                                            <t t-out="ticket.name" />: </t>
-                                        <t t-out="int(ticket.price)" />
-                                        <t t-out="event.company_id.currency_id.symbol" />
-                                    </div>
-                                </t>
-                            </t>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Ticket Prices block, mobile: inside the mobile dates block of the
+             main column. The standard template identifies it by its class; a
+             non-matching xpath is skipped silently, so re-check it when the
+             standard template is updated. -->
+        <xpath expr="//div[hasclass('o_wevent_event_main_dates_mobile')]" position="before">
+            <t t-set="visibility_classes">d-lg-none</t>
+            <t t-call="event_rya.event_ticket_price_block" />
         </xpath>
     </template>
 
@@ -141,7 +146,7 @@
                     </div>
                     <button t-if="event.event_registrations_open" type="button" data-bs-toggle="modal"
                         data-bs-target="#modal_slot_registration"
-                        t-attf-class="btn btn-link text-decoration-none pb-0 {{cta_additional_classes}}">
+                        t-attf-class="btn btn-secondary text-decoration-none pb-0 {{cta_additional_classes}}">
                         View More
                     </button>
                 </t>
