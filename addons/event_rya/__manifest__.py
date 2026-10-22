@@ -23,6 +23,7 @@
     ],
     "data": [
         "data/payment_term.xml",
+        "data/mail_template_after_event.xml",
         "report/event.event_event_templates.xml",
         "report/event.event_report_template_full_page_ticket.xml",
         "views/account_move_views.xml",
@@ -33,6 +34,7 @@
         "security/ir.model.access.csv",
         "views/event_event_views.xml",
         "views/res_partner_geo.xml",
+        "views/res_config_settings_views_rya.xml",
         "views/webclient_templates.xml",
         "views/report_invoice_rya.xml",
         "views/event_registration_views.xml",
