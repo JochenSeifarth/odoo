@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import copy
+import logging
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pytz
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 from odoo.tools.json import scriptsafe as json_scriptsafe
 
 from ..services.o2_router_service import O2RouterService
@@ -265,3 +266,20 @@ class EventEvent(models.Model):
                  events.append(base_event)
 
         return events
+
+    def action_run_mail_schedulers(self):
+        """Dummy placeholder for action_run_mail_schedulers on event.event.
+
+        Prevents 'method not found' errors when the button on the event form
+        view is clicked. The real scheduling logic is not implemented here.
+        """
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": _("Communications"),
+                "message": _("No communications to send."),
+                "type": "warning",
+                "sticky": True,
+            },
+        }

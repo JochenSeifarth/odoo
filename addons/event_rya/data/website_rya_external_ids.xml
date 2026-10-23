@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!--
+            Externe IDs für beide Websites (interne id=1 und id=2).
+            Die externen IDs verknüpfen die bestehenden Websites mit
+            event_rya.website_1 bzw. event_rya.website_2, damit sie
+            in website_rya_google_review_url.xml angesprochen werden können.
+        -->
+        <record id="event_rya.website_1_imd" model="ir.model.data">
+            <field name="model">website</field>
+            <field name="res_id">1</field>
+            <field name="module">event_rya</field>
+            <field name="name">website_1</field>
+        </record>
+        <record id="event_rya.website_2_imd" model="ir.model.data">
+            <field name="model">website</field>
+            <field name="res_id">2</field>
+            <field name="module">event_rya</field>
+            <field name="name">website_2</field>
+        </record>
+    </data>
+</odoo>

@@ -5,7 +5,6 @@ from . import (
     event_event,
     event_leg,
     event_mail,
-    event_mail_slot,
     event_registration,
     mail_compose_message,
     payment_transaction,

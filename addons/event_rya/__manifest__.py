@@ -23,7 +23,9 @@
     ],
     "data": [
         "data/payment_term.xml",
-        "data/mail_template_after_event.xml",
+        "data/mail_template_review_google.xml",
+        "data/website_rya_external_ids.xml",
+        "data/website_rya_google_review_url.xml",
         "report/event.event_event_templates.xml",
         "report/event.event_report_template_full_page_ticket.xml",
         "views/account_move_views.xml",

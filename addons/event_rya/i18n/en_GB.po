@@ -176,3 +176,20 @@ msgstr ""
 #: model_terms:account.payment.term,note:event_rya.payment_term_event_20_80_start
 msgid "20% at booking, balance before the event"
 msgstr ""
+
+#. module: event_rya
+#: model:ir.model.fields,field_description:event_rya.field_website__rya_google_review_url
+msgid "Google Review Link"
+msgstr ""
+
+#. module: event_rya
+#: model:ir.model.fields,help:event_rya.field_website__rya_google_review_url
+msgid ""
+"Link where the guests of this website can leave a Google review.\n"
+"It is inserted in the after the event mail of the event_rya addon, for the events published on this website."
+msgstr ""
+
+#. module: event_rya
+#: model:mail.template,name:event_rya.event_mail_template_review_google
+msgid "Events: Review (Google)"
+msgstr ""

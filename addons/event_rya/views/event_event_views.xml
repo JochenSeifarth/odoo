@@ -6,9 +6,9 @@
 			<field name="model">event.event</field>
 			<field name="inherit_id" ref="event.view_event_form" />
 			<field name="arch" type="xml">
-			<xpath expr="//field[@name='event_type_id']" position="after">
-				<field name="payment_term_id" domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]" />
-			</xpath>
+				<xpath expr="//field[@name='event_type_id']" position="after">
+					<field name="payment_term_id" domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]" />
+				</xpath>
 			</field>
 		</record>
 
@@ -35,6 +35,33 @@
 							</list>
 						</field>
 					</page>
+				</xpath>
+			</field>
+		</record>
+
+		<record id="view_event_event_form_inherit_mail_slot_scope" model="ir.ui.view">
+			<field name="name">event.event.form.mail.slot.scope.inherit</field>
+			<field name="model">event.event</field>
+			<field name="inherit_id" ref="event.view_event_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//page[@name='event_communication']//field[@name='interval_type']" position="after">
+					<field name="only_attendees" invisible="interval_type in ('before_event', 'after_sub')"
+						title="Send only to the participants that actually attended." />
+				</xpath>
+			</field>
+		</record>
+
+		<record id="view_event_event_form_inherit_run_communications" model="ir.ui.view">
+			<field name="name">event.event.form.run.communications.inherit</field>
+			<field name="model">event.event</field>
+			<field name="inherit_id" ref="event.view_event_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//page[@name='event_communication']/field[@name='event_mail_ids']" position="before">
+					<button name="action_run_mail_schedulers" type="object"
+						string="Send the communications that are due now"
+						class="btn btn-secondary mb-2"
+						groups="base.group_no_one"
+						confirm="This sends the emails of this event whose scheduled date are reached. Continue?" />
 				</xpath>
 			</field>
 		</record>

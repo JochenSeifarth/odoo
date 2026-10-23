@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!--
+            Google Review URL für die Websites, auf denen die Events
+            veröffentlicht werden. Wird in der Nach-dem-Event-Mail
+            (mail_template_review_google) verwendet.
+        -->
+        <!-- Google Review URL für die Standard-Website (id=1) über die externe ID -->
+        <record id="event_rya.website_1" model="website">
+            <field name="rya_google_review_url">https://g.page/r/CcrUIBqIwRVwEBM/review</field>
+        </record>
+
+        <!-- Google Review URL für die zweite Website (id=2) über die externe ID -->
+        <record id="event_rya.website_2" model="website">
+            <field name="rya_google_review_url">https://g.page/r/CaYiT6qgpTDQEBM/review</field>
+        </record>
+    </data>
+</odoo>

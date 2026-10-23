@@ -1,5 +1,6 @@
 from . import (
     test_event_invoicing,
+    test_event_mail_slot,
     test_mail_compose_message,
     test_payment_terms,
     test_qweb_deprecation_filter,

@@ -215,3 +215,69 @@ msgstr "Fällig am"
 #: model_terms:ir.ui.view,arch_db:event_rya.website_sale_payment_rya
 msgid "Due now"
 msgstr "Jetzt zu zahlen"
+
+#. module: event_rya
+#: model:ir.model.fields,field_description:event_rya.field_website__rya_google_review_url
+msgid "Google Review Link"
+msgstr "Google-Bewertungslink"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.view_res_config_settings_website_form_rya
+msgid "Link to your Google review page. Shown at the end of the after-event email."
+msgstr ""
+"Link auf Ihre Google-Bewertungsseite. Wird am Ende der Nach-dem-Event-Mail "
+"angezeigt."
+
+#. module: event_rya
+#: model:ir.model.fields,help:event_rya.field_website__rya_google_review_url
+msgid ""
+"Link where the guests of this website can leave a Google review.\n"
+"It is inserted in the after the event mail of the event_rya addon, for the events published on this website."
+msgstr ""
+"Link, auf dem die Gäste dieser Website eine Bewertung bei Google hinterlassen können.\n"
+"Er wird in die Nach-dem-Event-Mail des Addons event_rya eingesetzt, für die auf dieser Website veröffentlichten Events."
+
+#. module: event_rya
+#: model:ir.model.fields,field_description:event_rya.field_event_mail__only_attendees
+msgid "Only for attendees"
+msgstr "Nur für Teilnehmer"
+
+#. module: event_rya
+#: model:ir.model.fields,help:event_rya.field_event_mail__only_attendees
+msgid "Send this communication only to the participants that actually took part, so that a guest who never showed up is not contacted. It applies once the event or the slot has started, where the attendance is known. It has no effect before the event starts and on the communication sent on each registration."
+msgstr "Diese Kommunikation nur an die tatsächlich anwesenden Teilnehmer senden, damit ein Gast, der nicht erschienen ist, nicht angeschrieben wird. Sie gilt, sobald das Event oder der Slot begonnen hat, dann ist die Teilnahme bekannt. Vor Beginn des Events und bei der Kommunikation nach jeder Anmeldung hat sie keine Wirkung."
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.view_event_event_form_inherit_run_communications
+msgid "Send the communications that are due now"
+msgstr "Jetzt die fälligen Kommunikationen senden"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.view_event_event_form_inherit_run_communications
+msgid "This sends the emails of this event whose scheduled date is reached, to the attendees only. Continue?"
+msgstr "Dies sendet die E-Mails dieses Events, deren Termin erreicht ist, nur an die Teilnehmer. Fortfahren?"
+
+#. module: event_rya
+#: code:addons/event_rya/models/event_event.py:0
+msgid "%(done)s communication(s) of %(total)s executed, %(pending)s still pending.\\nThe emails are in the queue: Settings ‣ Technical ‣ Email ‣ Emails."
+msgstr "%(done)s von %(total)s Kommunikationen ausgeführt, %(pending)s noch ausstehend.\\nDie E-Mails liegen in der Warteschlange: Einstellungen ‣ Technisch ‣ E-Mail ‣ E-Mails."
+
+#. module: event_rya
+#: code:addons/event_rya/models/event_event.py:0
+msgid "Communications"
+msgstr "Kommunikation"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.view_website_form_rya
+msgid "After the event mail"
+msgstr "Mail nach dem Event"
+
+#. module: event_rya
+#: model:mail.template,name:event_rya.event_mail_template_review_google
+msgid "Events: Review (Google)"
+msgstr "Veranstaltungen: Rezension (Google)"
+
+#. module: event_rya
+#: model:ir.model.fields.selection,name:event_rya.selection__event_mail__interval_type__after_event_slot
+msgid "After the slot ends"
+msgstr "Nach dem Slot"

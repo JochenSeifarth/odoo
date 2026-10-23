@@ -213,3 +213,67 @@ msgstr "Vence el"
 #: model_terms:ir.ui.view,arch_db:event_rya.website_sale_payment_rya
 msgid "Due now"
 msgstr "A pagar ahora"
+
+#. module: event_rya
+#: model:ir.model.fields,field_description:event_rya.field_website__rya_google_review_url
+msgid "Google Review Link"
+msgstr "Enlace de reseña en Google"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.view_res_config_settings_website_form_rya
+msgid "Link to your Google review page. Shown at the end of the after-event email."
+msgstr "Enlace a tu página de reseñas de Google. Se muestra al final del correo después del evento."
+
+#. module: event_rya
+#: model:ir.model.fields,help:event_rya.field_website__rya_google_review_url
+msgid ""
+"Link where the guests of this website can leave a Google review.\n"
+"It is inserted in the after the event mail of the event_rya addon, for the events published on this website."
+msgstr ""
+"Enlace donde los clientes de este sitio pueden dejar una reseña en Google.\n"
+"Se inserta en el correo de después del evento del addon event_rya, para los eventos publicados en este sitio web."
+
+#. module: event_rya
+#: model:ir.model.fields,field_description:event_rya.field_event_mail__only_attendees
+msgid "Only for attendees"
+msgstr "Solo para asistentes"
+
+#. module: event_rya
+#: model:ir.model.fields,help:event_rya.field_event_mail__only_attendees
+msgid "Send this communication only to the participants that actually took part, so that a guest who never showed up is not contacted. It applies once the event or the slot has started, where the attendance is known. It has no effect before the event starts and on the communication sent on each registration."
+msgstr "Enviar esta comunicación solo a los participantes que realmente recibieron, para que no se contacte a un cliente que nunca compareció. Se aplica una vez que el evento o el espacio ha comenzado, cuando la asistencia ya se conoce. No tiene efecto antes del inicio del evento ni en la comunicación enviada con cada inscripción."
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.view_event_event_form_inherit_run_communications
+msgid "Send the communications that are due now"
+msgstr "Enviar ahora las comunicaciones que ya vencieron"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.view_event_event_form_inherit_run_communications
+msgid "This sends the emails of this event whose scheduled date is reached, to the attendees only. Continue?"
+msgstr "Esto envía los correos de este evento cuya fecha programada ya se alcanzó, solo a los asistentes. ¿Continuar?"
+
+#. module: event_rya
+#: code:addons/event_rya/models/event_event.py:0
+msgid "%(done)s communication(s) of %(total)s executed, %(pending)s still pending.\\nThe emails are in the queue: Settings ‣ Technical ‣ Email ‣ Emails."
+msgstr "%(done)s de %(total)s comunicaciones ejecutadas, %(pending)s aún pendientes.\\nLos correos están en la cola: Ajustes ‣ Técnico ‣ Correo electrónico ‣ Correos."
+
+#. module: event_rya
+#: code:addons/event_rya/models/event_event.py:0
+msgid "Communications"
+msgstr "Comunicaciones"
+
+#. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.view_website_form_rya
+msgid "After the event mail"
+msgstr "Correo después del evento"
+#. module: event_rya
+#: model:mail.template,name:event_rya.event_mail_template_review_google
+msgid "Events: Review (Google)"
+msgstr "Eventos: Reseña (Google)"
+
+
+#. module: event_rya
+#: model:ir.model.fields.selection,name:event_rya.selection__event_mail__interval_type__after_event_slot
+msgid "After the slot ends"
+msgstr "Después de cada espacio"

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="1">
+    <data>
+
+        <!--
+            Sent to every participant of an event once it ended, to thank them
+            and to ask them for a Google review. Schedule it in the
+            "Communications" tab of the event with the trigger "After the event
+            ended": one mail per participant, each in the language of the event.
+
+            The logo is taken from the website the event is published on, see
+            the website_id of the event, falling back to the default website.
+            The Google review link is taken from that same website, see the
+            rya_google_review_url field of website. The paragraph and the button
+            disappear when that website has none.
+        -->
+        <record id="event_mail_template_review_google" model="mail.template">
+            <field name="name">Events: Review (Google)</field>
+            <field name="model_id" ref="event.model_event_registration" />
+            <field name="subject">Thank you for spending the day with us!</field>
+            <field name="email_from">{{ (object.event_id.organizer_id.email_formatted or object.event_id.company_id.email_formatted
+                or user.email_formatted or '') }}</field>
+            <field name="email_to" eval="False" />
+            <field name="use_default_to" eval="True" />
+            <field name="description">Ask participants of an event after it ended for a Google review</field>
+            <field name="body_html" type="html">
+                <table border="0" cellpadding="0" cellspacing="0"
+                    style="padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">
+                    <tr>
+                        <td align="center">
+                            <t t-set="review_url" t-value="object.event_id.website_id.rya_google_review_url" />
+                            <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                style="padding: 16px; background-color: white; color: #454748; border-collapse:separate;">
+                                <tbody>
+                                    <tr>
+                                        <td align="center" style="min-width: 590px;">
+                                            <table width="590" border="0" cellpadding="0" cellspacing="0"
+                                                style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                                <tr>
+                                                    <td valign="middle">
+                                                        <span style="font-size: 20px; font-weight: bold;">
+                                                            <t t-out="object.event_id.name or ''" />
+                                                        </span>
+                                                    </td>
+                                                    <td valign="middle" align="right">
+                                                        <t t-set="site"
+                                                            t-value="object.event_id.website_id or object.env.ref('website.default_website', raise_if_not_found=False)" />
+                                                        <img t-if="site and site.logo"
+                                                            t-att-src="'/web/image/website/%s/logo' % site.id"
+                                                            style="padding: 0px; margin: 0px; height: auto; width: 80px;"
+                                                            t-att-alt="site.name" />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" style="text-align:center;">
+                                                        <hr width="100%"
+                                                            style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin:16px 0px 16px 0px;" />
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" style="min-width: 590px;">
+                                            <table width="590" border="0" cellpadding="0" cellspacing="0"
+                                                style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                                <tr>
+                                                    <td valign="top" style="font-size: 14px;">
+                                                        <div> Dear <t t-out="object.name or ''" />,<br /><br /> thank you very much
+                                                            for spending a day fishing with us in Alicante! We hope you had a great
+                                                            time aboard our PEIXET and that you were completely satisfied with your
+                                                            fishing experience. </div>
+                                                        <br />
+                                                        <div>
+                                                            Your opinion is very important to us. If you have any comments, ideas or
+                                                            suggestions, please feel free to contact us at any time. We really
+                                                            appreciate your feedback and are always looking for ways to make our
+                                                            trips even better.
+                                                        </div>
+                                                        <t t-if="review_url">
+                                                            <br />
+                                                            <div>
+                                                                You would also help us a lot by leaving us a Google review. If you
+                                                                enjoyed your trip, we would be very happy if you shared your
+                                                                experience with other guests. You can leave a review directly using
+                                                                this link:</div>
+                                                            <br />
+                                                            <div style="text-align:center;">
+                                                                <a t-att-href="review_url" target="_blank"
+                                                                    t-attf-style="padding: 8px 12px; font-size: 14px; color: {{object.event_id.company_id.email_primary_color or '#FFFFFF'}}; text-decoration: none !important; font-weight: 400; background-color: {{object.event_id.company_id.email_secondary_color or '#875A7B'}}; border-radius:3px; display: inline-block;">
+                                                                    Leave a review</a>
+                                                            </div>
+                                                        </t>
+                                                        <br />
+                                                        <div>
+                                                            We would be delighted to welcome you aboard again on your next visit to
+                                                            Alicante!
+                                                        </div>
+                                                        <br />
+                                                        <div> And if you would like to experience the Mediterranean in a different
+                                                            way: we also offer day trips, sailing holidays and special sailing
+                                                            experiences aboard our classic sailing yacht LILLI. You can find out
+                                                            more at <a t-attf-href="http://www.real-yachting-alicante.com"
+                                                                target="_blank"
+                                                                t-attf-style="color: {{object.event_id.company_id.email_secondary_color or '#875A7B'}};">
+                                                            www.real-yachting-alicante.com</a>.</div>
+                                                        <br />
+                                                        <br />
+                                                        <div> Best wishes from Alicante <br />
+                                                        <span style="color: #454748;">Your <a
+                                                                    target="_blank"
+                                                                    t-attf-href="{{ object.event_id.website_id.domain or ' '}}"
+                                                                    t-attf-style="color: {{object.event_id.user_id.company_id.email_secondary_color or '#875A7B'}};"
+                                                                    t-out="object.event_id.website_id.name or object.company_id.website">
+                                                            YourWebsite.com
+                                                                </a>
+                                                            Team</span>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:center;">
+                                                        <hr width="100%"
+                                                            style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;" />
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center"
+                                            style="border-radius:0px;border-style:none;padding:0px;margin:0px;box-sizing:border-box;border-left-color:#808080;border-bottom-color:#808080;border-right-color:#808080;border-top-color:#808080;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;min-width: 590px; color: #454748; background-color: #f1f1f1;">
+                                            <t t-if="object.company_id">
+                                                <table width="590" border="0" cellpadding="0" cellspacing="0"
+                                                    style="border-radius: 0px; border-style: none; margin: 0px; box-sizing: border-box; border-color: #808080; border-width: 0px; caption-side: bottom; min-width: 590px; padding: 8px; border-collapse: separate; font-family: Verdana, Arial, sans-serif; color: #454748;">
+                                                    <tbody
+                                                        style="border-radius:0px;border-style:none;padding:0px;margin:0px;box-sizing:border-box;border-left-color:#808080;border-bottom-color:#808080;border-right-color:#808080;border-top-color:#808080;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;">
+                                                        <tr
+                                                            style="border-radius:0px;border-style:none;padding:0px;margin:0px;box-sizing:border-box;border-left-color:#808080;border-bottom-color:#808080;border-right-color:#808080;border-top-color:#808080;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;">
+                                                            <td
+                                                                style="border-radius:0px;border-style:none;padding:0px;margin:0px;box-sizing:border-box;border-left-color:#808080;border-bottom-color:#808080;border-right-color:#808080;border-top-color:#808080;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;text-align: center; font-size: 14px; color: #454748; background-color: #f1f1f1;">
+                                                                Sent by <a target="_blank"
+                                                                    t-attf-href="{{ object.company_id.website }}"
+                                                                    t-attf-style="color: {{object.event_id.user_id.company_id.email_secondary_color or '#875A7B'}};"
+                                                                    t-out="object.company_id.name or ''"
+                                                                    style="color: #454748; text-decoration: none; border-radius: 0px; border-style: none; padding: 0px; margin: 0px; box-sizing: border-box; border-color: #008f8c; border-width: 0px;">
+                                                                YourCompany</a>
+                                                               <br /> Discover <a href=""
+                                                                    t-attf-href="{{ object.company_id.website }}/event"
+                                                                    t-attf-style="color: {{object.event_id.user_id.company_id.email_secondary_color or '#875A7B'}};">all
+                                                                our events</a>.</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </field>
+            <field name="lang">{{ object.partner_id.lang or object.event_id.lang }}</field>
+            <field name="auto_delete" eval="True" />
+        </record>
+
+    </data>
+</odoo>
