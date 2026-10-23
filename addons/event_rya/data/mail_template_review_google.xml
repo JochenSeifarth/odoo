@@ -108,12 +108,12 @@
                                                         <br />
                                                         <div> Best wishes from Alicante <br />
                                                         <span style="color: #454748;">Your <a
-                                                                    target="_blank"
-                                                                    t-attf-href="{{ object.event_id.website_id.domain or ' '}}"
-                                                                    t-attf-style="color: {{object.event_id.user_id.company_id.email_secondary_color or '#875A7B'}};"
-                                                                    t-out="object.event_id.website_id.name or object.company_id.website">
+                                                                target="_blank"
+                                                                t-attf-href="{{ object.event_id.website_id.domain or ' '}}"
+                                                                t-attf-style="color: {{object.event_id.user_id.company_id.email_secondary_color or '#875A7B'}};"
+                                                                t-out="object.event_id.website_id.name or object.company_id.website">
                                                             YourWebsite.com
-                                                                </a>
+                                                        </a>
                                                             Team</span>
                                                         </div>
                                                     </td>
@@ -143,9 +143,9 @@
                                                                     t-attf-href="{{ object.company_id.website }}"
                                                                     t-attf-style="color: {{object.event_id.user_id.company_id.email_secondary_color or '#875A7B'}};"
                                                                     t-out="object.company_id.name or ''"
-                                                                    style="color: #454748; text-decoration: none; border-radius: 0px; border-style: none; padding: 0px; margin: 0px; box-sizing: border-box; border-color: #008f8c; border-width: 0px;">
-                                                                YourCompany</a>
-                                                               <br /> Discover <a href=""
+                                                                style="color: #454748; text-decoration: none; border-radius: 0px; border-style: none; padding: 0px; margin: 0px; box-sizing: border-box; border-color: #008f8c; border-width: 0px;">
+                                                                 YourCompany</a>
+                                                                <br /> Discover <a href=""
                                                                     t-attf-href="{{ object.company_id.website }}/event"
                                                                     t-attf-style="color: {{object.event_id.user_id.company_id.email_secondary_color or '#875A7B'}};">all
                                                                 our events</a>.</td>
