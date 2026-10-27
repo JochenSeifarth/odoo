@@ -51,7 +51,7 @@ class TestRegistrationStatus(AccountTestInvoicingCommon, TransactionCase):
                 cls.event_date + timedelta(days=1), datetime.min.time(),
             ),
             'payment_term_id': cls.quick_ref(
-                'event_rya.payment_term_event_20_80_90',
+                'event_rya.payment_term_event_20_30_50',
             ).id,
         })
         cls.ticket = cls.event.event_ticket_ids

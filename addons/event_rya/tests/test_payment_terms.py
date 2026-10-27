@@ -32,7 +32,7 @@ class TestEventPaymentTerms(TransactionCase):
         cls.later_event = cls._create_event('Later Test Event', cls.later_event_date)
         cls.ticket = cls.event.event_ticket_ids
         cls.later_ticket = cls.later_event.event_ticket_ids
-        cls.payment_term = cls.env.ref('event_rya.payment_term_event_20_80_90')
+        cls.payment_term = cls.env.ref('event_rya.payment_term_event_20_30_50')
         cls.standard_product = cls.env['product.product'].create({
             'name': 'Test Service',
             'type': 'service',
@@ -83,10 +83,10 @@ class TestEventPaymentTerms(TransactionCase):
     def test_schedule_of_event_order(self):
         schedule = self.sale_order._get_rya_payment_schedule()
 
-        self.assertEqual(len(schedule), 2)
-        self.assertEqual([line['amount'] for line in schedule], [20.0, 80.0])
-        self.assertEqual([line['due'] for line in schedule], [True, False])
-        self.assertEqual(schedule[1]['date'], self.event_date - timedelta(days=90))
+        self.assertEqual(len(schedule), 3)
+        self.assertEqual([line['amount'] for line in schedule], [20.0, 30.0, 50.0])
+        self.assertEqual([line['due'] for line in schedule], [True, False, False])
+        self.assertEqual(schedule[1]['date'], self.event_date - timedelta(days=120))
 
     def test_due_amount_of_event_order(self):
         self.assertEqual(self.sale_order._get_rya_due_payment_amount(), 20.0)
@@ -323,7 +323,7 @@ class TestEventPaymentTerms(TransactionCase):
 
     def test_payment_term_line_due_date_accepts_any_date_type(self):
         line = self._event_line.with_context(rya_event_date=self.event_date)
-        expected = self.event_date - timedelta(days=90)
+        expected = self.event_date - timedelta(days=60)
 
         self.assertEqual(line._get_due_date(self.today), expected)
         self.assertEqual(
@@ -347,7 +347,8 @@ class TestEventPaymentTerms(TransactionCase):
         self.assertEqual(invoice._get_rya_event_start_date(), self.event.date_begin)
         self.assertEqual(
             sorted(term['date_maturity'] for term in invoice.needed_terms),
-            [self.today, self.event_date - timedelta(days=90)],
+            [self.today, self.event_date - timedelta(days=120),
+             self.event_date - timedelta(days=60)],
         )
 
     def test_invoice_date_of_multiple_events_is_the_earliest(self):
@@ -366,7 +367,8 @@ class TestEventPaymentTerms(TransactionCase):
 
         self.assertEqual(
             sorted(term['date_maturity'] for term in event_invoice.needed_terms),
-            [self.today, self.event_date - timedelta(days=90)],
+            [self.today, self.event_date - timedelta(days=120),
+             self.event_date - timedelta(days=60)],
         )
         self.assertEqual(
             sorted(term['date_maturity'] for term in standard_invoice.needed_terms),
@@ -439,12 +441,12 @@ class TestEventPaymentTerms(TransactionCase):
     def test_due_flag_marks_the_installments_of_today(self):
         """An installment due today counts as due, one due later does not."""
         self.sale_order.payment_term_id = self.env.ref(
-            'event_rya.payment_term_event_20_80_start',
+            'event_rya.payment_term_event_20_30_50',
         )
 
         schedule = self.sale_order._get_rya_payment_schedule()
 
-        self.assertEqual([line['due'] for line in schedule], [True, False])
+        self.assertEqual([line['due'] for line in schedule], [True, False, False])
         self.assertEqual(self.sale_order._get_rya_due_payment_amount(), 20.0)
 
     def test_payment_amount_of_an_event_order_is_zero_once_paid(self):
@@ -601,8 +603,9 @@ class TestEventPaymentTerms(TransactionCase):
     @property
     def _event_line(self):
         return self.payment_term.line_ids.filtered(
-            lambda line: line.delay_type == 'rya_days_after_event',
-        )
+            lambda line: line.delay_type == 'rya_days_after_event'
+            and line.nb_days == -60,
+        ).ensure_one()
 
     @property
     def later_order_line(self):

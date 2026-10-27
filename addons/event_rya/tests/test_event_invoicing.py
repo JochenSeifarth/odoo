@@ -50,7 +50,7 @@ class TestEventInvoicing(TransactionCase):
             ),
         })
         cls.ticket = cls.event.event_ticket_ids
-        cls.payment_term = cls.env.ref('event_rya.payment_term_event_20_80_90')
+        cls.payment_term = cls.env.ref('event_rya.payment_term_event_20_30_50')
         cls.partner = cls.env['res.partner'].create({'name': 'Test Customer'})
         cls.event_order = cls._create_event_order()
         cls.standard_order = cls._create_standard_order()
@@ -138,7 +138,8 @@ class TestEventInvoicing(TransactionCase):
             sorted(term['date_maturity'] for term in invoice.needed_terms),
             sorted([
                 self.today,
-                self.event_date - timedelta(days=90),
+                self.event_date - timedelta(days=120),
+                self.event_date - timedelta(days=60),
             ]),
         )
 

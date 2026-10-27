@@ -47,6 +47,19 @@
         </field>
     </record>
 
+    <record id="event_registration_view_form_rya" model="ir.ui.view">
+        <field name="name">event.registration.form.rya</field>
+        <field name="model">event.registration</field>
+        <field name="inherit_id" ref="event.view_event_registration_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//group" position="before">
+                <field name="sale_status" invisible="1"/>
+                <widget name="web_ribbon" title="Deposit paid" bg_color="text-bg-warning"
+                    invisible="sale_status != 'partial'"/>
+            </xpath>
+        </field>
+    </record>
+
     <record id="view_event_registration_tree_rya" model="ir.ui.view">
         <field name="name">event.registration.list.rya</field>
         <field name="model">event.registration</field>

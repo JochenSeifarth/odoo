@@ -21,6 +21,12 @@ msgid ", at"
 msgstr ""
 
 #. module: event_rya
+#: model:ir.model.fields.selection,name:event_rya.selection__event_registration__sale_status__partial
+#: model_terms:ir.ui.view,arch_db:event_rya.event_registration_view_form_rya
+msgid "Deposit paid"
+msgstr ""
+
+#. module: event_rya
 #: model_terms:ir.ui.view,arch_db:event_rya.registration_template_rya
 msgid "<b>Cancelled</b>"
 msgstr ""
@@ -158,23 +164,13 @@ msgid "Attendees"
 msgstr ""
 
 #. module: event_rya
-#: model:account.payment.term,name:event_rya.payment_term_event_20_80_90
-msgid "20% now, balance 90 days before event"
+#: model:account.payment.term,name:event_rya.payment_term_event_20_30_50
+msgid "20% now, 30% 120 days, 50% 60 days before event"
 msgstr ""
 
 #. module: event_rya
-#: model_terms:account.payment.term,note:event_rya.payment_term_event_20_80_90
-msgid "20% at booking, balance 90 days before the event"
-msgstr ""
-
-#. module: event_rya
-#: model:account.payment.term,name:event_rya.payment_term_event_20_80_start
-msgid "20% now, balance before event"
-msgstr ""
-
-#. module: event_rya
-#: model_terms:account.payment.term,note:event_rya.payment_term_event_20_80_start
-msgid "20% at booking, balance before the event"
+#: model_terms:account.payment.term,note:event_rya.payment_term_event_20_30_50
+msgid "20% at booking, 30% 120 days, 50% 60 days before event"
 msgstr ""
 
 #. module: event_rya

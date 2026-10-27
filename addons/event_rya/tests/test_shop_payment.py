@@ -54,7 +54,7 @@ class TestShopPayment(WebsiteSaleCommon, PaymentCommon, TransactionCase):
             ),
         })
         cls.ticket = cls.event.event_ticket_ids
-        cls.payment_term = cls.env.ref('event_rya.payment_term_event_20_80_90')
+        cls.payment_term = cls.env.ref('event_rya.payment_term_event_20_30_50')
         cls.standard_product = cls.env['product.product'].create({
             'name': 'Test Service',
             'type': 'service',

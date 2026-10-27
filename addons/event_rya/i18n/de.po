@@ -162,24 +162,14 @@ msgid "Attendees"
 msgstr "Teilnehmer"
 
 #. module: event_rya
-#: model:account.payment.term,name:event_rya.payment_term_event_20_80_90
-msgid "20% now, balance 90 days before event"
-msgstr "20% sofort, Rest 90 Tage vor Veranstaltung"
+#: model:account.payment.term,name:event_rya.payment_term_event_20_30_50
+msgid "20% now, 30% 120 days, 50% 60 days before event"
+msgstr "20% sofort, 30% 120 Tage, 50% 60 Tage vor Veranstaltung"
 
 #. module: event_rya
-#: model_terms:account.payment.term,note:event_rya.payment_term_event_20_80_90
-msgid "20% at booking, balance 90 days before the event"
-msgstr "20% bei Buchung, Rest 90 Tage vor der Veranstaltung"
-
-#. module: event_rya
-#: model:account.payment.term,name:event_rya.payment_term_event_20_80_start
-msgid "20% now, balance before event"
-msgstr "20% sofort, Rest vor Veranstaltung"
-
-#. module: event_rya
-#: model_terms:account.payment.term,note:event_rya.payment_term_event_20_80_start
-msgid "20% at booking, balance before the event"
-msgstr "20% bei Buchung, Rest vor der Veranstaltung"
+#: model_terms:account.payment.term,note:event_rya.payment_term_event_20_30_50
+msgid "20% at booking, 30% 120 days, 50% 60 days before event"
+msgstr "20% bei Buchung, 30% 120 Tage, 50% 60 Tage vor Veranstaltung"
 
 #. module: event_rya
 #: model:ir.model.fields.selection,name:event_rya.selection__account_payment_term_line__delay_type__rya_days_after_event
@@ -188,6 +178,7 @@ msgstr "Tage nach Veranstaltungsbeginn"
 
 #. module: event_rya
 #: model:ir.model.fields.selection,name:event_rya.selection__event_registration__sale_status__partial
+#: model_terms:ir.ui.view,arch_db:event_rya.event_registration_view_form_rya
 msgid "Deposit paid"
 msgstr "Angezahlt"
 

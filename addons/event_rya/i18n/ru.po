@@ -16,6 +16,16 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: event_rya
+#: model:account.payment.term,name:event_rya.payment_term_event_20_30_50
+msgid "20% now, 30% 120 days, 50% 60 days before event"
+msgstr "20% сейчас, 30% за 120 дней и 50% за 60 дней до мероприятия"
+
+#. module: event_rya
+#: model_terms:account.payment.term,note:event_rya.payment_term_event_20_30_50
+msgid "20% at booking, 30% 120 days, 50% 60 days before event"
+msgstr "20% при бронировании, 30% за 120 дней и 50% за 60 дней до мероприятия"
+
+#. module: event_rya
 #: model:mail.template,subject:event_rya.event_mail_template_review_google
 msgid "Thank you for spending the day with us!"
 msgstr "Спасибо, что провели этот день с нами!"
