@@ -12,6 +12,8 @@ from odoo.tools.json import scriptsafe as json_scriptsafe
 
 from ..services.o2_router_service import O2RouterService
 
+_logger = logging.getLogger(__name__)
+
 
 def _format_datetime_with_tz(dt, tz_name):
     if not dt:
@@ -268,18 +270,114 @@ class EventEvent(models.Model):
         return events
 
     def action_run_mail_schedulers(self):
-        """Dummy placeholder for action_run_mail_schedulers on event.event.
+        """Send all due mail communications for this event.
 
-        Prevents 'method not found' errors when the button on the event form
-        view is clicked. The real scheduling logic is not implemented here.
+        Delegates to the same code path the cron uses (event.mail.execute()).
+        Slot communications older than XX days are skipped individually;
+        attendee-based communications remain active so future registrations
+        can still be processed.
+
+        Returns a client notification informing the user about the result.
         """
+        self.ensure_one()
+        now = fields.Datetime.now()
+        cutoff = now - timedelta(days=7)
+        schedulers = self.env['event.mail'].search([
+            ('event_id', '=', self.id),
+            ('mail_done', '=', False),
+        ])
+
+        slot_schedulers = schedulers.filtered(
+            lambda scheduler: scheduler._is_slot_based() and scheduler.event_id.event_slot_ids,
+        )
+        slot_candidates = slot_schedulers.filtered(
+            lambda scheduler: scheduler.scheduled_date and scheduler.scheduled_date <= now,
+        )
+        for scheduler in slot_candidates:
+            missing_slots = scheduler.event_id.event_slot_ids - scheduler.mail_slot_ids.event_slot_id
+            if missing_slots:
+                scheduler.write({'mail_slot_ids': [
+                    (0, 0, {'event_slot_id': slot.id})
+                    for slot in missing_slots
+                ]})
+
+        expired_slots = slot_candidates.mapped('mail_slot_ids').filtered(
+            lambda mail_slot: (
+                not mail_slot.mail_done
+                and mail_slot.scheduled_date
+                and mail_slot.scheduled_date < cutoff
+            ),
+        )
+        expired_slots.write({'mail_done': True})
+
+        # A slot scheduler is complete only when every slot has been handled.
+        # In particular, aging one slot must not hide a newer pending slot.
+        completed_slot_schedulers = slot_candidates.filtered(
+            lambda scheduler: (
+                scheduler.mail_slot_ids
+                and all(scheduler.mail_slot_ids.mapped('mail_done'))
+            ),
+        )
+        completed_slot_schedulers.write({'mail_done': True})
+
+        due_slots = slot_candidates.filtered(
+            lambda scheduler: any(
+                not mail_slot.mail_done
+                and mail_slot.scheduled_date
+                and cutoff <= mail_slot.scheduled_date <= now
+                for mail_slot in scheduler.mail_slot_ids
+            ),
+        )
+
+        non_slot_schedulers = schedulers - slot_schedulers
+        expired_schedulers = non_slot_schedulers.filtered(
+            lambda scheduler: (
+                scheduler.interval_type != 'after_sub'
+                and scheduler.scheduled_date
+                and scheduler.scheduled_date < cutoff
+            ),
+        )
+        expired_schedulers.write({'mail_done': True})
+
+        due_non_slot = non_slot_schedulers.filtered(
+            lambda scheduler: (
+                scheduler.interval_type == 'after_sub'
+                or (
+                    scheduler.scheduled_date
+                    and cutoff <= scheduler.scheduled_date <= now
+                )
+            ),
+        )
+        due = due_slots | due_non_slot
+        due.execute()
+
+        # The core execution updates counts, but a mix of expired and completed
+        # slots can leave the aggregate scheduler flag unset.
+        completed_slot_schedulers = due_slots.filtered(
+            lambda scheduler: (
+                scheduler.mail_slot_ids
+                and all(scheduler.mail_slot_ids.mapped('mail_done'))
+            ),
+        )
+        completed_slot_schedulers.write({'mail_done': True})
+
+        skipped_old = len(expired_slots) + len(expired_schedulers)
+
+        _logger.info(
+            "Event %s: skipped_old=%d processed=%d",
+            self.id, skipped_old, len(due),
+        )
+
         return {
             "type": "ir.actions.client",
             "tag": "display_notification",
             "params": {
                 "title": _("Communications"),
-                "message": _("No communications to send."),
-                "type": "warning",
+                "message": _(
+                    "Processed %d due scheduler(s); skipped %d old communication(s).",
+                    len(due), skipped_old,
+                ),
+                "type": "success",
                 "sticky": True,
             },
         }

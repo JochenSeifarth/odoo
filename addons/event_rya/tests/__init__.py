@@ -1,4 +1,5 @@
 from . import (
+    test_action_run_mail_schedulers,
     test_event_invoicing,
     test_mail_compose_message,
     test_payment_terms,

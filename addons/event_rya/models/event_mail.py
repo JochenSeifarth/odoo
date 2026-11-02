@@ -97,6 +97,12 @@ class EventMail(models.Model):
             return False
         return date.replace(microsecond=0) + _INTERVALS[self.interval_unit](self.interval_nbr)
 
+    def _execute_slot_based(self):
+        slotless = self.filtered(lambda scheduler: not scheduler.event_id.event_slot_ids)
+        if slotless:
+            slotless._execute_event_based()
+        return super(EventMail, self - slotless)._execute_slot_based()
+
     @api.depends(
         'event_id.date_begin', 'event_id.date_end',
         'event_id.is_multi_slots',
@@ -133,3 +139,22 @@ class EventMail(models.Model):
                 slot_schedules.extend(dates)
         if slot_schedules and (cron := self.env.ref('event.event_mail_scheduler', raise_if_not_found=False)):
             cron._trigger(min(slot_schedules))
+
+
+class EventMailSlot(models.Model):
+    _inherit = 'event.mail.slot'
+
+    @api.depends(
+        'event_slot_id.start_datetime', 'event_slot_id.end_datetime',
+        'scheduler_id.interval_type', 'scheduler_id.interval_unit',
+        'scheduler_id.interval_nbr',
+    )
+    def _compute_scheduled_date(self):
+        for mail_slot in self:
+            mail_slot.scheduled_date = mail_slot.scheduler_id._get_slot_scheduled_date(
+                mail_slot.event_slot_id,
+            )
+
+        next_schedule = self.filtered('scheduled_date').mapped('scheduled_date')
+        if next_schedule and (cron := self.env.ref('event.event_mail_scheduler', raise_if_not_found=False)):
+            cron._trigger(next_schedule)
