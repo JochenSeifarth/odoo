@@ -67,8 +67,9 @@
                         </t>
                     </div>
                 </div>
-                <small class="d-block text-center text-muted" t-if="event.payment_term_id.note">
-                    <t t-out="event.payment_term_id.note" />
+                <t t-set="payment_term_note" t-value="event.payment_term_id.sudo().note" />
+                <small class="d-block text-center text-muted" t-if="payment_term_note">
+                    <t t-out="payment_term_note" />
                 </small>
             </div>
         </div>

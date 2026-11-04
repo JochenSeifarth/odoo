@@ -88,6 +88,23 @@ class TestEventPaymentTerms(TransactionCase):
         self.assertEqual([line['due'] for line in schedule], [True, False, False])
         self.assertEqual(schedule[1]['date'], self.event_date - timedelta(days=120))
 
+    def test_public_event_ticket_block_shows_payment_term_note(self):
+        self.event.write({
+            'payment_term_id': self.payment_term.id,
+            'website_published': True,
+        })
+        public_user = self.env.ref('base.public_user')
+
+        rendered = self.env['ir.qweb'].with_user(public_user)._render(
+            'event_rya.event_ticket_price_block',
+            {
+                'event': self.event.with_user(public_user),
+                'visibility_classes': '',
+            },
+        )
+
+        self.assertIn(self.payment_term.note, rendered)
+
     def test_due_amount_of_event_order(self):
         self.assertEqual(self.sale_order._get_rya_due_payment_amount(), 20.0)
         self.assertEqual(self.sale_order._get_rya_payment_amount(), 20.0)
