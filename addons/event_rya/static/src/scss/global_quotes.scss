@@ -1,0 +1,58 @@
+.website_global_quotes_wrapper {
+    margin: 0;
+
+    .s_quotes_carousel {
+        min-height: 0;
+        border-radius: 0;
+    }
+
+    .carousel-item {
+        min-height: 0;
+        padding: 0.4rem 2.5rem;
+    }
+
+    .website_global_quotes_slide {
+        padding-top: 0.35rem;
+        padding-bottom: 0.35rem;
+    }
+
+    blockquote.s_blockquote {
+        width: 100%;
+        max-width: 72rem;
+        margin-bottom: 0;
+        padding: 0.25rem 1rem;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+    }
+
+    .s_blockquote_quote {
+        margin: 0;
+        font-size: clamp(0.9rem, 1.2vw, 1.15rem);
+        line-height: 1.35;
+    }
+
+    .s_blockquote_infos {
+        margin: 0;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 2.25rem;
+        opacity: 0.65;
+    }
+
+    @media (max-width: 767.98px) {
+        .carousel-item {
+            padding: 0.25rem 1.75rem;
+        }
+
+        blockquote.s_blockquote {
+            padding: 0.25rem 0.5rem;
+        }
+
+        .s_blockquote_author {
+            display: none;
+        }
+    }
+}

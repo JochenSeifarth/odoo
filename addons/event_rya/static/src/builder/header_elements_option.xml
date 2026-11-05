@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-inherit="website.HeaderElementsOption" t-inherit-mode="extension">
+    <xpath expr="//BuilderRow[@label.translate='Visuals']" position="inside">
+        <BuilderButton
+            title.translate="Global Quotes Carousel"
+            className="'fa fa-quote-right flex-grow-1'"
+            actionParam="{views: ['event_rya.global_quotes_carousel']}"
+        />
+    </xpath>
+</t>
+
+</templates>

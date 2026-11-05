@@ -43,8 +43,12 @@
         "views/website_sale.templates.xml",
         "views/website.website_templates.xml",
         "views/website_event.s_events.xml",
+        "views/website.website_templates.global_quotes.xml",
     ],
     "assets": {
+        "website.website_builder_assets": [
+            "event_rya/static/src/builder/header_elements_option.xml",
+        ],
         "web.assets_frontend": [
             "event_rya/static/src/js/event_route_map.js",
             "event_rya/static/src/js/event_slot_quick_booking.js",
@@ -52,6 +56,7 @@
             "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
             "event_rya/static/src/img/1/favicon.svg",
             "event_rya/static/src/img/2/favicon.svg",
+            "event_rya/static/src/scss/global_quotes.scss",
         ],
         "web.assets_backend": [
             "event_rya/static/src/js/coordinate_widgets.js",
