@@ -5,10 +5,10 @@
         The content is stored as website view content and can be edited in
         Website > Edit. The carousel uses the native Odoo Quotes snippet DOM.
     -->
-    <template id="global_quotes_carousel" inherit_id="website.layout" name="Global Quotes Carousel">
+    <template id="global_quotes_carousel" inherit_id="website.layout" name="Global Quotes Carousel" active="False">
         <xpath expr="//header" position="before">
             <div class="oe_structure oe_structure_solo">
-                <section class="s_quotes_carousel_wrapper website_global_quotes_wrapper"
+                <section class="s_quotes_carousel_wrapper website_global_quotes_wrapper oe_unremovable"
                     data-vxml="001" data-vcss="002" data-name="Global Quotes Carousel">
                     <div id="website_global_quotes_carousel"
                         class="s_quotes_carousel s_carousel_boxed carousel carousel-dark slide o_cc o_cc2"
@@ -17,7 +17,7 @@
                             <div class="carousel-item active" data-name="Slide">
                                 <div class="website_global_quotes_slide container">
                                     <blockquote data-name="Blockquote" data-snippet="s_blockquote"
-                                        class="s_blockquote s_blockquote_with_icon o_cc o_cc1 position-relative d-flex flex-column gap-2 mx-auto fst-normal">
+                                        class="s_blockquote s_blockquote_with_icon o_cc o_cc1 position-relative d-flex flex-column gap-2 mx-auto fst-normal oe_unremovable">
                                         <p class="s_blockquote_quote my-auto text-center">
                                             Your unforgettable sailing experience on the Costa Blanca.
                                         </p>
@@ -34,7 +34,7 @@
                             <div class="carousel-item" data-name="Slide">
                                 <div class="website_global_quotes_slide container">
                                     <blockquote data-name="Blockquote" data-snippet="s_blockquote"
-                                        class="s_blockquote s_blockquote_with_icon o_cc o_cc1 position-relative d-flex flex-column gap-2 mx-auto fst-normal">
+                                        class="s_blockquote s_blockquote_with_icon o_cc o_cc1 position-relative d-flex flex-column gap-2 mx-auto fst-normal oe_unremovable">
                                         <p class="s_blockquote_quote my-auto text-center">
                                             Discover the Mediterranean from a different perspective.
                                         </p>
@@ -42,23 +42,6 @@
                                             <div class="s_blockquote_author">
                                                 <span class="o_small">
                                                     <strong>Sailing in Alicante</strong>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </blockquote>
-                                </div>
-                            </div>
-                            <div class="carousel-item" data-name="Slide">
-                                <div class="website_global_quotes_slide container">
-                                    <blockquote data-name="Blockquote" data-snippet="s_blockquote"
-                                        class="s_blockquote s_blockquote_with_icon o_cc o_cc1 position-relative d-flex flex-column gap-2 mx-auto fst-normal">
-                                        <p class="s_blockquote_quote my-auto text-center">
-                                            Enjoy the coast, the sea and the freedom of sailing.
-                                        </p>
-                                        <div class="s_blockquote_infos d-flex flex-column align-items-center w-100 text-center">
-                                            <div class="s_blockquote_author">
-                                                <span class="o_small">
-                                                    <strong>Your charter team</strong>
                                                 </span>
                                             </div>
                                         </div>
@@ -81,11 +64,9 @@
                         <div class="carousel-indicators s_carousel_indicators_dots o_not_editable">
                             <button type="button" data-bs-target="#website_global_quotes_carousel"
                                 data-bs-slide-to="0" class="active" aria-current="true"
-                                aria-label="Carousel indicator"/>
+                                aria-label="Carousel indicator" />
                             <button type="button" data-bs-target="#website_global_quotes_carousel"
-                                data-bs-slide-to="1" aria-label="Carousel indicator"/>
-                            <button type="button" data-bs-target="#website_global_quotes_carousel"
-                                data-bs-slide-to="2" aria-label="Carousel indicator"/>
+                                data-bs-slide-to="1" aria-label="Carousel indicator" />
                         </div>
                     </div>
                 </section>
