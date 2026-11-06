@@ -45,6 +45,7 @@
         "views/website.website_templates.xml",
         "views/website_event.s_events.xml",
         "views/website.website_templates.global_quotes.xml",
+        "views/website_sale_loyalty.website_sale_templates.layout.coupon_error.xml",
     ],
     "assets": {
         "website.website_builder_assets": [

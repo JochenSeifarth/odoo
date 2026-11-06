@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="coupon_error_title_warning_override" inherit_id="website_sale_loyalty.layout" name="Coupon error title not shown for warning">
+        <xpath expr="//span[hasclass('coupon-message-title')]" position="attributes">
+            <attribute name="t-if">request.params.get('coupon_error_type') != 'warning'</attribute>
+        </xpath>
+    </template>
+</odoo>
