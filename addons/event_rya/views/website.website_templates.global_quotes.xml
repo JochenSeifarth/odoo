@@ -5,6 +5,18 @@
         The content is stored as website view content and can be edited in
         Website > Edit. The carousel uses the native Odoo Quotes snippet DOM.
     -->
+    <!-- Once this has been installed on a DB, to reset the template to that defined here we need to hard-reset, i.e. :
+    ./odoo-bin shell -c rya-odoo-DEV.conf -d ryadev "-"-no-http <<'PY'
+views = env['ir.ui.view'].with_context(active_test=False).search([('key', '=', 'event_rya.global_quotes_carousel'),
+    ('website_id','=', 1),])
+if len(views) != 1:
+    raise RuntimeError(f'Erwartete genau eine View, gefunden: {len(views)}')
+else:
+    views.reset_arch(mode='hard')
+    env.cr.commit()
+    print(f"View {views.id} auf die Modulvorlage zurückgesetzt.")
+PY
+    -->
     <template id="global_quotes_carousel" inherit_id="website.layout" name="Global Quotes Carousel" active="False">
         <xpath expr="//header" position="before">
             <div class="oe_structure oe_structure_solo">

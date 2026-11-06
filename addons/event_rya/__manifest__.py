@@ -20,6 +20,7 @@
         "website_event",
         "website_event_sale",
         "website_sale",
+        "website_sale_loyalty",
     ],
     "data": [
         "data/payment_term.xml",

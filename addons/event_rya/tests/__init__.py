@@ -6,4 +6,5 @@ from . import (
     test_qweb_deprecation_filter,
     test_registration_status,
     test_shop_payment,
+    test_website_sale_coupon_redirect,
 )
