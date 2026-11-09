@@ -34,7 +34,7 @@ msgstr ""
 #. module: event_rya
 #: model_terms:ir.ui.view,arch_db:event_rya.registration_template_rya
 msgid "<b>Sold Out</b>"
-msgstr ""
+msgstr "<b>Fully Booked</b>"
 
 #. module: event_rya
 #: model_terms:ir.ui.view,arch_db:event_rya.registration_template_rya
@@ -89,9 +89,11 @@ msgid "Registrations will open on"
 msgstr "Bookings will open on"
 
 #. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.dynamic_filter_template_event_event_picture_rya
 #: model_terms:ir.ui.view,arch_db:event_rya.event_description_dates_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.event_list_rya
 msgid "Sold Out"
-msgstr ""
+msgstr "Fully Booked"
 
 #. module: event_rya
 #: model_terms:ir.ui.view,arch_db:event_rya.event_list_rya

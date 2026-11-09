@@ -18,6 +18,9 @@
                         <t t-set="use_filters" t-value="True" />
                         <t t-set="additionnal_classes" t-value="'h-100 w-100 bg-600 position-absolute'" />
                     </t>
+                    <span t-if="record.event_registrations_sold_out" class="o_rya_sold_out_stamp" t-translation="on">
+                        Sold Out
+                    </span>
 
                     <div class="text-center w-100 h-100 px-3 d-flex flex-column justify-content-center flex-grow-1">
                         <div t-if="is_sample" class="h5 o_ribbon_right bg-primary text-uppercase">Sample</div>

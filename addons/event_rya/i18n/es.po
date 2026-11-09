@@ -28,7 +28,7 @@ msgstr "<b>Cancelado</b>"
 #. module: event_rya
 #: model_terms:ir.ui.view,arch_db:event_rya.registration_template_rya
 msgid "<b>Sold Out</b>"
-msgstr "<b>Agotado</b>"
+msgstr "<b>Completo</b>"
 
 #. module: event_rya
 #: model_terms:ir.ui.view,arch_db:event_rya.registration_template_rya
@@ -84,10 +84,11 @@ msgid "Registrations will open on"
 msgstr "Las reservas se abrirán el"
 
 #. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.dynamic_filter_template_event_event_picture_rya
 #: model_terms:ir.ui.view,arch_db:event_rya.event_description_dates_rya
 #: model_terms:ir.ui.view,arch_db:event_rya.event_list_rya
 msgid "Sold Out"
-msgstr "Agotado"
+msgstr "Completo"
 
 #. module: event_rya
 #: model_terms:ir.ui.view,arch_db:event_rya.event_list_rya
@@ -538,4 +539,3 @@ msgstr ""
 "                    </tr>\n"
 "                </table>\n"
 "            "
-

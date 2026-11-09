@@ -82,6 +82,15 @@
             <attribute name="itemprop" />
         </xpath>
 
+        <xpath expr="//small[@t-field='event.subtitle']" position="replace">
+            <div t-if="opt_events_list_columns" class="o_rya_event_subtitle position-relative">
+                <small class="opacity-75" t-field="event.subtitle" />
+                <span t-if="event.event_registrations_sold_out" class="o_rya_sold_out_stamp">
+                    Sold Out
+                </span>
+            </div>
+        </xpath>
+
         <xpath expr="//small[@t-if='opt_events_list_columns' and @itemprop='location']" position="attributes">
             <attribute name="itemprop" />
         </xpath>

@@ -16,6 +16,11 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: event_rya
+#: model_terms:ir.ui.view,arch_db:event_rya.dynamic_filter_template_event_event_picture_rya
+msgid "Sold Out"
+msgstr "Мест нет"
+
+#. module: event_rya
 #: model:account.payment.term,name:event_rya.payment_term_event_20_30_50
 msgid "20% now, 30% 120 days, 50% 60 days before event"
 msgstr "20% сейчас, 30% за 120 дней и 50% за 60 дней до мероприятия"

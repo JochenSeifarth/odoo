@@ -59,6 +59,7 @@
             "event_rya/static/src/img/1/favicon.svg",
             "event_rya/static/src/img/2/favicon.svg",
             "event_rya/static/src/scss/global_quotes.scss",
+            "event_rya/static/src/scss/event_list.scss",
         ],
         "web.assets_backend": [
             "event_rya/static/src/js/coordinate_widgets.js",
