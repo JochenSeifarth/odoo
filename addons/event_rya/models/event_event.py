@@ -310,12 +310,16 @@ class EventEvent(models.Model):
         )
         expired_slots.write({'mail_done': True})
 
-        # A slot scheduler is complete only when every slot has been handled.
-        # In particular, aging one slot must not hide a newer pending slot.
+        # A slot scheduler is complete only when every slot has been handled
+        # and the event itself has ended, so no future slots/registrations can
+        # be added.
         completed_slot_schedulers = slot_candidates.filtered(
             lambda scheduler: (
                 scheduler.mail_slot_ids
+                and set(scheduler.mail_slot_ids.event_slot_id.ids) == set(scheduler.event_id.event_slot_ids.ids)
                 and all(scheduler.mail_slot_ids.mapped('mail_done'))
+                and scheduler.event_id.date_end
+                and scheduler.event_id.date_end <= now
             ),
         )
         completed_slot_schedulers.write({'mail_done': True})
@@ -353,10 +357,14 @@ class EventEvent(models.Model):
 
         # The core execution updates counts, but a mix of expired and completed
         # slots can leave the aggregate scheduler flag unset.
+        now = fields.Datetime.now()
         completed_slot_schedulers = due_slots.filtered(
             lambda scheduler: (
                 scheduler.mail_slot_ids
+                and set(scheduler.mail_slot_ids.event_slot_id.ids) == set(scheduler.event_id.event_slot_ids.ids)
                 and all(scheduler.mail_slot_ids.mapped('mail_done'))
+                and scheduler.event_id.date_end
+                and scheduler.event_id.date_end <= now
             ),
         )
         completed_slot_schedulers.write({'mail_done': True})

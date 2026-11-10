@@ -103,6 +103,24 @@ class EventMail(models.Model):
             slotless._execute_event_based()
         return super(EventMail, self - slotless)._execute_slot_based()
 
+    def _refresh_mail_count_done(self, mail_slot=False):
+        super()._refresh_mail_count_done(mail_slot=mail_slot)
+        now = fields.Datetime.now()
+        for scheduler in self:
+            # Slot-based schedulers may only be completed at event level once
+            # every event slot has been handled and the event itself has ended.
+            # Otherwise future slots/registrations could still be added.
+            if scheduler._is_slot_based() and scheduler.event_id.event_slot_ids:
+                all_slots_handled = (
+                    scheduler.mail_slot_ids
+                    and set(scheduler.mail_slot_ids.event_slot_id.ids) == set(scheduler.event_id.event_slot_ids.ids)
+                    and all(scheduler.mail_slot_ids.mapped('mail_done'))
+                )
+                event_ended = bool(
+                    scheduler.event_id.date_end and scheduler.event_id.date_end <= now
+                )
+                scheduler.mail_done = all_slots_handled and event_ended
+
     @api.depends(
         'event_id.date_begin', 'event_id.date_end',
         'event_id.is_multi_slots',
