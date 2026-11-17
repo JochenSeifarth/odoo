@@ -1,6 +1,7 @@
 from . import (
     event_route_controller,
     hilfe_auth,
+    html_editor_controller,
     l10nes_portal_account,
     main,
     website,
